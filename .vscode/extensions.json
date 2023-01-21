@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "svelte.svelte-vscode",
+    "esbenp.prettier-vscode",
+    "irongeek.vscode-env",
+    "dbaeumer.vscode-eslint",
+    "proverbialninja.svelte-extractor",
+    "fivethree.vscode-svelte-snippets"
+  ]
+}
