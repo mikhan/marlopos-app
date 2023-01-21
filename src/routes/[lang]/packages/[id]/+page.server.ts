@@ -1,5 +1,6 @@
 import type { PageServerLoad } from './$types'
-import { assertIsNonNullable, assertIsObject, api, fetchMany, fetchOne } from '$lib/api'
+import { fromCollection } from '$lib/api'
+import { assertIsNonNullable, assertIsObject } from "$lib/utils/assert"
 import { error } from '@sveltejs/kit'
 
 export const load = (async ({ params }) => {
@@ -16,7 +17,7 @@ export const load = (async ({ params }) => {
 }) satisfies PageServerLoad
 
 async function getPackage(id: string) {
-  const query = api.items('package_translations').readByQuery({
+  const items = await fromCollection('package_translations', {
     filter: {
       // languages_code: { code: { _starts_with: 'en' } },
       package_id: { id: { _eq: id } },
@@ -30,7 +31,7 @@ async function getPackage(id: string) {
     ],
   })
 
-  return await fetchMany(query, (item) => {
+  return items.transform((item) => {
     assertIsObject(item.package_id, `item.package_id`)
     assertIsObject(item.package_id.cover, `item.package_id.cover`)
     assertIsNonNullable(item.package_id.cover.title, `item.package_id.cover.title`)
