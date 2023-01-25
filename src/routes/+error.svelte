@@ -1,7 +1,7 @@
 <script>
   import { page } from '$app/stores'
 
-const online = typeof navigator !== 'undefined' ? navigator.onLine : true
+  const online = false //typeof navigator !== 'undefined' ? navigator.onLine : true
 </script>
 
 <svelte:head>

@@ -1,0 +1,21 @@
+@tailwind components;
+
+@layer components {
+  .form-input {
+    display: block;
+    width: 100%;
+    background-color: theme('colors.neutral.200');
+    border: 1px solid theme('colors.neutral.300');
+    color: theme('colors.neutral.800');
+    border-radius: theme('borderRadius.md');
+    padding: theme('spacing[2.5]');
+
+    &:focus {
+      border-color: theme('colors.neutral.500');
+    }
+
+    &::placeholder {
+      color: theme('colors.neutral.500');
+    }
+  }
+}

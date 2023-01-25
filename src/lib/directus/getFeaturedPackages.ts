@@ -8,10 +8,10 @@ export interface FeaturedPackage {
   url: string
   cover: {
     id: string
-    title: string
+    // title: string
     url: string
-    width: number
-    height: number
+    // width: number
+    // height: number
     blurhash: string
   }
 }
@@ -23,9 +23,9 @@ export async function getFeaturedPackages({ lang }: { lang: string }): Promise<F
       'name',
       'description',
       'package_id.cover.id',
-      'package_id.cover.title',
-      'package_id.cover.width',
-      'package_id.cover.height',
+      // 'package_id.cover.title',
+      // 'package_id.cover.width',
+      // 'package_id.cover.height',
       'package_id.cover.blurhash',
     ],
     filter: {
@@ -40,9 +40,9 @@ export async function getFeaturedPackages({ lang }: { lang: string }): Promise<F
   return items.transform((item) => {
     assertIsObject(item.package_id)
     assertIsObject(item.package_id.cover)
-    assertIsNonNullable(item.package_id.cover.title)
-    assertIsNonNullable(item.package_id.cover.width)
-    assertIsNonNullable(item.package_id.cover.height)
+    // assertIsNonNullable(item.package_id.cover.title)
+    // assertIsNonNullable(item.package_id.cover.width)
+    // assertIsNonNullable(item.package_id.cover.height)
     assertIsNonNullable(item.package_id.cover.blurhash)
 
     return {
@@ -52,10 +52,10 @@ export async function getFeaturedPackages({ lang }: { lang: string }): Promise<F
       url: `/${lang}/packages/${item.package_id.id}`,
       cover: {
         id: item.package_id.cover.id,
-        title: item.package_id.cover.title,
+        // title: item.package_id.cover.title,
         url: `/assets/${item.package_id.cover.id}?key=cover`,
-        width: item.package_id.cover.width,
-        height: item.package_id.cover.height,
+        // width: item.package_id.cover.width,
+        // height: item.package_id.cover.height,
         blurhash: item.package_id.cover.blurhash,
       },
     }

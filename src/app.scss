@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './lib/core/styles/button.scss';
+@import './lib/core/styles/form-field.scss';
+@import './lib/core/styles/form-input.scss';
+@import './lib/core/styles/form-label.scss';
+
+@layer components {
+  :is(.form-input, .button) {
+    outline: none;
+
+    &:focus-visible {
+      outline: 2px solid theme('colors.primary.500 / 75%');
+      outline-offset: 2px;
+    }
+  }
+}
+
+@layer utilities {
+  .focusable {
+    outline: none;
+
+    &:focus-visible {
+      outline: 2px solid theme('colors.primary.500 / 75%');
+      outline-offset: 2px;
+    }
+  }
+}

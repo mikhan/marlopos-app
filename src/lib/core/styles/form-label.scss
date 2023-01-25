@@ -1,0 +1,10 @@
+@tailwind components;
+
+@layer components {
+  .form-label {
+    display: block;
+    margin-bottom: theme('spacing.2');
+    font-size: theme('fontSize.sm');
+    font-weight: theme('fontWeight.bold');
+  }
+}

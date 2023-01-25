@@ -1,46 +1,101 @@
 <script lang="ts">
+  import { onDestroy, onMount } from 'svelte'
   import { useKeyboardNavigation, type KeyboardNavigation } from '$lib/core/actions/keyboard-navigation'
-  import { createIndexLoop } from '$lib/core/stores/index-loop'
+  import { IndexManagerStore } from '$lib/core/stores/index-manager-store'
+  import { IntervalPlayer } from '../types/interval-player'
 
   type T = $$Generic
 
   export let slides: T[] = []
-  export let initialIndex = 0
-  let rotation: [number, number, number]
+  export let index = 0
+  export let loop = false
+  export let autoplay = false
+  export let interval = 0
 
-  $: controller = createIndexLoop(slides.length, { initialIndex, wrap: false })
-  $: currentIndex = $controller
-  $: rotation = [
-    currentIndex === 0 ? controller.size - 1 : currentIndex - 1,
-    currentIndex,
-    currentIndex === controller.size - 1 ? 0 : currentIndex + 1,
-  ]
+  export const first = () => indexLoop.first()
+  export const last = () => indexLoop.last()
+  export const previous = () => indexLoop.previous()
+  export const next = () => indexLoop.next()
+
+  export const start = () => intervalPlayer.start()
+  export const stop = () => intervalPlayer.stop()
+  export const pause = () => intervalPlayer.pause()
+  export const resume = () => intervalPlayer.resume()
 
   const keyboardNavigation: KeyboardNavigation = {
-    home: () => controller.first(),
-    end: () => controller.last(),
-    left: () => controller.previous(),
-    right: () => controller.next(),
+    home: () => first(),
+    end: () => last(),
+    left: () => previous(),
+    right: () => next(),
+  }
+
+  $: interval = Number.isFinite(interval) && interval > 0 ? interval : 1000
+  $: intervalPlayer = new IntervalPlayer(() => {
+    console.log('tick')
+    next()
+  }, interval)
+
+  function onIndexChange(newIndex: number) {
+    index = newIndex
+
+    if (intervalPlayer.state === 'playing') {
+      intervalPlayer.restart()
+    }
+  }
+
+  let indexLoop: IndexManagerStore
+  let unsubscribeIndexLoop: () => void
+  function createIndexLoop(size: number, loop: boolean) {
+    if (unsubscribeIndexLoop) unsubscribeIndexLoop()
+
+    indexLoop = new IndexManagerStore(size, { index, loop })
+    unsubscribeIndexLoop = indexLoop.subscribe(onIndexChange)
+  }
+
+  $: createIndexLoop(slides.length, loop)
+
+  let rotation: [number, number, number]
+  $: rotation = [index === 0 ? indexLoop.size - 1 : index - 1, index, index === indexLoop.size - 1 ? 0 : index + 1]
+
+  onMount(() => {
+    if (autoplay) intervalPlayer.start()
+  })
+
+  onDestroy(() => {
+    if (unsubscribeIndexLoop) unsubscribeIndexLoop()
+    intervalPlayer.stop()
+  })
+
+  function test(event: FocusEvent & { currentTarget: HTMLElement & EventTarget }) {
+    const { target, currentTarget } = event
+    console.log({ target, currentTarget }, target && currentTarget.contains(target as Node))
   }
 </script>
 
-<section class="carousel" aria-roledescription="carousel" tabindex="-1" use:useKeyboardNavigation={keyboardNavigation}>
+<section
+  class="carousel"
+  aria-roledescription="carousel"
+  tabindex="-1"
+  use:useKeyboardNavigation={keyboardNavigation}
+  on:mouseenter={pause}
+  on:mouseleave={resume}
+  on:focusin={test}
+  on:focusout={test}>
   <ul class="slides" aria-live="polite">
-    {#each slides as slide, index (index)}
+    {#each slides as slide, slideIndex (slideIndex)}
       <li
         class="slide"
-        class:slide-prev={index === rotation[0]}
-        class:slide-current={index === rotation[1]}
-        class:slide-next={index === rotation[2]}
-        inert={index === rotation[1] ? null : true}
-        role="group"
+        class:slide-prev={slideIndex === rotation[0]}
+        class:slide-current={slideIndex === rotation[1]}
+        class:slide-next={slideIndex === rotation[2]}
+        inert={slideIndex === rotation[1] ? null : true}
         aria-roledescription="slide"
-        aria-hidden={rotation.includes(index) === false}>
-        <slot name="slide" {slides} {currentIndex} {controller} {slide} {index} />
+        aria-hidden={rotation.includes(slideIndex) === false}>
+        <slot name="slide" {slides} {index} {slide} {slideIndex} />
       </li>
     {/each}
   </ul>
-  <slot name="controls" {slides} {currentIndex} {controller} />
+  <slot name="controls" {slides} {index} />
 </section>
 
 <style lang="scss">
@@ -49,6 +104,8 @@
     contain: layout size;
     outline: none;
     contain-intrinsic-size: auto 30rem auto 15rem;
+    min-width: 0;
+    min-height: 0;
   }
 
   .slides {

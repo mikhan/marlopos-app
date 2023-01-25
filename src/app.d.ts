@@ -3,9 +3,9 @@ declare namespace App {
     language: string
   }
 
-  interface Error {
-    code: string
-  }
+  // interface Error {
+  //   code: string
+  // }
 }
 
 declare module '*.svg?component' {
