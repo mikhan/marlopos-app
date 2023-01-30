@@ -2,6 +2,13 @@
   import '@fontsource/merriweather'
   import '@fontsource/noto-sans'
   import '../../app.scss'
+  import AppShell from '$lib/components/app-shell.svelte'
+  import { languageStore } from '$lib/stores/language-store'
+  import type { LayoutData } from './$types'
+
+  export let data: LayoutData
+
+  $: languageStore.set(data.language)
 </script>
 
 <svelte:head>
@@ -9,13 +16,9 @@
   <meta name="description" content="Agencia de viajes Marlopos" />
 </svelte:head>
 
-<slot />
+<AppShell><slot /></AppShell>
 
 <style lang="scss" global>
-  :root {
-    color-scheme: dark;
-  }
-
   body {
     --app_surface_color: theme('colors.neutral.100');
     font-family: theme('fontFamily.sans');

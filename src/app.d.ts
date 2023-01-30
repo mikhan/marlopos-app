@@ -1,10 +1,10 @@
 declare namespace App {
-  interface Locals {
-    language: string
-  }
-
-  // interface Error {
-  //   code: string
+  // import type { Language } from '$lib/constants'
+  // interface Locals {
+  //   language: Language
+  // }
+  // interface PageData {
+  // language: Language
   // }
 }
 

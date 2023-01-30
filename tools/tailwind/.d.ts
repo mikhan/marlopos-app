@@ -16,7 +16,7 @@ declare global {
       [K in string]: string | { color: string; shade?: number; shades?: number[] }
     }
 
-    type PaletteResult = Record<string, Color>
+    type PaletteResult<T extends string> = Record<T, ColorResult>
 
     type ColorConfig = {
       color: string
@@ -26,7 +26,7 @@ declare global {
 
     type ColorResult = Record<string, string>
 
-    type GeneratePalette = (config: PaletteConfig, options?: { dark?: boolean }) => PaletteResult
+    type GeneratePalette = <P extends PaletteConfig>(config: P, options?: { dark?: boolean }) => PaletteResult<keyof P>
 
     type GenerateColor = (config: ColorConfig, options?: { dark?: boolean }) => ColorResult
 

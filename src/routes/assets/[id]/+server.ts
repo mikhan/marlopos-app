@@ -1,8 +1,6 @@
 import { API_TOKEN, API_URL } from '$env/static/private'
 import type { RequestHandler } from './$types'
 
-// export const prerender = false
-
 const headers = new Headers({ Authorization: `Bearer ${API_TOKEN}` })
 
 export const GET: RequestHandler = async ({ fetch, params, url }) => {

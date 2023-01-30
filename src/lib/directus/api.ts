@@ -1,8 +1,8 @@
 import { Directus, type PickedDefaultItem, type QueryMany, type TypeOf } from '@directus/sdk'
 import { API_URL, API_TOKEN } from '$env/static/private'
 import type { CustomDirectusTypes } from './collections'
-// import { JsonCache } from '$lib/core/types/json-cache'
-// import { simpleHash } from '$lib/core/utils/cripto'
+// import { JsonCache } from '$core/types/json-cache'
+// import { simpleHash } from '$core/utils/cripto'
 
 const api = new Directus<CustomDirectusTypes>(API_URL, {
   auth: { staticToken: API_TOKEN },

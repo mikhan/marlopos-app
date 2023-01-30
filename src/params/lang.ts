@@ -1,6 +1,6 @@
-import { SUPPORTED_LANGUAGES } from '$lib/app/constants'
+import { isSupportedLanguage } from '$lib/utils/language'
 import type { ParamMatcher } from '@sveltejs/kit'
 
 export const match = ((param) => {
-  return SUPPORTED_LANGUAGES.includes(param)
+  return isSupportedLanguage(param)
 }) satisfies ParamMatcher

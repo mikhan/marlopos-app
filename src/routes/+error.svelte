@@ -8,7 +8,7 @@
   <title>{$page.status}</title>
 </svelte:head>
 
-<div class="container">
+<div class="container mx-auto place-self-center">
   {#if $page.status === 404}
     <h1>Not found!</h1>
   {:else if online}
@@ -28,6 +28,7 @@
 
 <style>
   .container {
+    border: 2px solid blue;
     padding: var(--sk-page-padding-top) var(--sk-page-padding-side) 6rem var(--sk-page-padding-side);
   }
   h1,

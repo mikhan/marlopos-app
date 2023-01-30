@@ -8,6 +8,16 @@ const config = {
   }),
   kit: {
     adapter: adapter(),
+    alias: {
+      $core: 'src/core',
+      $tailwind: 'tools/tailwind/config.cjs',
+    },
+    csp: {
+      mode: 'nonce',
+      directives: {
+        'script-src': ['self'],
+      },
+    },
   },
 }
 
