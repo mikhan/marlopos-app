@@ -1,17 +1,14 @@
 <script lang="ts">
-  import { renderBlurhash } from '$core/utils/image'
   import { onDestroy, onMount } from 'svelte'
+  import { renderBlurhash } from '../utils/image'
 
   let blurhash: string
-  let width = 32
-  let height = 32
+  let width: number = 32
+  let height: number = 32
   let punch: number | undefined = undefined
 
   let canvas: HTMLCanvasElement
-
   let image: HTMLImageElement | null
-
-  $: options = punch ? { width, height, punch } : { width, height }
 
   function hideImage() {
     if (!image || image.complete) return
@@ -21,15 +18,12 @@
   }
 
   function showImage() {
-    if (!image) return
-
-    image.style.removeProperty('opacity')
+    image?.style.removeProperty('opacity')
   }
 
   onMount(() => {
     const renderingContext = canvas.getContext('2d')
-    renderingContext && renderBlurhash(renderingContext, blurhash, options)
-
+    renderingContext && renderBlurhash(renderingContext, blurhash, { width, height, punch })
     image = canvas.parentElement?.querySelector('img') ?? null
     hideImage()
   })

@@ -1,49 +1,25 @@
 <script lang="ts">
+  import FeaturedPackageComponent from './featured-package.svelte'
   import ChevronLeft from '$core/icons/angle-left.svg?component'
   import ChevronRight from '$core/icons/angle-right.svg?component'
-  import Blurhash from '$core/components/blurhash.svelte'
   import Carousel from '$core/components/carousel.svelte'
   import { layoutStore } from '$lib/stores/layout-store'
   import { followFocus } from '$lib/actions/follow-focus'
-  import { page } from '$app/stores'
-  import { getLocalizedUrl } from '$lib/utils/language'
-  import { languageStore } from '$lib/stores/language-store'
   import type { FeaturedPackage } from 'src/routes/[[lang]]/+page.server'
 
   export let packages: FeaturedPackage[]
 
   let index = 0
   let carousel: Carousel<FeaturedPackage>
-  const url = $page.url
-  const language = $languageStore
-  $: marginTop = `${$layoutStore.topbar.height * -1}px`
-
-  const getPackageUrl = (slug: string) => getLocalizedUrl(new URL(`/packages/${slug}`, url), language.code)
+  const marginTop = `${$layoutStore.topbar.height * -1}px`
+  const loop = true
+  const autoplay = false
 </script>
 
-<svelte:head>
-  {#if packages.length}
-    <link rel="preload" as="image" href={packages[0]?.cover.url} />
-    <!-- <link rel="preload" as="image" href="" imagesrcset="" imagesizes="" /> -->
-  {/if}
-</svelte:head>
-
 <div class="wrapper layout-fullbleed" style:margin-top={marginTop}>
-  <Carousel bind:this={carousel} slides={packages} loop={true} bind:index autoplay={true}>
+  <Carousel bind:this={carousel} bind:index slides={packages} {loop} {autoplay}>
     <svelte:fragment slot="slide" let:slideIndex let:slide>
-      <div class="slide">
-        <picture class="slide-background">
-          <Blurhash blurhash={slide.cover.blurhash} />
-          <img loading={slideIndex === 0 ? 'eager' : 'lazy'} src={`/assets/${slide.cover.id}?key=cover`} alt="" />
-        </picture>
-        <div class="slide-content layout">
-          <div>
-            <div class="slide-title">{slide.name}</div>
-            <div class="slide-desc mt-2">{@html slide.description.split('.')[0]}</div>
-            <a class="button mt-6" href={getPackageUrl(slide.slug).toString()}>More</a>
-          </div>
-        </div>
-      </div>
+      <FeaturedPackageComponent data={slide} index={slideIndex} />
     </svelte:fragment>
 
     <svelte:fragment slot="controls">
@@ -127,55 +103,9 @@
     }
   }
 
-  .slide {
-    &-background {
-      position: absolute;
-      inset: 0;
-      display: grid;
-
-      &::after {
-        display: block;
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(to top, rgb(0 0 0 / 50%), rgb(0 0 0 / 10%)),
-          linear-gradient(to right, rgb(0 0 0 / 50%), transparent 20%),
-          linear-gradient(to left, rgb(0 0 0 / 50%), transparent 20%);
-      }
-
-      & > img {
-        width: 100%;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        object-fit: cover;
-        transition: opacity 250ms ease-in;
-      }
-    }
-
-    &-content {
-      --px: calc(var(--slide_button_w) - var(--layout-padding));
-      position: absolute;
-      inset: auto 0 0 0;
-      padding: 2rem var(--px) var(--slide_content_py) var(--px);
-      background-image: linear-gradient(to top, var(--shadow-color), transparent);
-    }
-
-    &-title {
-      font-family: theme('fontFamily.serif');
-      font-size: var(--slide_title_size);
-      font-weight: var(--slide_title_weight);
-      letter-spacing: theme('letterSpacing.widest');
-    }
-
-    &-desc {
-      font-size: var(--slide_desc_size);
-    }
-  }
-
   .control {
-    --background: theme('colors.neutral.300');
-    --color: theme('colors.neutral.300-fg');
+    --background: theme('colors.neutral.200');
+    --color: theme('colors.neutral.200-fg');
     --outline: none;
     display: grid;
     place-content: center;

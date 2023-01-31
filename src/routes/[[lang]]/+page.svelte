@@ -10,6 +10,4 @@
 <FeaturedPackages packages={data.featuredPackages} />
 <ContactForm />
 
-<div class="h-screen">
-  <!-- <Theme /> -->
-</div>
+<!-- <div class="h-screen"><Theme /></div> -->

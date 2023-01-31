@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte'
   import { useKeyboardNavigation, type KeyboardNavigation } from '../actions/keyboard-navigation'
   import { IndexManagerStore } from '../stores/index-manager-store'
   import { IntervalPlayer } from '../types/interval-player'
@@ -17,11 +17,12 @@
   export const last = () => indexLoop.last()
   export const previous = () => indexLoop.previous()
   export const next = () => indexLoop.next()
-
   export const start = () => intervalPlayer.start()
   export const stop = () => intervalPlayer.stop()
   export const pause = () => intervalPlayer.pause()
   export const resume = () => intervalPlayer.resume()
+
+  const dispatch = createEventDispatcher()
 
   const keyboardNavigation: KeyboardNavigation = {
     home: () => first(),
@@ -39,6 +40,8 @@
     if (intervalPlayer.state === 'playing') {
       intervalPlayer.restart()
     }
+
+    dispatch('change', { index: newIndex })
   }
 
   let indexLoop: IndexManagerStore
