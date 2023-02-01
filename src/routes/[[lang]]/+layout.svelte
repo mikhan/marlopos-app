@@ -2,7 +2,7 @@
   import AppShell from '$lib/components/app-shell.svelte'
   import Chat from '$lib/components/chat.svelte'
   import { languageStore } from '$lib/stores/language-store'
-  import { PUBLIC_TAWK_WIDGET_ID } from '$env/static/public'
+  import { PUBLIC_TAWK_WIDGET_SCRIPT_SRC } from '$env/static/public'
   import type { LayoutData } from './$types'
   import '@fontsource/merriweather'
   import '@fontsource/noto-sans'
@@ -19,7 +19,7 @@
 </svelte:head>
 
 <AppShell><slot /></AppShell>
-<Chat id={PUBLIC_TAWK_WIDGET_ID} />
+<Chat src={PUBLIC_TAWK_WIDGET_SCRIPT_SRC} />
 
 <style lang="scss" global>
   body {

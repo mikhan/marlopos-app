@@ -8,9 +8,24 @@
 </script>
 
 <script lang="ts">
-  export let id: string
-</script>
+  import { onMount } from 'svelte'
+  import { delay } from '$core/utils/async'
 
-<svelte:head>
-  <script src={id} async crossorigin="*"></script>
-</svelte:head>
+  export let src: string
+
+  function createWidget(document: Document, src: string) {
+    if (src.startsWith('https://embed.tawk.to/') === false) {
+      throw new Error('Invalid Tawk Chat Widget src')
+    }
+
+    const script = document.createElement('script')
+    script.async = true
+    script.crossOrigin = '*'
+    script.src = src
+
+    const head = document.querySelector('head')
+    head?.append(script)
+  }
+
+  onMount(() => delay(3_000).then(() => createWidget(document, src)))
+</script>
