@@ -9,7 +9,7 @@ export type ImageConfig = {
   breakpoints?: number[]
 }
 
-const DEFAULT_BREAKPOINTS = [320, 640, 768, 1024, 1366, 1600, 1920]
+const DEFAULT_BREAKPOINTS = [640, 960, 1280, 1600, 1920]
 
 let imageLoader: ImageLoader = ({ src }) => src
 let imageConfig: ImageConfig = {}

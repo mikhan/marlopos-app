@@ -38,7 +38,7 @@
       </button>
 
       <ul class="indicators" use:followFocus>
-        {#each packages as item, i}
+        {#each packages as item, i (item.slug)}
           <li>
             <button
               type="button"

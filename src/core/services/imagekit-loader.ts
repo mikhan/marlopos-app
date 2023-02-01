@@ -22,15 +22,16 @@ function encodeTransformations(transformations: Transformations): string {
     if (typeof value === 'string') parameters.push(`${key}-${value}`)
   }
 
-  return parameters.length ? `tr:${parameters.join(',')}` : ''
+  return parameters.length ? `tr:${parameters.join(',')}/` : ''
 }
 
 const PLACEHOLDER = '__TRANSFORM__/'
 function imageKitLoader(path: string, config: ImageLoaderConfig) {
-  const url = new URL(config.src.replace(/^(\/)?/, `$1${PLACEHOLDER}/`), path)
+  const url = new URL(config.src.replace(/^(\/)?/, `$1${PLACEHOLDER}`), path)
   const transformations = decodeTransformations(url.searchParams.get('tr'))
 
-  if (config.width) transformations['w'] = config.width.toString()
+  transformations['w'] = config.width?.toString()
+  transformations['q'] ??= 'auto'
 
   url.pathname = url.pathname.replace(PLACEHOLDER, encodeTransformations(transformations))
   url.searchParams.delete('tr')

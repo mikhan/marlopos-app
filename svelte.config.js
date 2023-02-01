@@ -13,9 +13,15 @@ const config = {
       $tailwind: 'tools/tailwind/config.cjs',
     },
     csp: {
-      mode: 'nonce',
+      mode: 'auto',
       directives: {
-        'script-src': ['self'],
+        'script-src': ['self', '*.tawk.to', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
+        // 'style-src': ['self', '*.tawk.to', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
+        // 'frame-src': ['self', '*.tawk.to'],
+        // 'font-src': ['self', '*.tawk.to', 'fonts.gstatic.com'],
+        // 'img-src': ['self', '*.imagekit.io', '*.tawk.to', 'cdn.jsdelivr.net'],
+        // 'connect-src': ['self', '*.tawk.to', 'wss://*.tawk.to'],
+        // 'form-action': ['self', '*.tawk.to'],
       },
     },
   },

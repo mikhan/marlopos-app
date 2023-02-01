@@ -3,28 +3,30 @@
   import { page } from '$app/stores'
   import { getLocalizedUrl } from '$lib/utils/language'
   import { languageStore } from '$lib/stores/language-store'
-  import { getImageSrc, getImageSrcset } from '$core/services/image-loader'
+  // import { getImageSrc, getImageSrcset } from '$core/services/image-loader'
   import type { FeaturedPackage } from 'src/routes/[[lang]]/+page.server'
+  import Image from '$core/components/image.svelte'
 
   export let data: FeaturedPackage
   export let index: number
 
-  const imagePath = data.cover.id + '/' + encodeURI(data.cover.title.replace(/ /g, '-'))
-  const imageSrc = getImageSrc({ src: imagePath })
-  const imageSrcset = getImageSrcset({ src: imagePath })
+  const src = data.cover.id + '/' + encodeURI(data.cover.title.replace(/ /g, '-'))
+  // const imageSrc = getImageSrc({ src: imagePath })
+  // const imageSrcset = getImageSrcset({ src: imagePath })
 
   $: href = getLocalizedUrl(new URL(`/packages/${data.slug}`, $page.url), $languageStore.code).toString()
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
   {#if index === 0}
     <link rel="preload" as="image" href={imageSrc} imagesrcset={imageSrcset} />
   {/if}
-</svelte:head>
+</svelte:head> -->
 
 <picture class="slide-background">
   <Blurhash blurhash={data.cover.blurhash} />
-  <img loading={index === 0 ? 'eager' : 'lazy'} decoding="async" src={imageSrc} srcset={imageSrcset} alt="" />
+  <Image priority={index === 0} {src} sizes="100vw" decoding="async" alt="" fit="cover" />
+  <!-- <img loading={index === 0 ? 'eager' : 'lazy'} decoding="async" src={imageSrc} srcset={imageSrcset} alt="" /> -->
 </picture>
 <div class="slide-content layout">
   <div>
@@ -52,12 +54,12 @@
           linear-gradient(to left, rgb(0 0 0 / 50%), transparent 20%);
       }
 
-      & > img {
-        width: 100%;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        object-fit: cover;
+      & > :global(img) {
+        // width: 100%;
+        // height: 100%;
+        // min-width: 0;
+        // min-height: 0;
+        // object-fit: cover;
         transition: opacity 250ms ease-in;
       }
     }
