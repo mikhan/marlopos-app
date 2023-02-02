@@ -4,7 +4,6 @@
   import { metadataStore } from '$lib/stores/metadata.store'
   import { getLanguage } from '$lib/utils/language'
   let i = 0
-  console.clear()
 
   $: metadata = $metadataStore
   $: if (metadata) languageStore.set(getLanguage(metadata.lang))
