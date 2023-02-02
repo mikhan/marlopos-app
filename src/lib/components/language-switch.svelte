@@ -1,27 +1,39 @@
 <script lang="ts">
-  import { languageStore } from '$lib/stores/language-store'
-  import { getLanguage, LANGUAGES } from '$lib/utils/language'
+  import { languageStore } from '$lib/stores/language.store'
+  import { getLanguage, type LanguageCode } from '$lib/utils/language'
   import { navigating } from '$app/stores'
+  import { alternateLanguagesStore } from '$lib/stores/alternate-languages.store'
+  import { derived } from 'svelte/store'
 
-  const languages = Object.values(LANGUAGES)
-  const languageCodes = Object.keys(LANGUAGES)
+  const alternateLanguagesCode = derived(alternateLanguagesStore, (links) =>
+    links.map(({ hreflang }) => hreflang as LanguageCode),
+  )
 
   $: activeLang = $languageStore
-  $: alternativeLang = getLanguage(languageCodes[(languageCodes.indexOf(activeLang.code) + 1) % languageCodes.length]!)
+  $: languageCodes = [activeLang.code].concat($alternateLanguagesCode)
+  $: languages = languageCodes.map((code) => getLanguage(code))
+  // $: alternativeLang = getLanguage(languageCodes[(languageCodes.indexOf(activeLang.code) + 1) % languageCodes.length]!)
+  $: alternateLink = $alternateLanguagesStore[0]
+
+  // $: alternativeLang = getLanguage(languageCodes[(languageCodes.indexOf(activeLang.code) + 1) % languageCodes.length]!)
+  // $: alternativeLang = $metadataStore.links.find(
+  //   (link): link is Api.LinkAlternate => link.rel === 'alternate' && link.hreflang !== activeLang.code,
+  // )
   // $: nextLocalizedUrl = setUrlLocale($page.url, alternativeLang.code).toString()
-  $: disabled = !!$navigating
+  $: disabled = !!$navigating || !alternateLink
 </script>
 
-<button
-  class="switch"
-  class:disabled
-  style:--position={languageCodes.indexOf(activeLang.code)}
-  on:click={() => ($languageStore = alternativeLang)}>
-  {#each languages as language (language.code)}
-    <div class="switch-option" class:active={activeLang.code === language.code} aria-hidden="true">{language.code}</div>
-  {/each}
-  <div class="sr-only">Translate to {activeLang.name}</div>
-</button>
+{#if alternateLink}
+  <!-- content here -->
+  <a class="switch" class:disabled style:--position={languageCodes.indexOf(activeLang.code)} href={alternateLink.href}>
+    {#each languages as language (language.code)}
+      <div class="switch-option" class:active={activeLang.code === language.code} aria-hidden="true">
+        {language.code}
+      </div>
+    {/each}
+    <div class="sr-only">Translate to {activeLang.name}</div>
+  </a>
+{/if}
 
 <style lang="scss">
   .switch {

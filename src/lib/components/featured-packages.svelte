@@ -3,7 +3,7 @@
   import ChevronLeft from '$core/icons/angle-left.svg?component'
   import ChevronRight from '$core/icons/angle-right.svg?component'
   import Carousel from '$core/components/carousel.svelte'
-  import { layoutStore } from '$lib/stores/layout-store'
+  import { layoutStore } from '$lib/stores/layout.store'
   import { followFocus } from '$lib/actions/follow-focus'
   import type { FeaturedPackage } from 'src/routes/[[lang]]/+page.server'
 

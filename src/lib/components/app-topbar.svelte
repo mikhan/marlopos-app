@@ -2,7 +2,7 @@
   import LanguageWwitch from './language-switch.svelte'
 
   import Topbar from '$core/components/topbar.svelte'
-  import { layoutStore } from '$lib/stores/layout-store'
+  import { layoutStore } from '$lib/stores/layout.store'
   import logo from '../assets/logotipo.webp'
 
   let y: number
@@ -14,7 +14,7 @@
 
 <svelte:window bind:scrollY={y} />
 
-<div class="app-topbar layout-fullbleed" style:--opacity={opacity} style:height>
+<div class="app-topbar" style:--opacity={opacity} style:height>
   <Topbar>
     <div class="flex items-center gap-4 w-full">
       <img class="app-topbar-logo" src={logo} width="105" height="105" alt="" />

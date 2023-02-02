@@ -1,12 +1,4 @@
-declare namespace App {
-  // import type { Language } from '$lib/constants'
-  // interface Locals {
-  //   language: Language
-  // }
-  // interface PageData {
-  // language: Language
-  // }
-}
+declare namespace App {}
 
 declare module '*.svg?component' {
   import type { ComponentType, SvelteComponentTyped } from 'svelte'

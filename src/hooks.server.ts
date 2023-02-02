@@ -1,5 +1,5 @@
 import * as LanguageParser from 'accept-language-parser'
-import { redirect, type Handle } from '@sveltejs/kit'
+import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit'
 import {
   DEFAULT_LANGUAGE,
   LANGUAGE_CODES,
@@ -21,6 +21,14 @@ export const handle = (({ event, resolve }) => {
     transformPageChunk: ({ html }) => html.replace('%lang%', lang),
   })
 }) satisfies Handle
+
+export const handleError = (({ error }) => {
+  console.error(error)
+
+  return {
+    message: 'Whoops!',
+  }
+}) satisfies HandleServerError
 
 function getClientLanguage(request: Request): LanguageCode {
   const acceptLanguage = request.headers.get('Accept-Language')

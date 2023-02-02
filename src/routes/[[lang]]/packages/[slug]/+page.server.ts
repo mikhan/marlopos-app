@@ -1,19 +1,25 @@
+import { error } from '@sveltejs/kit'
 import { getPackages } from '$lib/database/package'
-import { getPageLinks } from '$lib/services/api'
 import { getLanguage } from '$lib/utils/language'
+import { getPageLinks } from '$lib/services/api'
 import type { PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
   const language = getLanguage(params.lang)
-  const featured = getPackages({ language, featured: true })
+  const slug = params.slug
+  const [content] = await getPackages({ language, slug })
+
+  if (!content) {
+    throw error(404, { message: 'Not found' })
+  }
 
   return {
     meta: {
-      title: 'Viajes Marlopos',
-      description: 'Agencia de viajes Marlopos',
+      title: content.name,
+      description: content.description,
       lang: language.code,
       links: getPageLinks(url, params.lang),
     },
-    featured,
+    content,
   }
 }) satisfies PageServerLoad<Api.Resource>

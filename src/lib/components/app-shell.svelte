@@ -2,7 +2,17 @@
   import AppTopbar from './app-topbar.svelte'
 </script>
 
-<main class="layout">
+<main>
   <AppTopbar />
-  <slot />
+  <div class="layout">
+    <slot />
+  </div>
 </main>
+
+<style>
+  main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100dvh;
+  }
+</style>

@@ -37,7 +37,7 @@ export function getLanguage(code?: string): Language {
   }
 }
 
-const UrlPathnameLocaleRegexp = /^\/([a-z]{2}\/)?/
+const UrlPathnameLocaleRegexp = /^\/([a-z]{2}(\/|$))?/
 export function setUrlLocale(url: URL, locale: string): URL {
   const cannonicalUrl = new URL(url)
   cannonicalUrl.pathname = url.pathname.replace(UrlPathnameLocaleRegexp, `${locale}/`)
@@ -45,6 +45,6 @@ export function setUrlLocale(url: URL, locale: string): URL {
   return cannonicalUrl
 }
 
-export function getLocalizedUrl(url: URL, code: LanguageCode): URL {
+export function getLocalizedUrl(url: URL, code = DEFAULT_LANGUAGE.code): URL {
   return setUrlLocale(url, code === DEFAULT_LANGUAGE.code ? '' : code)
 }
