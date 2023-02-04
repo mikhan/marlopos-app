@@ -1,15 +1,19 @@
 import { createClient, type PostgrestError } from '@supabase/supabase-js'
 import { SUPABASE_URL, SUPABASE_TOKEN } from '$env/static/private'
 import { DEFAULT_LANGUAGE, getLocalizedUrl, LANGUAGE_CODES } from '$lib/utils/language'
+import type { Database } from './database'
 
-export type ApiResponse<T> = { data: T; error: null } | { data: null; error: PostgrestError }
+export type ApiResponseBase = { status: number; statusText: string }
+export type ApiResponseError = { data: null; error: PostgrestError } & ApiResponseBase
+export type ApiResponseSuccess<T> = { data: T; error: null } & ApiResponseBase
+export type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError
 
-export const api = createClient(SUPABASE_URL, SUPABASE_TOKEN)
+export const api = createClient<Database>(SUPABASE_URL, SUPABASE_TOKEN)
 
 export function getPageLinks(url: URL, lang = ''): Api.Link[] {
   const links: Api.Link[] = []
 
-  console.log('getPageLinks', { url: url.toString(), lang })
+  // console.log('getPageLinks', { url: url.toString(), lang })
 
   for (const code of LANGUAGE_CODES) {
     if (code === lang && code === DEFAULT_LANGUAGE.code) {
@@ -23,7 +27,7 @@ export function getPageLinks(url: URL, lang = ''): Api.Link[] {
     links.push({ rel: 'alternate', href, hreflang: code })
   }
 
-  console.log(links)
+  // console.log(links)
 
   return links
 }

@@ -1,8 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@fontsource/inter': ^4.5.15
   '@fontsource/merriweather': ^4.5.14
-  '@fontsource/noto-sans': ^4.5.11
   '@poppanator/sveltekit-svg': ^2.0.2
   '@supabase/supabase-js': ^2.5.0
   '@sveltejs/adapter-auto': ^1.0.0
@@ -21,7 +21,6 @@ specifiers:
   postcss-import: ^15.1.0
   prettier: ^2.8.0
   prettier-plugin-svelte: ^2.8.1
-  rxjs: ^7.8.0
   sass: ^1.57.1
   svelte: ^3.54.0
   svelte-check: ^2.9.2
@@ -32,11 +31,10 @@ specifiers:
   vite: ^4.0.0
 
 dependencies:
+  '@fontsource/inter': 4.5.15
   '@fontsource/merriweather': 4.5.14
-  '@fontsource/noto-sans': 4.5.11
   '@supabase/supabase-js': 2.5.0
   fast-blurhash: 1.1.2
-  rxjs: 7.8.0
 
 devDependencies:
   '@poppanator/sveltekit-svg': 2.0.2_svelte@3.55.0+vite@4.0.4
@@ -281,12 +279,12 @@ packages:
       - supports-color
     dev: true
 
-  /@fontsource/merriweather/4.5.14:
-    resolution: {integrity: sha512-kDMIAokOvE9bYf+CDmEWzV3xtR8cRJlw/BipjhxqD9MIRZfU348cZ8xhHhmPXmxRiEjZLor4xxHXqps7eCvGQg==}
+  /@fontsource/inter/4.5.15:
+    resolution: {integrity: sha512-FzleM9AxZQK2nqsTDtBiY0PMEVWvnKnuu2i09+p6DHvrHsuucoV2j0tmw+kAT3L4hvsLdAIDv6MdGehsPIdT+Q==}
     dev: false
 
-  /@fontsource/noto-sans/4.5.11:
-    resolution: {integrity: sha512-lBX7FCjIjSrQ+iMuXUuO+mbjbnUsJyZANg/04PgkeeAYe+cwnX81ibbgrAk1F56M6/btIrWQoDjxsK6Sz8KoVQ==}
+  /@fontsource/merriweather/4.5.14:
+    resolution: {integrity: sha512-kDMIAokOvE9bYf+CDmEWzV3xtR8cRJlw/BipjhxqD9MIRZfU348cZ8xhHhmPXmxRiEjZLor4xxHXqps7eCvGQg==}
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:
@@ -1939,12 +1937,6 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /rxjs/7.8.0:
-    resolution: {integrity: sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==}
-    dependencies:
-      tslib: 2.4.1
-    dev: false
-
   /sade/1.8.1:
     resolution: {integrity: sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==}
     engines: {node: '>=6'}
@@ -2301,6 +2293,7 @@ packages:
 
   /tslib/2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
+    dev: true
 
   /tsutils/3.21.0_typescript@4.9.4:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

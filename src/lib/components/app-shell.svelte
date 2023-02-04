@@ -1,18 +1,15 @@
 <script lang="ts">
-  import AppTopbar from './app-topbar.svelte'
+  import '@fontsource/merriweather'
+  import '@fontsource/inter/variable.css'
+  import '../../app.scss'
 </script>
 
-<main>
-  <AppTopbar />
-  <div class="layout">
-    <slot />
-  </div>
-</main>
+<div class="app-shell"><slot /></div>
 
-<style>
-  main {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100dvh;
+<style lang="scss">
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
   }
 </style>

@@ -3,24 +3,24 @@
 
   export let src: string
   export let alt: string
-  export let width: number | undefined = undefined
-  export let height: number | undefined = undefined
+  export let width: number | null = null
+  export let height: number | null = null
   export let fit: 'cover' | 'contain' | null = null
   export let sizes: string | null = null
   export let priority: boolean = false
 
   const loading = priority ? 'eager' : 'lazy'
 
-  $: if (fit && (typeof width !== 'undefined' || typeof height !== 'undefined')) {
+  $: if (fit && (width !== null || height !== null)) {
     throw new Error('Remove size attributes when using "fit" mode.')
-  } else if (!fit && typeof width === 'undefined') {
+  } else if (!fit && width === null) {
     throw new Error('Missing attribute "width".')
-  } else if (!fit && typeof height === 'undefined') {
+  } else if (!fit && height === null) {
     throw new Error('Missing attribute "height".')
   }
 
   $: imageSrc = getImageSrc({ src })
-  $: srcset = getImageSrcset({ src })
+  $: imageSrcset = getImageSrcset({ src })
 </script>
 
 <!-- <svelte:head>
@@ -29,7 +29,7 @@
   {/if}
 </svelte:head> -->
 
-<img {loading} src={imageSrc} {alt} {width} {height} {srcset} {sizes} data-fit={fit} {...$$restProps} />
+<img {loading} src={imageSrc} srcset={imageSrcset} {alt} {width} {height} {sizes} data-fit={fit} {...$$restProps} />
 
 <style>
   img[data-fit] {

@@ -1,6 +1,5 @@
 <script lang="ts">
-  import LanguageWwitch from './language-switch.svelte'
-
+  // import LanguageWwitch from './language-switch.svelte'
   import Topbar from '$core/components/topbar.svelte'
   import { layoutStore } from '$lib/stores/layout.store'
   import logo from '../assets/logotipo.webp'
@@ -14,15 +13,15 @@
 
 <svelte:window bind:scrollY={y} />
 
-<div class="app-topbar" style:--opacity={opacity} style:height>
+<header class="app-topbar" style:--opacity={opacity} style:height>
   <Topbar>
     <div class="flex items-center gap-4 w-full">
       <img class="app-topbar-logo" src={logo} width="105" height="105" alt="" />
       <h1 class="text-xl font-serif tracking-wider">Inicio</h1>
-      <LanguageWwitch />
+      <!-- <LanguageWwitch /> -->
     </div>
   </Topbar>
-</div>
+</header>
 
 <style lang="scss">
   .app-topbar {

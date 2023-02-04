@@ -1,17 +1,23 @@
 <script lang="ts">
   import FeaturedPackages from '$lib/components/featured-packages.svelte'
   import ContactForm from '$lib/components/contact-form.svelte'
-  import type { PageData } from './$types'
   import { metadataStore } from '$lib/stores/metadata.store'
-
-  // import Theme from '$core/components/theme.svelte'
+  import type { PageData } from './$types'
+  import CountriesPreview from '$lib/components/countries-preview.svelte'
+  import InformationMap from '$lib/components/information-map.svelte'
 
   export let data: PageData
 
   $: metadataStore.set(data.meta)
 </script>
 
-<FeaturedPackages packages={data.featured} />
-<ContactForm />
+<svelte:head>
+  <link rel="preconnect" href="https://ik.imagekit.io" />
+</svelte:head>
 
-<!-- <div class="h-screen"><Theme /></div> -->
+<main class="layout">
+  <FeaturedPackages packages={data.featured} />
+  <CountriesPreview data={data.countriesPreview} />
+  <ContactForm />
+  <InformationMap data={data.information} />
+</main>

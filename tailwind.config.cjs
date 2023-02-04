@@ -36,7 +36,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['Noto Sans', 'sans-serif'],
+        sans: ['InterVariable', 'sans-serif'],
         serif: ['Merriweather', 'serif'],
       },
     },

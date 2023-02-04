@@ -27,6 +27,8 @@ function encodeTransformations(transformations: Transformations): string {
 
 const PLACEHOLDER = '__TRANSFORM__/'
 function imageKitLoader(path: string, config: ImageLoaderConfig) {
+  if (config.src.startsWith('http')) return config.src
+
   const url = new URL(config.src.replace(/^(\/)?/, `$1${PLACEHOLDER}`), path)
   const transformations = decodeTransformations(url.searchParams.get('tr'))
 

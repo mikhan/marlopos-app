@@ -27,5 +27,7 @@
     head?.append(script)
   }
 
-  onMount(() => delay(3_000).then(() => createWidget(document, src)))
+  onMount(() => {
+    if (src) delay(3_000).then(() => createWidget(document, src))
+  })
 </script>

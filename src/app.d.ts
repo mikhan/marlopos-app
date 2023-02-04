@@ -1,4 +1,8 @@
-declare namespace App {}
+declare namespace App {
+  interface Error {
+    message: string
+  }
+}
 
 declare module '*.svg?component' {
   import type { ComponentType, SvelteComponentTyped } from 'svelte'

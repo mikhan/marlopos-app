@@ -5,12 +5,11 @@
   import Carousel from '$core/components/carousel.svelte'
   import { layoutStore } from '$lib/stores/layout.store'
   import { followFocus } from '$lib/actions/follow-focus'
-  import type { FeaturedPackage } from 'src/routes/[[lang]]/+page.server'
 
-  export let packages: FeaturedPackage[]
+  export let packages: Database.Package[]
 
   let index = 0
-  let carousel: Carousel<FeaturedPackage>
+  let carousel: Carousel<Database.Package>
   const marginTop = `${$layoutStore.topbar.height * -1}px`
   const loop = true
   const autoplay = false
@@ -38,7 +37,7 @@
       </button>
 
       <ul class="indicators" use:followFocus>
-        {#each packages as item, i (item.slug)}
+        {#each packages as item, i (item.id)}
           <li>
             <button
               type="button"

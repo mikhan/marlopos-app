@@ -4,13 +4,12 @@
   import { languageStore } from '$lib/stores/language.store'
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
-
   export let data: Database.Package
   export let index: number
 
   const src = data.cover.id + '/' + encodeURI(data.cover.title.replace(/ /g, '-'))
 
-  $: href = getLocalizedUrl(new URL(`/packages/${data.slug}`, $page.url), $languageStore.code).toString()
+  $: href = getLocalizedUrl(new URL(`/packages/${data.id}`, $page.url), $languageStore.code).toString()
 </script>
 
 <div class="slide">
@@ -31,7 +30,7 @@
     position: absolute;
     inset: 0;
 
-    &:hover .title {
+    &:is(:hover, :focus-within) .title {
       --color-fg: theme('colors.primary.500-fg');
       --color-bg: theme('colors.primary.500');
     }

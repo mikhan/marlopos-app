@@ -1,14 +1,21 @@
 declare namespace Database {
-  type Image = {
+  interface Package {
     id: string
-    title: string
-    blurhash: string
-  }
-
-  type Package = {
-    slug: string
     name: string
     description: string
     cover: Image
+  }
+
+  interface Destination {
+    id: string
+    cover: Image
+    photos: Image[]
+    // coordinates:
+  }
+
+  interface Image {
+    id: string
+    title: string
+    blurhash: string
   }
 }

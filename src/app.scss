@@ -6,4 +6,16 @@
 
 :root {
   color-scheme: dark;
+  scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion) {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  --app_surface_color: theme('colors.neutral.100');
+  font-family: theme('fontFamily.sans');
+  background-color: var(--app_surface_color);
+  color: theme('colors.neutral.900');
 }
