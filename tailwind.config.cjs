@@ -1,21 +1,22 @@
 const plugin = require('tailwindcss/plugin')
 const { generatePalette } = require('./tools/tailwind/palette.cjs')
 
-const colors = generatePalette(
+const palette = generatePalette(
   {
-    primary: { color: 'hsl(254, 66%, 52%)', shade: 500 },
+    primary: 'hsl(254, 66%, 52%)',
     neutral: '#6b7280',
   },
-  { dark: true },
+  { dark: false },
 )
 
-colors['base'] = colors.neutral[100]
+palette.colors['base'] = palette.colors.neutral[100]
+palette.variables['--colors-base-100'] = palette.variables['--colors-neutral-100']
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    colors,
+    colors: palette.colors,
     focusable: {
       border: {
         width: `1px`,
@@ -34,6 +35,7 @@ module.exports = {
       //   offset: '2px',
       // },
     },
+    variables: palette.variables,
     extend: {
       fontFamily: {
         sans: ['InterVariable', 'sans-serif'],
@@ -42,6 +44,11 @@ module.exports = {
     },
   },
   plugins: [
+    plugin(({ addBase, theme }) => {
+      addBase({
+        ':root': theme('variables'),
+      })
+    }),
     // plugin(({ matchUtilities, theme }) => {
     //   matchUtilities(
     //     {

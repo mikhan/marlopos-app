@@ -30,6 +30,6 @@ declare global {
 
     type GenerateColor = (config: ColorConfig, options?: { dark?: boolean }) => ColorResult
 
-    type GetForegroundColor = (color: string, options?: { contrastRatio?: number }) => string | null
+    type GetForegroundColor = (color: Color, options?: { contrastRatio?: number }) => string | null
   }
 }
