@@ -49,22 +49,5 @@ module.exports = {
         ':root': theme('variables'),
       })
     }),
-    // plugin(({ matchUtilities, theme }) => {
-    //   matchUtilities(
-    //     {
-    //       focusable: (value) => {
-    //         const { color, width = '2px', style = 'solid', offset = '0px' } = value
-    //         console.log('color', theme(color))
-    //         return {
-    //           '&:focus-visible': {
-    //             outline: `${width} ${style} ${color}`,
-    //             outlineOffset: offset,
-    //           },
-    //         }
-    //       },
-    //     },
-    //     { values: theme('focusable') },
-    //   )
-    // }),
   ],
 }

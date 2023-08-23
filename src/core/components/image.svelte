@@ -1,49 +1,46 @@
 <script lang="ts">
-  import { getImageSrc, getImageSrcset } from '$core/services/image-loader'
+  import { createEventDispatcher } from 'svelte'
+  import { isAbsoluteURL } from '$core/utils/url'
+
+  const dispatch = createEventDispatcher<{
+    load: HTMLImageElement
+  }>()
+
+  function onLoad(event: Event) {
+    dispatch('load', event.currentTarget as HTMLImageElement)
+  }
 
   export let src: string
   export let alt: string
-  export let width: number | null = null
-  export let height: number | null = null
-  export let fit: 'cover' | 'contain' | null = null
+  export let width: number
+  export let height: number
   export let sizes: string | null = null
   export let priority: boolean = false
+  export let breakpoints: number[] = [640, 960, 1280, 1600, 1920]
 
   const loading = priority ? 'eager' : 'lazy'
 
-  $: if (fit && (width !== null || height !== null)) {
-    throw new Error('Remove size attributes when using "fit" mode.')
-  } else if (!fit && width === null) {
-    throw new Error('Missing attribute "width".')
-  } else if (!fit && height === null) {
-    throw new Error('Missing attribute "height".')
+  function getImageSrcset(src: string, breakpoints: number[]): string | null {
+    if (isAbsoluteURL(src)) return null
+
+    const srcset: Set<string> = new Set()
+
+    for (const width of breakpoints) {
+      const url = new URL(src, 'http://localhost')
+      url.searchParams.set('w', width.toString())
+      srcset.add(`${url.href.replace('http://localhost', '')} ${width}w`)
+    }
+
+    return Array.from(srcset).join(', ') || null
   }
 
-  $: imageSrc = getImageSrc({ src })
-  $: imageSrcset = getImageSrcset({ src })
+  $: srcset = getImageSrcset(src, breakpoints.sort().reverse())
 </script>
 
-<!-- <svelte:head>
-  {#if priority && !browser}
-    <link rel="preload" as="image" href={imageSrc} imagesrcset={srcset} imagesizes={sizes} />
+<svelte:head>
+  {#if priority}
+    <link rel="preload" as="image" href={src} imagesrcset={srcset} imagesizes={sizes} />
   {/if}
-</svelte:head> -->
+</svelte:head>
 
-<img {loading} src={imageSrc} srcset={imageSrcset} {alt} {width} {height} {sizes} data-fit={fit} {...$$restProps} />
-
-<style>
-  img[data-fit] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    inset: 0px;
-  }
-
-  img[data-fit='cover'] {
-    object-fit: cover;
-  }
-
-  img[data-fit='contain'] {
-    object-fit: contain;
-  }
-</style>
+<img {loading} on:load={onLoad} {src} {width} {height} {alt} {srcset} {sizes} {...$$restProps} />

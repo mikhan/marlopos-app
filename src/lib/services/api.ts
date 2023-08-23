@@ -8,12 +8,12 @@ export type ApiResponseError = { data: null; error: PostgrestError } & ApiRespon
 export type ApiResponseSuccess<T> = { data: T; error: null } & ApiResponseBase
 export type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError
 
-export const api = createClient<Database>(SUPABASE_URL, SUPABASE_TOKEN)
+export const api = createClient<Database>(SUPABASE_URL, SUPABASE_TOKEN, {
+  auth: { persistSession: false },
+})
 
 export function getPageLinks(url: URL, lang = ''): Api.Link[] {
   const links: Api.Link[] = []
-
-  // console.log('getPageLinks', { url: url.toString(), lang })
 
   for (const code of LANGUAGE_CODES) {
     if (code === lang && code === DEFAULT_LANGUAGE.code) {
@@ -26,8 +26,6 @@ export function getPageLinks(url: URL, lang = ''): Api.Link[] {
     const href = getLocalizedUrl(url, code).toString()
     links.push({ rel: 'alternate', href, hreflang: code })
   }
-
-  // console.log(links)
 
   return links
 }

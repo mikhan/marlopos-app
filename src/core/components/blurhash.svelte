@@ -1,44 +1,47 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
-  import { renderBlurhash } from '../utils/image'
+  import { onMount, createEventDispatcher } from 'svelte'
+  import { getBlurhashUrl, renderBlurhash } from '../utils/image'
+  import { browser } from '$app/environment'
 
-  let blurhash: string
+  type Events = {
+    load: HTMLCanvasElement
+  }
+
+  const dispatch = createEventDispatcher<Events>()
+
+  let hash: string
   let width: number = 32
   let height: number = 32
   let punch: number | undefined = undefined
+  let blurhashURL: string | null = null
+
+  if (browser) blurhashURL = getBlurhashUrl(hash, { width, height, punch })
 
   let canvas: HTMLCanvasElement
-  let image: HTMLImageElement | null
-
-  function hideImage() {
-    if (!image || image.complete) return
-
-    image.style.setProperty('opacity', '0')
-    image.addEventListener('load', () => showImage(), { once: true })
-  }
-
-  function showImage() {
-    image?.style.removeProperty('opacity')
-  }
 
   onMount(() => {
     const renderingContext = canvas.getContext('2d')
-    renderingContext && renderBlurhash(renderingContext, blurhash, { width, height, punch })
-    image = canvas.parentElement?.querySelector('img') ?? null
-    hideImage()
+    renderingContext && renderBlurhash(renderingContext, hash, { width, height, punch })
+
+    dispatch('load', canvas)
   })
 
-  onDestroy(() => {
-    showImage()
-  })
-
-  export { blurhash, width, height, punch }
+  export { hash, width, height, punch }
 </script>
 
-<canvas {width} {height} bind:this={canvas} />
+<div {...$$restProps}>
+  <canvas style="display:none" {width} {height} bind:this={canvas} />
+  <img src={blurhashURL} aria-hidden="true" alt="" />
+  <slot />
+</div>
 
 <style lang="scss">
-  canvas {
+  div {
+    position: relative;
+    isolation: isolate;
+  }
+
+  img {
     position: absolute;
     inset: 0;
     width: 100%;

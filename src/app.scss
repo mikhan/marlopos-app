@@ -14,7 +14,7 @@
 }
 
 body {
-  --app_surface_color: theme('colors.neutral.100');
+  --app_surface_color: theme('colors.neutral.50');
   font-family: theme('fontFamily.sans');
   background-color: var(--app_surface_color);
   color: theme('colors.neutral.900');

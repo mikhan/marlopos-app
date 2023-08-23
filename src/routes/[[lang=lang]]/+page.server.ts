@@ -1,8 +1,8 @@
 import { getCountriesPreview } from '$lib/database/countries'
 import { getPackages } from '$lib/database/packages'
 import { getPageLinks } from '$lib/services/api'
-import { getLanguage } from '$lib/utils/language'
-import type { PageServerLoad } from './$types'
+import { getLanguage, isDefaultLanguage, LANGUAGE_CODES } from '$lib/utils/language'
+import type { EntryGenerator, PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
   const language = getLanguage(params.lang)
@@ -20,3 +20,8 @@ export const load = (async ({ url, params }) => {
     countriesPreview,
   }
 }) satisfies PageServerLoad<Api.Resource>
+
+export const entries: EntryGenerator = () =>
+  LANGUAGE_CODES.map((lang) => ({ lang: isDefaultLanguage(lang) ? '' : lang }))
+
+export const prerender = true

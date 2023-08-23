@@ -1,20 +1,7 @@
 import { unique } from '$core/utils/array'
 import { api } from '$lib/services/api'
 
-export interface CountryPreview {
-  id: number
-  name: string
-  cover: Database.Image & { src: string }
-  destinations: number
-  packages: number
-  href: string
-}
-
-function setCoverSrc<T extends { id: string; title: string }>(cover: T): T & { src: string } {
-  return { ...cover, src: cover.id + '/' + encodeURI(cover.title.replace(/ /g, '-')) }
-}
-
-export async function getCountriesPreview(): Promise<CountryPreview[]> {
+export async function getCountriesPreview() {
   const request = api
     .from('country')
     .select(
@@ -22,24 +9,28 @@ export async function getCountriesPreview(): Promise<CountryPreview[]> {
       id,
       name,
       destinations:destination!inner (id, cover!inner (
-        id,
+        id:filename_disk,
         title,
+        width,
+        height,
         blurhash
       )),
       packages:destination!inner (_:package_destination(package (id)))
     `,
     )
-    .returns<{
-      id: number
-      name: string
-      destinations: [
-        {
-          id: number
-          cover: Database.Image
-        },
-      ]
-      packages: { _: { package: { id: string } }[] }[]
-    }>()
+    .returns<
+      {
+        id: number
+        name: string
+        destinations: [
+          {
+            id: number
+            cover: Database.Image
+          },
+        ]
+        packages: { _: { package: { id: string } }[] }[]
+      }[]
+    >()
 
   const { data, error } = await request
 
@@ -48,7 +39,7 @@ export async function getCountriesPreview(): Promise<CountryPreview[]> {
   return data.map(({ id, name, destinations, packages }) => ({
     id,
     name,
-    cover: setCoverSrc(destinations[0].cover),
+    cover: destinations[0].cover,
     destinations: destinations.length,
     packages: unique(packages.flatMap(({ _ }) => _.map(({ package: { id } }) => id))).length,
     href: `/country/${id}`,

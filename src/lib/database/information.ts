@@ -24,7 +24,7 @@ export interface Information {
   schedule: Schedule[]
 }
 
-export async function getInformation(): Promise<Information> {
+export async function getInformation() {
   const request = api
     .from('information')
     .select(
@@ -36,7 +36,13 @@ export async function getInformation(): Promise<Information> {
       schedule
     `,
     )
-    .returns<Information>()
+    .returns<{
+      address: string
+      coordinates: [number, number]
+      contact: ContactInformation[]
+      networks: ContactNetwork[]
+      schedule: Schedule[]
+    }>()
     .single()
 
   const { data, error } = await request

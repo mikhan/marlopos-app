@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { page } from '$app/stores'
 
   const online = typeof navigator !== 'undefined' ? navigator.onLine : true

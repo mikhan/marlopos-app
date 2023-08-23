@@ -9,20 +9,20 @@ type CreateMarkerOptions = {
 }
 
 type CreateMapOptions = {
+  width: number
+  height: number
   lon: number
   lat: number
   zoom: number
-  width: number
-  height: number
   marker?: Omit<CreateMarkerOptions, 'lat' | 'lon'>
 }
 
-export function getStaticMap({ lon, lat, zoom, width, height, marker }: CreateMapOptions) {
+export function getStaticMapURL({ lon, lat, zoom, width, height, marker }: CreateMapOptions) {
   let href = `https://api.mapbox.com/styles/v1/${MAPBOX_USER}/${MAPBOX_STYLE}/static`
 
   if (marker) href += `/${createMarker({ lon, lat, ...marker })}`
 
-  return `${href}/${lon},${lat},${zoom}/${width}x${height}?access_token=${MAPBOX_ACCESS_TOKEN}`
+  return new URL(`${href}/${lon},${lat},${zoom}/${width}x${height}?access_token=${MAPBOX_ACCESS_TOKEN}`)
 }
 
 function createMarker({ lon, lat, label, size = 'small', color }: CreateMarkerOptions) {

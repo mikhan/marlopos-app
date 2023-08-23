@@ -1,27 +1,7 @@
-import type { PostgrestResponse } from '@supabase/supabase-js'
-import { api, type ApiResponse } from '../services/api'
+import { api } from '../services/api'
 import type { Language } from '../utils/language'
 
-export async function getDestinations({
-  language,
-  id,
-}: {
-  language: Language
-  id?: string
-}): Promise<Database.Package[]> {
-  type Data = {
-    id: string
-    name: string
-    description: string
-    package: {
-      cover: {
-        id: string
-        title: string
-        blurhash: string
-      }
-    }
-  }
-
+export async function getDestinations({ language, id }: { language: Language; id?: string }) {
   let request = api.from('destination_translations').select(`
       id,
       name,
@@ -43,7 +23,20 @@ export async function getDestinations({
     request = request.eq('languages_code', language.locale)
   }
 
-  const { data, error } = (await request) as PostgrestResponse<Data>
+  const { data, error } = await request.returns<
+    {
+      id: string
+      name: string
+      description: string
+      package: {
+        cover: {
+          id: string
+          title: string
+          blurhash: string
+        }
+      }
+    }[]
+  >()
 
   if (error) throw error
 

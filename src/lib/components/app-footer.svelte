@@ -1,14 +1,24 @@
 <script lang="ts">
+  import FacebookIcon from '$lib/icons/facebook.svg?component'
   import type { Information } from '$lib/database/information'
 
-  const currentYear = new Date().getFullYear()
-
   export let data: Information
-  console.log(data)
+
+  const currentYear = new Date().getFullYear()
+  const networkIcons = {
+    facebook: FacebookIcon,
+  }
 </script>
 
-<footer class="layout mt-auto pt-8 pb-16 bg-neutral-200 text-neutral-400 border-t border-t-neutral-300">
-  <div class="text-sm">
-    © {currentYear} VIAJES MARLOPOS SA DE CV.
+<footer class="layout mt-auto pt-8 pb-16 text-neutral-400 text-sm border-t border-t-neutral-100">
+  <div class="flex justify-between items-center">
+    <div>
+      © {currentYear} VIAJES MARLOPOS SA DE CV.
+    </div>
+    {#each data.networks as network}
+      <a class="transition-colors hover:text-neutral-600" href={network.value}>
+        <svelte:component this={networkIcons[network.type]} aria-hidden="true" width="24" height="24" />
+      </a>
+    {/each}
   </div>
 </footer>

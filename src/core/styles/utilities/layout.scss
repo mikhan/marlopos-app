@@ -20,6 +20,10 @@
     }
   }
 
+  .layout-lg {
+    --app-layout-content: theme('screens.lg');
+  }
+
   .layout-start {
     grid-column: fullbleed-start / content-start;
   }

@@ -8,12 +8,12 @@
   const opacityOffset = 250
 
   $: opacity = Math.min(y / opacityOffset, 1)
-  $: height = `${$layoutStore.topbar.height * -1}px`
+  $: height = `${$layoutStore.topbar.height}px`
 </script>
 
 <svelte:window bind:scrollY={y} />
 
-<header class="app-topbar" style:--opacity={opacity} style:height>
+<header class="app-topbar" style:--opacity={opacity} style:--height={height}>
   <Topbar>
     <div class="flex items-center gap-4 w-full">
       <img class="app-topbar-logo" src={logo} width="105" height="105" alt="" />
@@ -25,24 +25,21 @@
 
 <style lang="scss">
   .app-topbar {
-    --height: theme('spacing.16');
-    --opacity: 0;
     display: grid;
     position: sticky;
     top: 0;
     z-index: 2;
     height: var(--height);
-    background-image: linear-gradient(to bottom, theme('colors.base'), transparent);
 
     &::before {
       content: '';
       display: block;
       position: absolute;
       inset: 0;
-      background-color: theme('colors.neutral.200 / 50%');
+      background-color: theme('colors.neutral.100 / 60%');
       background-clip: content-box;
       border-bottom: 1px solid theme('colors.neutral.300 / 50%');
-      backdrop-filter: saturate(50%) blur(4px);
+      backdrop-filter: saturate(50%) blur(8px);
       opacity: var(--opacity);
       z-index: -1;
     }

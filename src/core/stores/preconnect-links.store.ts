@@ -11,10 +11,7 @@ export interface PreconnectLinksContext extends Readable<Record<string, Preconne
 export const PreconnectLinksContext = Symbol('PreconnectLinksContext')
 
 export function createPreconnectLinksStore(): PreconnectLinksContext {
-  const { subscribe, update } = writable<Record<string, PreconnectLink>>({}, () => {
-    console.log('>> got a subscriber')
-    return () => console.log('>> no more subscribers')
-  })
+  const { subscribe, update } = writable<Record<string, PreconnectLink>>({})
 
   return {
     subscribe,
@@ -25,8 +22,6 @@ export function createPreconnectLinksStore(): PreconnectLinksContext {
         if (!(origin in links)) {
           links[origin] = { href: origin }
         }
-
-        console.log('(inside) links', links)
 
         return { ...links }
       })

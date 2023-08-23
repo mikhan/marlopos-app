@@ -16,7 +16,7 @@ const config = {
     csp: {
       mode: 'auto',
       directives: {
-        'script-src': ['self', '*.tawk.to', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
+        'script-src': ['self', 'blob:', '*.tawk.to', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
       },
     },
   },

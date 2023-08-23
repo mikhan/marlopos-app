@@ -12,10 +12,7 @@ function generatePalette(config, { dark = false } = {}) {
   const variables = {}
 
   for (const [name, color] of Object.entries(config)) {
-    const result = generateColor(
-      { ...DEFAULT_CONFIG, ...(typeof color === 'string' ? { color } : color) },
-      { dark },
-    )
+    const result = generateColor({ ...DEFAULT_CONFIG, ...(typeof color === 'string' ? { color } : color) }, { dark })
 
     colors[name] = {}
 
@@ -29,7 +26,7 @@ function generatePalette(config, { dark = false } = {}) {
 }
 
 /** @type {Tailwind.GenerateColor} */
-function generateColor(config, { dark = false } = {}) {
+export function generateColor(config, { dark = false } = {}) {
   const base = chroma(config.color)
   const [l, c, h] = base.oklch()
   const direction = dark ? -1000 : +1000

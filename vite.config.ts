@@ -6,7 +6,7 @@ const config: UserConfig = {
   plugins: [
     sveltekit(),
     svg({
-      includePaths: ['./src/core/icons/'],
+      includePaths: ['./src/core/icons/', './src/lib/icons/'],
       svgoOptions: {
         multipass: true,
         plugins: [

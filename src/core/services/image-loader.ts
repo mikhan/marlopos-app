@@ -11,7 +11,7 @@ export type ImageConfig = {
 
 const DEFAULT_BREAKPOINTS = [640, 960, 1280, 1600, 1920]
 
-let imageLoader: ImageLoader = ({ src }) => src
+let imageLoader: ImageLoader = ({ src }) => new URL(src, 'http://localhost:81/assets/').href
 let imageConfig: ImageConfig = {}
 
 export function setImageConfig(config: ImageConfig) {

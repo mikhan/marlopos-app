@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
+  import { panning, type PanEvent } from '$core/actions/pan'
   import { useKeyboardNavigation, type KeyboardNavigation } from '../actions/keyboard-navigation'
   import { IndexManagerStore } from '../stores/index-manager-store'
   import { IntervalPlayer } from '../types/interval-player'
-  import { documentVvisivilityState } from '../stores/document-visibility-state'
+  import { documentVisibilityState } from '../stores/document-visibility-state'
 
   type T = $$Generic
 
@@ -56,8 +57,24 @@
   let rotation: [number, number, number]
   $: createIndexLoop(slides.length, loop)
   $: rotation = [index === 0 ? indexLoop.size - 1 : index - 1, index, index === indexLoop.size - 1 ? 0 : index + 1]
+  $: $documentVisibilityState === 'visible' ? resume() : pause()
 
-  $: $documentVvisivilityState === 'visible' ? resume() : pause()
+  let displace = 0
+
+  function onPanMove(event: PanEvent) {
+    displace = event.detail.deltaX
+
+    if (Math.abs(displace) < 250) return
+    if (displace < 0) next()
+    if (displace > 0) previous()
+
+    event.preventDefault()
+    displace = 0
+  }
+
+  function onPanStop() {
+    displace = 0
+  }
 
   onMount(() => {
     if (autoplay) intervalPlayer.start()
@@ -71,17 +88,24 @@
 
 <section
   class="carousel"
-  aria-roledescription="carousel"
+  role="listbox"
   tabindex="-1"
   use:useKeyboardNavigation={keyboardNavigation}
   on:mouseenter={pause}
   on:mouseleave={resume}
   on:focusin={() => (intervalPlayer.enabled = false)}
   on:focusout={() => (intervalPlayer.enabled = true)}>
-  <ul class="slides" aria-live="polite">
+  <ul
+    class="slides"
+    aria-live="polite"
+    style:--displace={displace + 'px'}
+    use:panning
+    on:panmove={onPanMove}
+    on:panstop={onPanStop}>
     {#each slides as slide, slideIndex (slideIndex)}
       <li
         class="slide"
+        class:panning={displace !== 0}
         class:slide-prev={slideIndex === rotation[0]}
         class:slide-current={slideIndex === rotation[1]}
         class:slide-next={slideIndex === rotation[2]}
@@ -99,6 +123,7 @@
   .carousel {
     display: inline-block;
     contain: layout size;
+    container: carousel / size;
     outline: none;
     contain-intrinsic-size: auto 30rem auto 15rem;
     min-width: 0;
@@ -109,27 +134,31 @@
     position: absolute;
     inset: 0;
     overflow: hidden;
+    touch-action: none;
   }
 
   .slide {
     isolation: isolate;
     position: absolute;
     inset: 0;
-    transition-property: transform;
-    transition-duration: theme('transitionDuration.700');
-    transition-timing-function: theme('transitionTimingFunction.in-out');
+
+    &:not(.panning) {
+      transition-property: transform;
+      transition-duration: theme('transitionDuration.700');
+      transition-timing-function: theme('transitionTimingFunction.in-out');
+    }
 
     &-prev {
-      transform: translateX(-100%);
+      transform: translateX(calc(-100% + var(--displace, 0px)));
     }
 
     &-current {
-      transform: translateX(0);
+      transform: translateX(calc(0% + var(--displace, 0px)));
       z-index: 2;
     }
 
     &-next {
-      transform: translateX(100%);
+      transform: translateX(calc(100% + var(--displace, 0px)));
     }
 
     &[aria-hidden='true'] {

@@ -1,5 +1,5 @@
 import { assertIsNonNullable } from '$core/utils/assert'
-import { getStaticMap } from '$lib/services/map'
+import { getStaticMapURL } from '$lib/services/map'
 import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ url, params, fetch }) => {
@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ url, params, fetch }) => {
   const width = Number(url.searchParams.get('width'))
   const height = Number(url.searchParams.get('height'))
 
-  const mapUrl = getStaticMap({
+  const mapUrl = getStaticMapURL({
     lon,
     lat,
     zoom,
@@ -21,5 +21,5 @@ export const GET: RequestHandler = async ({ url, params, fetch }) => {
     marker: { label: 'circle', color: '5a34d5', size: 'large' },
   })
 
-  return fetch(mapUrl)
+  return fetch(mapUrl.toString())
 }

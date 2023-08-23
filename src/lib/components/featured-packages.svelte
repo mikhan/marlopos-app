@@ -56,7 +56,7 @@
 
 <style lang="scss">
   .wrapper {
-    --shadow-color: theme('colors.base');
+    --shadow-color: theme('colors.base/0.5');
     --slide_content_py: min(theme('spacing.16'), 10vh);
     --slide_content_px: theme('spacing.8');
     --slide_title_size: theme('fontSize.xl');
@@ -80,11 +80,11 @@
       --slide_desc_size: theme('fontSize.lg');
     }
 
-    @media (min-width: theme('screens.lg')) {
-      --slide_content_px: theme('spacing.36');
-      --slide_title_size: theme('fontSize.4xl');
-      --slide_desc_size: theme('fontSize.xl');
-    }
+    // @media (min-width: theme('screens.lg')) {
+    //   --slide_content_px: theme('spacing.36');
+    //   --slide_title_size: theme('fontSize.4xl');
+    //   --slide_desc_size: theme('fontSize.xl');
+    // }
 
     @media (min-height: theme('spacing.80')) and (pointer: fine) {
       --slide_indicators_display: flex;
@@ -95,6 +95,8 @@
     min-height: min(40rem, 75vh);
     max-height: min(40rem, 100vh);
     aspect-ratio: 4/3;
+    max-width: theme('screens.2xl');
+    margin: 0 auto;
 
     &:hover,
     &:focus-within {
@@ -126,7 +128,7 @@
     }
 
     &:hover,
-    &:focus {
+    &:active {
       --background: theme('colors.neutral.400');
       --color: theme('colors.neutral.400-fg');
     }

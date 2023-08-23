@@ -10,12 +10,13 @@ declare namespace Database {
     id: string
     cover: Image
     photos: Image[]
-    // coordinates:
   }
 
   interface Image {
     id: string
     title: string
+    width: number
+    height: number
     blurhash: string
   }
 }

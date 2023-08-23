@@ -1,4 +1,6 @@
-export function followFocus(element: HTMLElement) {
+import type { Action } from 'svelte/action'
+
+export const followFocus: Action<HTMLElement> = (element) => {
   const mutationObserver = new MutationObserver((records) => {
     for (const { target } of records) {
       if (target instanceof HTMLElement && target.getAttribute('tabindex') === '0') {
