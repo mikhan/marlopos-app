@@ -1,17 +1,44 @@
 @layer components {
   .button {
-    display: inline-grid;
-    place-content: center;
+    --bg: theme('colors.surface-1.bg');
+    --fg: theme('colors.surface-1.fg');
+    --hover: theme('colors.surface-1.hover');
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: theme('spacing.2');
     min-width: theme('spacing.16');
-    height: theme('spacing.10');
+    height: theme('spacing.12');
     padding: 0 theme('spacing.6');
-    background-color: theme('colors.primary.500');
-    color: theme('colors.primary.500-fg');
-    font-weight: theme('fontWeight.bold');
+    color: var(--fg);
     text-transform: uppercase;
     border-radius: theme('borderRadius.DEFAULT');
+    border: 2px solid var(--bg);
     letter-spacing: theme('letterSpacing.wider');
-    outline: none;
-    @apply focusable;
+    outline: 2px solid transparent;
+    outline-offset: 8px;
+    transition-property: background-color, border-color, outline-color, outline-offset;
+    transition-duration: 150ms, 150ms, 150ms, 250ms;
+
+    &:is(:hover, :active) {
+      background-color: var(--hover);
+      border: 2px solid var(--hover);
+    }
+
+    &:focus-visible {
+      outline-color: theme('colors.ring');
+      outline-offset: 2px;
+    }
+  }
+
+  .button-filled {
+    background-color: var(--bg);
+    box-shadow: theme('elevation.low');
+  }
+
+  .button-primary {
+    --bg: theme('colors.surface-primary.bg');
+    --fg: theme('colors.surface-primary.fg');
+    --hover: theme('colors.surface-primary.hover');
   }
 }

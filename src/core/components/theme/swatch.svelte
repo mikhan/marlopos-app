@@ -16,7 +16,7 @@
   <div class="text-xs opacity-0 group-hover:opacity-100 transition-opacity">{contrast}</div>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
   .swatch {
     display: flex;
     flex-direction: column;

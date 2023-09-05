@@ -1,7 +1,7 @@
 @layer utilities {
   .layout {
     --layout-padding: var(--app-layout-padding, 1rem);
-    --layout-content-max: var(--app-layout-content, theme('screens.md'));
+    --layout-content-max: var(--app-layout-content, theme('screens.lg'));
     --layout-content-min: calc(100% - calc(var(--layout-padding) * 2));
     display: grid;
     grid-template-columns:
@@ -18,10 +18,6 @@
     & > * {
       grid-column: content-start / content-end;
     }
-  }
-
-  .layout-lg {
-    --app-layout-content: theme('screens.lg');
   }
 
   .layout-start {

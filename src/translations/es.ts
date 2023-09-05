@@ -3,11 +3,11 @@
 const translations = {
   'param.packages': 'paquetes',
   'contactForm.field.email.label': 'Email',
-  'contactForm.field.email.placeholder': 'usuario@email.com',
+  'contactForm.field.email.placeholder': '',
   'contactForm.field.name.label': 'Nombre',
-  'contactForm.field.name.placeholder': '¿Cómo podemos ayudarle?',
+  'contactForm.field.name.placeholder': '',
   'contactForm.field.message.label': 'Mensaje',
-  'contactForm.field.message.placeholder': 'Déjenos un mensaje',
+  'contactForm.field.message.placeholder': '¿Cómo podemos ayudarle?',
   'contactForm.button.send': 'Enviar',
 }
 

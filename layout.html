@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .content-layout {
+        --full: calc(calc(100% - 1280px) / 2);
+        --xl-min: calc(calc(100% - 1024px) / 2);
+        --xl-max: calc(calc(1280px - 1024px) / 2);
+        --lg-min: calc(calc(100% - 768px) / 2);
+        --lg-max: calc(calc(1024px - 768px) / 2);
+        --md-min: calc(calc(100% - 480px) / 2);
+        --md-max: calc(calc(768px - 480px) / 2);
+        display: grid;
+        grid-template-columns:
+          [full-start] var(--full)
+          [xl-start] min(var(--xl-min), var(--xl-max))
+          [lg-start] min(var(--lg-min), var(--lg-max))
+          [md-start] min(var(--md-min), var(--md-max))
+          [sm-start] min(100%, 480px)
+          [sm-end] min(var(--md-min), var(--md-max))
+          [md-end] min(var(--lg-min), var(--lg-max))
+          [lg-end] min(var(--xl-min), var(--xl-max))
+          [xl-end] var(--full)
+          [full-end];
+      }
+
+      .content-start-full,
+      .content-layout > * {
+        grid-column-start: full-start;
+      }
+
+      .content-end-full,
+      .content-layout > * {
+        grid-column-end: full-end;
+      }
+
+      .content-start-xl,
+      .content-xl {
+        grid-column-start: xl-start;
+      }
+
+      .content-end-xl,
+      .content-xl {
+        grid-column-end: xl-end;
+      }
+
+      .content-start-lg,
+      .content-lg {
+        grid-column-start: lg-start;
+      }
+
+      .content-end-lg,
+      .content-lg {
+        grid-column-end: lg-end;
+      }
+
+      .content-start-md,
+      .content-md {
+        grid-column-start: md-start;
+      }
+
+      .content-end-md,
+      .content-md {
+        grid-column-end: md-end;
+      }
+
+      .content-start-sm,
+      .content-sm {
+        grid-column-start: sm-start;
+      }
+
+      .content-end-sm,
+      .content-sm {
+        grid-column-end: sm-end;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content-layout">
+      <div class="test">
+        <div>
+          <span>FULL</span>
+          <small><output></output></small>
+        </div>
+      </div>
+      <div class="test content-xl">
+        <div>
+          <span>XL</span>
+          <small><output></output> (1280)</small>
+        </div>
+      </div>
+      <div class="test content-lg">
+        <div>
+          <span>LG</span>
+          <small><output></output> (1024)</small>
+        </div>
+      </div>
+      <div class="test content-md">
+        <div>
+          <span>MD</span>
+          <small><output></output> (768)</small>
+        </div>
+      </div>
+      <div class="test content-sm">
+        <div>
+          <span>SM</span>
+          <small><output></output> (480)</small>
+        </div>
+      </div>
+    </div>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .content-layout {
+        margin: 2rem;
+        border: 1px dashed gray;
+        padding: 0 2rem;
+      }
+
+      .test {
+        display: grid;
+        place-content: center;
+        outline: 1px dotted red;
+        outline-offset: -1px;
+        height: 3lh;
+      }
+
+      .size {
+        border: 2px dashed green;
+        height: 3lh;
+      }
+    </style>
+    <script>
+      const observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const target = entry.target.querySelector('output')
+          target.textContent = entry.contentRect.width
+        }
+      })
+
+      for (const e of document.querySelectorAll('.test')) {
+        observer.observe(e)
+      }
+    </script>
+  </body>
+</html>

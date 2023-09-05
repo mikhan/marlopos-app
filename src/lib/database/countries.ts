@@ -1,7 +1,8 @@
 import { unique } from '$core/utils/array'
+import { getBlurHashColor } from '$core/utils/image'
 import { api } from '$lib/services/api'
 
-export async function getCountriesPreview() {
+export async function getCountriesPreview(): Promise<Api.CountryPreview[]> {
   const request = api
     .from('country')
     .select(
@@ -25,7 +26,13 @@ export async function getCountriesPreview() {
         destinations: [
           {
             id: number
-            cover: Database.Image
+            cover: {
+              id: string
+              title: string
+              width: number
+              height: number
+              blurhash: string
+            }
           },
         ]
         packages: { _: { package: { id: string } }[] }[]
@@ -39,7 +46,7 @@ export async function getCountriesPreview() {
   return data.map(({ id, name, destinations, packages }) => ({
     id,
     name,
-    cover: destinations[0].cover,
+    cover: { ...destinations[0].cover, color: getBlurHashColor(destinations[0].cover.blurhash) },
     destinations: destinations.length,
     packages: unique(packages.flatMap(({ _ }) => _.map(({ package: { id } }) => id))).length,
     href: `/country/${id}`,

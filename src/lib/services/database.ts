@@ -789,7 +789,7 @@ export interface Database {
           custom_css: string | null
           default_language: string
           id: number
-          mapbox_key: string | null
+          PUBLIC_MAPBOX_key: string | null
           module_bar: Json | null
           project_color: string | null
           project_descriptor: string | null
@@ -812,7 +812,7 @@ export interface Database {
           custom_css?: string | null
           default_language?: string
           id?: number
-          mapbox_key?: string | null
+          PUBLIC_MAPBOX_key?: string | null
           module_bar?: Json | null
           project_color?: string | null
           project_descriptor?: string | null
@@ -835,7 +835,7 @@ export interface Database {
           custom_css?: string | null
           default_language?: string
           id?: number
-          mapbox_key?: string | null
+          PUBLIC_MAPBOX_key?: string | null
           module_bar?: Json | null
           project_color?: string | null
           project_descriptor?: string | null

@@ -35,7 +35,7 @@
   </a>
 {/if}
 
-<style lang="scss">
+<style lang="postcss">
   .switch {
     --position: 0;
     width: 72px;
@@ -72,27 +72,28 @@
       pointer-events: none;
       opacity: 0.5;
     }
+  }
 
-    &-option {
-      display: grid;
-      place-content: center;
-      height: 100%;
-      width: 40px;
-      top: 0px;
-      z-index: 1;
-      position: absolute;
-      transition: color 150ms ease-in-out;
-      font-size: theme('fontSize.xs');
-      font-weight: bold;
-      right: 0;
+  .switch-option {
+    display: grid;
+    place-content: center;
+    height: 100%;
+    width: 40px;
+    top: 0px;
+    z-index: 1;
+    position: absolute;
+    transition: color 150ms ease-in-out;
+    font-size: theme('fontSize.xs[0]');
+    line-height: theme('fontSize.xs[1]');
+    font-weight: bold;
+    right: 0;
 
-      &:first-child {
-        left: 0;
-      }
+    &:first-child {
+      left: 0;
+    }
 
-      &.active {
-        color: theme('colors.neutral.100');
-      }
+    &.active {
+      color: theme('colors.neutral.100');
     }
   }
 </style>

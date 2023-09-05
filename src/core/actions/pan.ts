@@ -12,7 +12,11 @@ export type PanEvent = CustomEvent<{
 export const panning: Action<
   HTMLElement,
   undefined,
-  { 'on:panmove': (event: PanEvent) => void; 'on:panstop': (event: PanEvent) => void }
+  {
+    'on:panstart': (event: PanEvent) => void
+    'on:panmove': (event: PanEvent) => void
+    'on:panstop': (event: PanEvent) => void
+  }
 > = (node) => {
   let startX = 0
   let startY = 0
@@ -25,12 +29,24 @@ export const panning: Action<
   let abortController: AbortController | undefined
 
   function onPointerDown(event: PointerEvent) {
+    x = startX = event.screenX
+    y = startY = event.screenY
+    deltaX = 0
+    deltaY = 0
+    directionX = ''
+    directionY = ''
+
+    const panStartEvent = new CustomEvent('panstart', {
+      detail: { x, y, deltaX, deltaY, directionX, directionY },
+      cancelable: true,
+    })
+    node.dispatchEvent(panStartEvent)
+
+    if (panStartEvent.defaultPrevented) return
+
     abortController?.abort()
     abortController = new AbortController()
     abortController.signal.onabort = () => node.style.removeProperty('pointer-events')
-
-    startX = event.screenX
-    startY = event.screenY
     document.body.addEventListener('pointermove', onPointerMove, { signal: abortController.signal })
     document.body.addEventListener('pointerup', onPointerUp, { signal: abortController.signal })
   }

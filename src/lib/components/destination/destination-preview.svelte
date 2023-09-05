@@ -1,29 +1,30 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
+  import Image from '$core/components/image.svelte'
   import ItemPreview from '../common/item-preview.svelte'
 
-  export let data: {
-    name: string
-    cover: {
-      id: string
-      title: string
-      blurhash: string
-    }
-  }
+  export let data: Api.Destination
 </script>
 
 <button
-  class="aspect-video w-full h-full grid place-items-stretch rounded-md overflow-hidden border border-neutral-200">
+  class="grid w-full h-full overflow-hidden border rounded aspect-video place-items-stretch border-surface-1-border"
+  on:click
+  on:mouseover
+  on:mouseout
+  on:focus
+  on:blur>
   <ItemPreview>
     <picture slot="image">
-      <Blurhash hash={data.cover.blurhash}>
-        <img
-          class="w-full h-full object-cover"
-          src={`/api/assets/${data.cover.id}?w=320&h=180?q=50`}
-          width="320"
-          height="180"
-          alt={data.cover.title} />
-      </Blurhash>
+      <Image
+        class="w-full h-full"
+        src={`/api/assets/${data.cover.id}?w=320&h=180?q=50`}
+        width={320}
+        height={180}
+        fit="cover"
+        color={data.cover.color}
+        alt={data.cover.title}>
+        <Blurhash hash={data.cover.blurhash} width={320} height={180} />
+      </Image>
     </picture>
     <div class="px-3 py-2 text-left">
       <div>
@@ -32,6 +33,3 @@
     </div>
   </ItemPreview>
 </button>
-
-<style lang="scss">
-</style>

@@ -33,7 +33,7 @@
   </swatches>
 {/each}
 
-<style lang="scss" global>
+<style lang="postcss" global>
   swatches {
     display: grid;
     grid-template-columns: repeat(10, 1fr);

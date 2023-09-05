@@ -8,9 +8,9 @@ export const GET: RequestHandler = async ({ url, params, fetch }) => {
   assertIsNonNullable(lon)
   assertIsNonNullable(lat)
 
-  const zoom = Number(url.searchParams.get('zoom'))
-  const width = Number(url.searchParams.get('width'))
-  const height = Number(url.searchParams.get('height'))
+  const zoom = Number(url.searchParams.get('z'))
+  const width = Number(url.searchParams.get('w'))
+  const height = Number(url.searchParams.get('h'))
 
   const mapUrl = getStaticMapURL({
     lon,
@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ url, params, fetch }) => {
     zoom,
     width,
     height,
-    marker: { label: 'circle', color: '5a34d5', size: 'large' },
+    marker: { label: 'circle', color: '5a34d5' },
   })
 
   return fetch(mapUrl.toString())

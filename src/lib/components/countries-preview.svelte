@@ -5,7 +5,7 @@
   export let data: any[] = []
 </script>
 
-<section class="layout layout-fullbleed gap-8 py-16">
+<section class="flex flex-col gap-8 py-16 layout-lg md:layout-contain">
   <SectionHeader>Destinos principales</SectionHeader>
   <ul>
     {#each data as item}
@@ -14,20 +14,23 @@
   </ul>
 </section>
 
-<style lang="scss">
+<style lang="postcss">
   section {
     --app-layout-content: theme('screens.lg');
   }
 
   ul {
-    --grid_gap: 1rem;
-    --grid_size: calc(calc(100% - calc(var(--grid_gap) * 2)) / 3);
+    --grid_gap: 0.5rem;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: 1fr;
     gap: var(--grid_gap);
 
     @media (min-width: theme('screens.sm')) {
+      --grid_gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (theme('screens.md') < width < theme('screens.lg')) {
       grid-template-columns: repeat(3, 1fr);
 
       :global(li) {
@@ -54,6 +57,22 @@
 
         &:nth-child(3n + 6):last-child {
           grid-column: span 2;
+        }
+      }
+    }
+
+    @media (min-width: theme('screens.lg')) {
+      grid-template-columns: repeat(4, 1fr);
+
+      :global(li) {
+        & {
+          grid-column: span 1;
+          grid-row: span 2;
+          padding-top: var(--grid_gap);
+
+          &::before {
+            margin-top: 100%;
+          }
         }
       }
     }

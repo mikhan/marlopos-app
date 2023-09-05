@@ -1,10 +1,17 @@
 @layer utilities {
-  .focusable {
-    outline: none;
-
-    &:focus-visible {
-      outline: 2px solid var(--focusable-color, currentColor);
-      outline-offset: var(--focusable-offset, 2px);
-    }
+  /*.focusable,
+  .focusable-visible,
+  .focusable-within {
+    outline: 2px solid transparent;
+    outline-offset: 8px;
+    transition-property: outline-color, outline-offset;
+    transition-duration: 150ms, 250ms;
   }
+
+  .focusable:focus,
+  .focusable-visible:focus-visible,
+  .focusable-within:focus-within {
+    outline-color: var(--focusable-color, theme('colors.ring'));
+    outline-offset: var(--focusable-offset, 2px);
+  }*/
 }

@@ -6,9 +6,20 @@
   {@html html}
 </div>
 
-<style>
+<style lang="postcss">
   div :global(p) {
-    margin: theme('spacing.4') 0;
     line-height: theme('lineHeight.relaxed');
+  }
+
+  div :global(p:not(:first-child)) {
+    margin-top: 1lh;
+  }
+
+  div :global(a[href]) {
+    color: theme('colors.primary.200');
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 </style>

@@ -11,10 +11,10 @@
   </div>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
   .wrapper {
     --is-hover: 0;
-    --color: theme('colors.neutral.100');
+    --color: theme('colors.surface-1.fg');
     --dominant-color: transparent;
     display: grid;
     place-content: flex-end stretch;
@@ -56,8 +56,8 @@
 
     &::before {
       opacity: calc(var(--is-hover) + 1);
-      background-image: linear-gradient(to top, theme('colors.neutral.900 / 50%'), 4rem, transparent 12rem),
-        linear-gradient(45deg, theme('colors.neutral.900 / 75%'), 2rem, transparent 12rem);
+      background-image: linear-gradient(to top, theme('colors.surface-1.bg / 50%'), 4rem, transparent 12rem),
+        linear-gradient(45deg, theme('colors.surface-1.bg / 75%'), 2rem, transparent 12rem);
     }
 
     &::after {

@@ -1,4 +1,4 @@
-import { MAPBOX_ACCESS_TOKEN, MAPBOX_STYLE, MAPBOX_USER } from '$env/static/private'
+import { PUBLIC_MAPBOX_ACCESS_TOKEN, PUBLIC_MAPBOX_STYLE, PUBLIC_MAPBOX_USER } from '$env/static/public'
 
 type CreateMarkerOptions = {
   lon: number
@@ -18,11 +18,11 @@ type CreateMapOptions = {
 }
 
 export function getStaticMapURL({ lon, lat, zoom, width, height, marker }: CreateMapOptions) {
-  let href = `https://api.mapbox.com/styles/v1/${MAPBOX_USER}/${MAPBOX_STYLE}/static`
+  let href = `https://api.mapbox.com/styles/v1/${PUBLIC_MAPBOX_USER}/${PUBLIC_MAPBOX_STYLE}/static`
 
   if (marker) href += `/${createMarker({ lon, lat, ...marker })}`
 
-  return new URL(`${href}/${lon},${lat},${zoom}/${width}x${height}?access_token=${MAPBOX_ACCESS_TOKEN}`)
+  return new URL(`${href}/${lon},${lat},${zoom}/${width}x${height}?access_token=${PUBLIC_MAPBOX_ACCESS_TOKEN}`)
 }
 
 function createMarker({ lon, lat, label, size = 'small', color }: CreateMarkerOptions) {

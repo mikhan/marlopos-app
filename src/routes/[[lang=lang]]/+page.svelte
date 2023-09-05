@@ -1,23 +1,18 @@
 <script lang="ts">
-  import FeaturedPackages from '$lib/components/featured-packages.svelte'
-  import ContactForm from '$lib/components/contact-form.svelte'
-  import { metadataStore } from '$lib/stores/metadata.store'
+  import Banner from '$lib/components/banner/banner.svelte'
+  import Contact from '$lib/components/contact/contact.svelte'
   import type { PageData } from './$types'
   import CountriesPreview from '$lib/components/countries-preview.svelte'
-  import InformationMap from '$lib/components/information-map.svelte'
+  import { uiShellContext } from '$core/components/shell/ui-shell.svelte'
 
   export let data: PageData
 
-  $: metadataStore.set(data.meta)
+  const { layoutTopbarHeight } = uiShellContext.get()
+  $: marginTop = `${$layoutTopbarHeight * -1}px`
 </script>
 
-<svelte:head>
-  <link rel="preconnect" href="https://ik.imagekit.io" />
-</svelte:head>
-
-<main class="layout">
-  <FeaturedPackages packages={data.featured} />
+<main class="layout-container layout-padding" style:margin-top={marginTop}>
+  <Banner slides={data.featured} />
   <CountriesPreview data={data.countriesPreview} />
-  <ContactForm />
-  <InformationMap data={data.information} />
+  <Contact data={data.information} />
 </main>

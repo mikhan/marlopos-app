@@ -14,7 +14,7 @@ export const load = (async ({ url, params }) => {
   }
 
   return {
-    meta: {
+    metadata: {
       title: page.name,
       description: page.description,
       lang: language.code,
@@ -22,6 +22,6 @@ export const load = (async ({ url, params }) => {
     },
     page,
   }
-}) satisfies PageServerLoad<Api.Resource>
+}) satisfies PageServerLoad
 
 export const prerender = true

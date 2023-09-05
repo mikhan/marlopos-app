@@ -6,6 +6,9 @@ const config = {
   preprocess: sveltePreprocess({
     postcss: true,
   }),
+  compilerOptions: {
+    css: 'external',
+  },
   kit: {
     adapter: adapter(),
     alias: {

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '@fontsource/merriweather';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/quicksand';
+@import '@fontsource-variable/roboto-slab';
+@import '@fontsource-variable/caveat';
 @import '$core/styles.scss';
 
 :root {
@@ -14,8 +19,12 @@
 }
 
 body {
-  --app_surface_color: theme('colors.neutral.50');
   font-family: theme('fontFamily.sans');
-  background-color: var(--app_surface_color);
-  color: theme('colors.neutral.900');
+  background-color: theme('colors.canvas.bg');
+  color: theme('colors.canvas.fg');
+  overflow-y: scroll;
+}
+
+::selection {
+  background-color: hsla(147, 66%, 50%, 0.25);
 }

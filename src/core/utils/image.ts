@@ -49,7 +49,7 @@ export function renderBlurhash(
   context.putImageData(imageData, 0, 0)
 }
 
-export function getBlurhashAverageColor(blurhash: string): string {
+export function getBlurHashColor(blurhash: string): string {
   const [r, g, b] = getBlurHashAverageColor(blurhash)
   return rgbToHex({ r, g, b })
 }
@@ -97,4 +97,10 @@ export function rgbToHex({ r, g, b }: ColorRGB): string {
   const hex = (n: number) => n.toString(16).padStart(2, '0')
 
   return '#' + hex(r) + hex(g) + hex(b)
+}
+
+export function hexToRgb(hex: string): ColorRGB {
+  const [r, g, b] = Array.from(hex.match(/[a-z0-9]{2}/gi) ?? [], (s) => parseInt(s, 16)) as [number, number, number]
+
+  return { r, g, b }
 }

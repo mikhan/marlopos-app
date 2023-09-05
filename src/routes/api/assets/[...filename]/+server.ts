@@ -1,21 +1,12 @@
 import { PUBLIC_IMAGE_CDN_ENDPOINT } from '$env/static/public'
 import type { RequestHandler } from './$types'
 
-function getSize(w: string | null, h: string | null, ar: string | null): { width?: number; height?: number } {
-  const width = Number.parseInt(w ?? '')
-  const height = Number.parseInt(h ?? '')
+export const GET: RequestHandler = async ({ url, fetch, request }) => {
+  const headers = new Headers()
+  const accept = request.headers.get('accept')
+  if (accept) headers.set('accept', accept)
 
-  if (!Number.isFinite(width)) return {}
-
-  if (Number.isFinite(height)) {
-    return { width, height }
-  } else if (ar && /^\d+-\d+$/.test(ar)) {
-    const [arw, arh] = ar.split('-').map((n) => Number.parseInt(n)) as [number, number]
-
-    return { width, height: Math.round((width * arh) / arw) }
-  } else {
-    return { width }
-  }
+  return fetch(new Request(getImageKitURL(url), { headers }))
 }
 
 function getImageKitURL(url: URL) {
@@ -46,6 +37,19 @@ function getImageKitURL(url: URL) {
   return new URL(newURL.href.replace(newURL.origin + '/', PUBLIC_IMAGE_CDN_ENDPOINT))
 }
 
-export const GET: RequestHandler = async ({ url, fetch }) => {
-  return fetch(getImageKitURL(url))
+function getSize(w: string | null, h: string | null, ar: string | null): { width?: number; height?: number } {
+  const width = Number.parseInt(w ?? '')
+  const height = Number.parseInt(h ?? '')
+
+  if (!Number.isFinite(width)) return {}
+
+  if (Number.isFinite(height)) {
+    return { width, height }
+  } else if (ar && /^\d+-\d+$/.test(ar)) {
+    const [arw, arh] = ar.split('-').map((n) => Number.parseInt(n)) as [number, number]
+
+    return { width, height: Math.round((width * arh) / arw) }
+  } else {
+    return { width }
+  }
 }

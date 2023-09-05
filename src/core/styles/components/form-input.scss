@@ -2,17 +2,23 @@
   .form-input {
     display: block;
     width: 100%;
-    background-color: theme('colors.neutral.200');
-    border: 1px solid theme('colors.neutral.300');
-    color: theme('colors.neutral.800');
+    background-color: theme('colors.surface-2.bg');
+    color: theme('colors.surface-2.fg');
     border-radius: theme('borderRadius.DEFAULT');
-    padding: theme('spacing[2.5]');
-    outline: none;
-    --focusable-color: theme('colors.primary.500');
-    @apply focusable;
+    box-shadow: theme('elevation.low');
+    padding: theme('spacing.3');
+    outline: 2px solid transparent;
+    outline-offset: 8px;
+    transition-property: outline-color, outline-offset;
+    transition-duration: 150ms, 250ms;
+
+    &:focus-visible {
+      outline-color: theme('colors.ring');
+      outline-offset: 2px;
+    }
 
     &::placeholder {
-      color: theme('colors.neutral.600');
+      color: theme('colors.surface-2.fg / 50%');
     }
   }
 }
