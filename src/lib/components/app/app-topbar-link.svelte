@@ -13,10 +13,12 @@
     display: grid;
     place-content: center;
     height: 100%;
-    padding: 0 theme('spacing.4');
-    opacity: 0.5;
-    transition: opacity 250ms;
+    padding: 0 theme('spacing.1');
+    transition: color 250ms;
     position: relative;
+    font-weight: bold;
+    font-size: theme('fontSize.sm[0]');
+    line-height: theme('fontSize.sm[1]');
 
     &::before {
       content: '';
@@ -24,21 +26,25 @@
       width: 100%;
       height: 4px;
       background-color: currentColor;
-      translate: 0 -100%;
-      transition: translate 250ms;
-      top: 0;
-    }
-
-    &.active {
-      opacity: 1;
-
-      &::before {
-        translate: 0 0;
-      }
+      scale: 100% 0;
+      transition: scale 250ms;
+      bottom: 0;
     }
 
     &:hover {
       opacity: 1;
+
+      &::before {
+        scale: 100% 100%;
+      }
+    }
+
+    &.active {
+      color: theme('colors.primary.300');
+
+      &::before {
+        scale: 100% 100%;
+      }
     }
   }
 </style>

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Marker } from 'mapbox-gl'
   import { onMount } from 'svelte'
-  import { mapContext } from './map.svelte'
+  import { getMapContext } from './map.svelte'
 
-  const { getMarkers, addMarker, removeMarker } = mapContext.get()
+  const mapContext = getMapContext()
 
   export let coordinates: [number, number]
   export let color = ''
@@ -14,16 +14,16 @@
   onMount(() => {
     marker = new Marker($$slots.default ? { element: markerElement } : { color })
     marker.setLngLat(coordinates)
-    addMarker(marker)
+    mapContext.addMarker(marker)
 
-    return () => removeMarker(marker)
+    return () => mapContext.removeMarker(marker)
   })
 
   export function highlight(marker: Marker | undefined, hightlight: boolean) {
     if (!marker) return
 
-    for (const m of getMarkers()) {
-      m.getElement().children[0]?.classList.toggle('animate-bounce', m === marker && hightlight)
+    for (const marker of mapContext.getMarkers()) {
+      marker.getElement().children[0]?.classList.toggle('animate-bounce', marker === marker && hightlight)
     }
   }
 
@@ -34,7 +34,7 @@
   export function openMarker(marker: Marker | undefined) {
     if (!marker) return
 
-    for (const m of getMarkers()) {
+    for (const m of mapContext.getMarkers()) {
       const isOpen = m.getPopup().isOpen()
       if ((m === marker && !isOpen) || (m !== marker && isOpen)) m.togglePopup()
     }

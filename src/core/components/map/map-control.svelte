@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { IControl, Map } from 'mapbox-gl'
-  import { mapContext } from './map.svelte'
   import { createEventDispatcher, onMount } from 'svelte'
   import type { MapControlAction, MapControlPosition } from './map-utils'
+  import { getMapContext } from './map.svelte'
 
   let content: HTMLElement
 
-  const { addControl, removeControl, getMap } = mapContext.get()
+  const mapContext = getMapContext()
   const dispatch = createEventDispatcher<{
     add: null
     remove: null
@@ -17,7 +17,7 @@
   let map: Map
 
   onMount(() => {
-    map = getMap()
+    map = mapContext.getMap()
 
     let actionUnload: ((map: Map) => void) | void
 
@@ -32,11 +32,11 @@
       },
     }
 
-    addControl(control, position)
+    mapContext.addControl(control, position)
     dispatch('add')
 
     return () => {
-      removeControl(control)
+      mapContext.removeControl(control)
       dispatch('remove')
     }
   })

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores'
   import Image from '$core/components/image.svelte'
   import EmailIcon from '$lib/icons/email.svg?component'
   import LocationIcon from '$lib/icons/location.svg?component'
@@ -17,13 +18,12 @@
     width: number
     height: number
   }) {
-    const searchParams = new URLSearchParams()
-    searchParams.set('zoom', zoom.toString())
-    searchParams.set('width', width.toString())
-    searchParams.set('height', height.toString())
+    const url = new URL(`/api/map/${lon},${lat}`, $page.url.origin)
+    url.searchParams.set('zoom', zoom.toString())
+    url.searchParams.set('width', width.toString())
+    url.searchParams.set('height', height.toString())
 
-    // FIXME: Obtener de forma dinámica
-    return `http://localhost:5173/api/map/${lon},${lat}?${searchParams.toString()}`
+    return url.toString()
   }
 
   export let data: Api.Information

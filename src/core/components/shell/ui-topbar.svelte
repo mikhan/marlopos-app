@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { uiShellContext } from './ui-shell.svelte'
+  import { getUiShellContext } from './ui-shell.svelte'
 
   export let height = 0
   let className = ''
   export { className as class }
 
-  const { layoutTopbarHeight } = uiShellContext.get()
+  const { layoutTopbarHeight } = getUiShellContext()
   if (height) layoutTopbarHeight.set(height)
 
   onMount(() => {

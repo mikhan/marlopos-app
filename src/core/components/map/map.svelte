@@ -1,5 +1,7 @@
 <script lang="ts" context="module">
-  export const mapContext = createContext<{
+  import { createContext } from '$core/services/context'
+
+  export type MapContext = {
     getMap: () => Map
     getMarkers: () => Marker[]
     addMarker: (marker: Marker) => void
@@ -7,15 +9,16 @@
     getControls: () => IControl[]
     addControl: (control: IControl, position?: MapControlPosition) => void
     removeControl: (control: IControl) => void
-  }>('map-context')
+  }
+
+  export const [getMapContext, setMapContext] = createContext<MapContext>()
 </script>
 
 <script lang="ts">
-  import { Map, Marker, type IControl, type MapboxOptions } from 'mapbox-gl'
-  import { onMount } from 'svelte'
+  import { type IControl, Map, type MapboxOptions, Marker } from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
+  import { onMount } from 'svelte'
   import type { MapControlPosition } from './map-utils'
-  import { createContext } from '$core/services/context'
 
   export let options: Omit<MapboxOptions, 'container'>
 
@@ -56,7 +59,7 @@
     controls.splice(controls.indexOf(control), 1)
   }
 
-  mapContext.set({ getMap, getMarkers, addMarker, removeMarker, getControls, addControl, removeControl })
+  setMapContext({ getMap, getMarkers, addMarker, removeMarker, getControls, addControl, removeControl })
 
   onMount(() => {
     map = new Map({ ...options, container })

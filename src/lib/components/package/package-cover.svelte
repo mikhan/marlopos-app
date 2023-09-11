@@ -1,7 +1,6 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
-  import { imageBreakpoints } from '$core/constants/breakpoints'
 
   export let data: Api.Image
 </script>
@@ -16,8 +15,17 @@
     alt={data.title}
     color={data.color}
     priority={true}
-    breakpoints={imageBreakpoints}>
-    <Blurhash class="object-cover w-full h-full" hash={data.blurhash} width={data.width} height={data.height} />
+    srcset={[
+      { w: 480, h: 640 },
+      { w: 960, h: 640 },
+      { w: 1280, h: 640, q: 100 },
+    ]}>
+    <Blurhash
+      class="object-cover w-full h-full"
+      hash={data.blurhash}
+      renderSize={64}
+      width={data.width}
+      height={data.height} />
   </Image>
 </picture>
 
@@ -28,7 +36,7 @@
     height: 100%;
     min-height: min(40rem, 75vh);
     max-height: min(40rem, 100vh);
-    margin-bottom: -10%;
+    margin-bottom: -12rem;
     mask: linear-gradient(0deg, transparent, white 30%);
 
     &::after {

@@ -24,14 +24,20 @@ declare namespace Api {
     href: string
     href: string
   }
+
   type Package = {
     id: string
     name: string
     description: string
     content: string
     cover: Image
-    schedule: InformationSchedule[]
+    schedule: PackageSchedule[]
     destinations: Destination[]
+  }
+
+  type PackageSchedule = {
+    start: Date
+    end: Date
   }
 
   type Destination = {
@@ -68,10 +74,14 @@ declare namespace Api {
     cover: Image
   }
 
-  type CalendarEvent = {
+  type CalendarEntry = {
     id: string
-    color: string
     name: string
+    description: string
+    events: CalendarEvent[]
+  }
+
+  type CalendarEvent = {
     start: Date
     end: Date
   }

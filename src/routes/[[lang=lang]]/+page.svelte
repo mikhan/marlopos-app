@@ -3,11 +3,11 @@
   import Contact from '$lib/components/contact/contact.svelte'
   import type { PageData } from './$types'
   import CountriesPreview from '$lib/components/countries-preview.svelte'
-  import { uiShellContext } from '$core/components/shell/ui-shell.svelte'
+  import { getUiShellContext } from '$core/components/shell/ui-shell.svelte'
 
   export let data: PageData
 
-  const { layoutTopbarHeight } = uiShellContext.get()
+  const { layoutTopbarHeight } = getUiShellContext()
   $: marginTop = `${$layoutTopbarHeight * -1}px`
 </script>
 

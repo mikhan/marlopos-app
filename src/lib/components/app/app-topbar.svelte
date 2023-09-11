@@ -1,8 +1,8 @@
 <script lang="ts">
-  import AppTopbarLink from './app-topbar-link.svelte'
-
+  import UiNavigationProgress from '$core/components/shell/ui-navigation-progress.svelte'
   import UiTopbar from '$core/components/shell/ui-topbar.svelte'
-  import logo from '$lib/assets/logotipo.webp'
+  import logotipo from '$lib/assets/logotipo.png'
+  import AppTopbarLink from './app-topbar-link.svelte'
 
   let y: number
   const opacityOffset = 250
@@ -12,16 +12,15 @@
 
 <svelte:window bind:scrollY={y} />
 
+<UiNavigationProgress class="z-10" />
 <header class="app-topbar" style:--opacity={opacity}>
   <UiTopbar height={64}>
     <div class="flex items-center w-full">
-      <a class="bg-[white] rounded shrink-0 hidden sm:block mr-4" href="/">
-        <img class="app-topbar-logo" src={logo} width="105" height="105" alt="" />
-        <span class="sr-only">Inicio</span>
+      <a class="flex items-center gap-2 mr-auto max-sm:ml-auto" href="/">
+        <img class="w-auto h-8" src={logotipo} width="84" height="84" alt="Viajes Marlopos logo" />
+        <span class="font-bold tracking-wider">Viajes Marlopos</span>
       </a>
-      <div class="text-xl tracking-wider">Viajes Marlopos</div>
-      <div class="grow" />
-      <div class="hidden h-full md:flex">
+      <div class="hidden h-full gap-4 sm:flex">
         <AppTopbarLink href="/contact">Contacto</AppTopbarLink>
         <AppTopbarLink href="/about">Nosotros</AppTopbarLink>
       </div>
@@ -56,17 +55,12 @@
       display: block;
       position: absolute;
       inset: 0;
-      background-color: theme('colors.surface-2.bg / 60%');
+      background-color: theme('colors.canvas.bg / 60%');
       background-clip: content-box;
-      border-bottom: 1px solid theme('colors.surface-2.fg / 15%');
+      border-bottom: 1px solid theme('colors.canvas.border');
       backdrop-filter: saturate(50%) blur(8px);
       opacity: var(--opacity, 0);
       z-index: -1;
     }
-  }
-
-  .app-topbar-logo {
-    width: theme('spacing.12');
-    aspect-ratio: 1/1;
   }
 </style>

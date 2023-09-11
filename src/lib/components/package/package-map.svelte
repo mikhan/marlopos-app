@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Fa from 'svelte-fa'
   import {
     faArrowsToCircle,
     faCompress,
@@ -8,13 +7,14 @@
     faMinus,
     faPlus,
   } from '@fortawesome/free-solid-svg-icons'
-  import InteractiveMap from '$core/components/map/map.svelte'
+  import { onMount } from 'svelte'
+  import Fa from 'svelte-fa'
+  import { PUBLIC_MAPBOX_ACCESS_TOKEN, PUBLIC_MAPBOX_STYLE, PUBLIC_MAPBOX_USER } from '$env/static/public'
+  import MapControl from '$core/components/map/map-control.svelte'
   import MapMarker from '$core/components/map/map-marker.svelte'
   import { getBoundingBox } from '$core/components/map/map-utils'
-  import MapControl from '../../../core/components/map/map-control.svelte'
-  import { PUBLIC_MAPBOX_ACCESS_TOKEN, PUBLIC_MAPBOX_STYLE, PUBLIC_MAPBOX_USER } from '$env/static/public'
+  import InteractiveMap from '$core/components/map/map.svelte'
   import { slugify } from '$core/utils/string'
-  import { onMount } from 'svelte'
 
   export let data: Api.Destination[]
   let isFullscreen = false
@@ -37,25 +37,28 @@
 
   const onFullscreenChange = () => (isFullscreen = document.fullscreenElement === container)
 
-  export const zoomTo = (delta: number) => map.getMap().zoomTo(map.getMap().getZoom() + delta)
+  export function zoomTo(delta: number) {
+    map.getMap()?.zoomTo(map.getMap().getZoom() + delta)
+  }
 
-  export const toggleFullscreen = () =>
+  export function toggleFullscreen() {
     !document.fullscreenElement ? container.requestFullscreen() : document.exitFullscreen()
+  }
 
-  export const highlightDestination = (id = '') => {
+  export function highlightDestination(id = '') {
     highlightedDestination = getDestinationById(id)
   }
 
-  export const focusDestination = (id = '') => {
+  export function focusDestination(id = '') {
     highlightDestination(id)
 
     if (highlightedDestination) {
-      map.getMap().flyTo({ center: highlightedDestination.coordinates })
+      map.getMap()?.flyTo({ center: highlightedDestination.coordinates })
     }
   }
 
-  export const reset = () => {
-    map.getMap().fitBounds(boundingBox)
+  export function reset() {
+    map.getMap()?.fitBounds(boundingBox)
     pristine = true
   }
 
@@ -103,6 +106,7 @@
           on:focus={() => focusDestination(id)}
           on:blur={() => focusDestination()}>
           <Fa size="2x" icon={faLocationDot} />
+          <span class="sr-only">{name}</span>
         </a>
       </MapMarker>
     {/each}

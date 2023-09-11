@@ -1,14 +1,22 @@
 import type { Action } from 'svelte/action'
 
-export type DismissOptions = { clickOutside?: boolean; scroll?: boolean; keys?: string[] | false }
+export type DismissOptions = {
+  clickOutside?: boolean
+  scroll?: boolean
+  keys?: string[] | false
+  restoreFocus?: boolean
+}
+
 export function onDismiss(element: HTMLElement, callback: (event: Event) => void, options: DismissOptions = {}) {
   const controller = new AbortController()
   const clickOutside = options.clickOutside ?? true
   const scroll = options.scroll ?? false
   const keys = options.keys ?? ['Escape']
+  const restoreFocus = options.restoreFocus ?? true
+  const previousActiveElement = document.activeElement as HTMLElement | null
 
   if (clickOutside) {
-    document.addEventListener('click', onClick, { signal: controller.signal })
+    document.addEventListener('pointerdown', onPointerDown, { signal: controller.signal })
   }
 
   if (scroll) {
@@ -20,15 +28,18 @@ export function onDismiss(element: HTMLElement, callback: (event: Event) => void
   }
 
   function dismiss(event: Event) {
-    console.log('DISMISS')
     callback(event)
 
     if (event.defaultPrevented) return
 
     controller.abort()
+
+    if (previousActiveElement && restoreFocus) {
+      previousActiveElement.focus()
+    }
   }
 
-  function onClick(event: MouseEvent) {
+  function onPointerDown(event: MouseEvent) {
     event.target && !element.contains(<Node>event.target) && dismiss(event)
   }
 

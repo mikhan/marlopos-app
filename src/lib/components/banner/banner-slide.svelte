@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores'
-  import { getLocalizedUrl } from '$lib/utils/language'
   import { languageStore } from '$lib/stores/language.store'
+  import { getLocalizedUrl } from '$lib/utils/language'
   import BannerImage from './banner-image.svelte'
 
   export let data: Api.Banner
@@ -55,7 +55,7 @@
     max-width: theme('screens.md');
     margin: auto auto 0 0;
     color: theme('colors.surface-1.fg');
-    text-shadow: 0 0 theme('spacing.2') theme('colors.canvas.bg');
+    text-shadow: theme('textShadow.DEFAULT');
     outline: var(--debug) solid #f009;
     outline-offset: calc(var(--debug) * -1);
   }

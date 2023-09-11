@@ -5,7 +5,10 @@
 </script>
 
 {#key pageId}
-  <div class="focusable-ring" in:fly={{ y: -200, duration: 300, delay: 300 }} out:fly={{ y: -200, duration: 300 }}>
+  <div
+    class="h-full grow focusable-ring"
+    in:fly={{ y: -200, duration: 300, delay: 300 }}
+    out:fly={{ y: -200, duration: 300 }}>
     <slot />
   </div>
 {/key}

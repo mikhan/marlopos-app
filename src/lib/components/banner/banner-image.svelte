@@ -1,6 +1,7 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
+  import { imageBreakpoints } from '$core/constants/breakpoints'
 
   export let id: string
   export let title: string
@@ -25,8 +26,8 @@
       {height}
       {color}
       {priority}
-      breakpoints={[320, 640, 1024]}>
-      <Blurhash class="object-cover w-full h-full" hash={blurhash} {width} {height} />
+      srcset={imageBreakpoints}>
+      <Blurhash class="object-cover w-full h-full animate-pulse" hash={blurhash} {width} {height} renderSize={64} />
     </Image>
   </picture>
 </div>

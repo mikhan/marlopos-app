@@ -1,3 +1,1 @@
-<li>
-  <hr class="h-px my-1 text-surface-2-border" />
-</li>
+<li class="h-px my-1 border-b border-b-surface-2-border" role="separator" />

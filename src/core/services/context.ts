@@ -1,14 +1,12 @@
 import { getContext, setContext } from 'svelte'
 
-export interface Context<T> {
-  get: () => T
-  set: (context: T) => T
-}
+export type ContextGetter<T> = () => T
+export type ContextSetter<T> = (context: T) => T
 
-export function createContext<T>(name = ''): Context<T> {
-  const key = Symbol(name)
-  return {
-    get: () => getContext<T>(key),
-    set: (context: T) => setContext(key, context),
-  }
+export function createContext<T>(): [ContextGetter<T>, ContextSetter<T>] {
+  const key = Symbol()
+  const getter = () => getContext<T>(key)
+  const setter = (context: T) => setContext(key, context)
+
+  return [getter, setter]
 }

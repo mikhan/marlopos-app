@@ -6,7 +6,6 @@
   import { page } from '$app/stores'
   import { metadataStore } from '$lib/stores/metadata.store'
   import '../app.scss'
-  import UiNavigationProgress from '$core/components/shell/ui-navigation-progress.svelte'
   import UiShell from '$core/components/shell/ui-shell.svelte'
   import AppContent from '$lib/components/app/app-content.svelte'
 
@@ -18,7 +17,6 @@
 <AppMetadata />
 
 <UiShell>
-  <UiNavigationProgress />
   <AppTopbar />
   <AppContent pageId={data.href}>
     <slot />

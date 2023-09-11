@@ -1,5 +1,6 @@
 import { decodeBlurHash, getBlurHashAverageColor } from 'fast-blurhash'
 import { assertIsNonNullable } from './assert'
+import { coerceToNumber } from './coerce'
 
 export type BlurhashImageOptions = {
   width?: number | undefined
@@ -11,6 +12,29 @@ export type ColorRGB = {
   r: number
   g: number
   b: number
+}
+
+export function getImageSize(
+  w: unknown,
+  h: unknown,
+  ar: unknown,
+): { width: number | undefined; height: number | undefined; aspectRatio: number | undefined } {
+  let width = coerceToNumber(w)
+  let height = coerceToNumber(h)
+  let aspectRatio: number | undefined = undefined
+
+  if (typeof ar === 'string' && /^\d+[-/_]\d+$/.test(ar)) {
+    const [arW, arH] = ar.split(/[-/_]/).map((n) => Number.parseInt(n)) as [number, number]
+    aspectRatio = arH / arW
+
+    if (width) {
+      height = Math.round(width * (arH / arW))
+    } else if (height) {
+      width = Math.round(height * (arW / arH))
+    }
+  }
+
+  return { width, height, aspectRatio }
 }
 
 const DEFAULT_SIZE = 32

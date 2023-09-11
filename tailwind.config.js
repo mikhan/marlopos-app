@@ -2,9 +2,10 @@ import colors from 'tailwindcss/colors'
 import { createFluidValue, generatePalette, generateTailwindColors, pxToRem } from './tools/tailwind/palette'
 import { cssVariablesPlugin } from './tools/tailwind/plugins/css-variables'
 import { elevationPlugin } from './tools/tailwind/plugins/elevation'
-import { hocusPlugin } from './tools/tailwind/plugins/hocus'
 import { focusablePlugin } from './tools/tailwind/plugins/focusable'
+import { hocusPlugin } from './tools/tailwind/plugins/hocus'
 import { layoutPlugin } from './tools/tailwind/plugins/layout'
+import { textShadowPlugin } from './tools/tailwind/plugins/text-shadow'
 
 const palette = generatePalette(
   {
@@ -113,5 +114,12 @@ export default {
       },
     },
   },
-  plugins: [cssVariablesPlugin(palette, alias), elevationPlugin(), hocusPlugin(), focusablePlugin(), layoutPlugin()],
+  plugins: [
+    textShadowPlugin(),
+    cssVariablesPlugin(palette, alias),
+    elevationPlugin(),
+    hocusPlugin(),
+    focusablePlugin(),
+    layoutPlugin(),
+  ],
 }

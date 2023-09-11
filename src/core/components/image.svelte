@@ -1,14 +1,19 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { isAbsoluteURL } from '$core/utils/url'
+  import { sortNumberArray } from '$core/utils/array'
+  import { coerceToNumber } from '$core/utils/coerce'
+  import { getImageSize } from '$core/utils/image'
+  import { isAbsoluteURL } from '$core/utils/predicate'
+
+  type Srcset = Record<string, unknown> & { w: number; h?: number }
 
   export let src: string
   export let alt: string
   export let width: number
   export let height: number
+  export let srcset: Srcset[] = []
   export let sizes: string | null = null
   export let priority: boolean = false
-  export let breakpoints: number[] = []
   export let fit: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' = 'fill'
   export let color: string | null = null
 
@@ -27,51 +32,53 @@
     dispatch('load', event.currentTarget as HTMLImageElement)
   }
 
-  function getAspectRatio(w: string | null, h: string | null) {
-    const width = Number.parseInt(w ?? '')
-    const height = Number.parseInt(h ?? '')
-
-    if (!Number.isFinite(width)) return {}
-    else if (Number.isFinite(height)) return { width, height, aspectRatio: height / width }
-    else return { width }
+  function getImageSizeFromURL(url: URL) {
+    return getImageSize(url.searchParams.get('w'), url.searchParams.get('h'), url.searchParams.get('ar'))
   }
 
-  function rewriteURL(url: URL, width: number, aspectRatio?: number) {
-    const resizedURL = new URL(url)
-    resizedURL.searchParams.set('w', width.toString())
+  function getImageSrcset(src: string, srcset: ReadonlyArray<Srcset>): string | null {
+    if (!srcset.length) return null
 
-    if (aspectRatio) resizedURL.searchParams.set('h', Math.round(width * aspectRatio).toString())
-
-    return `${resizedURL.href.replace('http://localhost', '')} ${width}w`
-  }
-
-  const sortNumbers = (a: number, b: number) => (a > b ? 1 : a < b ? -1 : 0)
-
-  function getImageSrcset(src: string, breakpoints: ReadonlyArray<number>): string | null {
-    if (!breakpoints.length) return null
-    if (isAbsoluteURL(src)) return null
-
-    const srcset: Set<string> = new Set()
-    const widths = new Set(breakpoints)
+    const absoluteURL = isAbsoluteURL(src)
     const url = new URL(src, 'http://localhost')
-    const { width, aspectRatio } = getAspectRatio(url.searchParams.get('w'), url.searchParams.get('h'))
+    const result = new Map<number, string>()
+    const srcsetWidths = srcset.map(({ w }) => w)
+    const srcsetParams = Object.fromEntries(srcset.map(({ w, ...params }) => [w, params]))
 
-    if (width) widths.add(width)
+    const width = coerceToNumber(url.searchParams.get('w'))
+    if (width && !srcsetWidths.includes(width)) srcsetWidths.push(width)
 
-    for (const width of [...widths].sort(sortNumbers)) {
-      srcset.add(rewriteURL(url, width, aspectRatio))
+    for (const width of srcsetWidths.sort(sortNumberArray)) {
+      const newURL = new URL(url)
+      const params = Object.assign(srcsetParams[width] ?? {}, { w: width.toString() })
+
+      for (const [name, value] of Object.entries(params)) {
+        newURL.searchParams.set(name, String(value))
+      }
+
+      const { aspectRatio } = getImageSizeFromURL(newURL)
+      if (aspectRatio) newURL.searchParams.set('h', Math.round(width * aspectRatio).toString())
+
+      let src = newURL.href
+      if (!absoluteURL) src = src.replace(newURL.origin, '')
+      result.set(width, src)
     }
 
-    return Array.from(srcset).join(', ') || null
+    return (
+      Array.from(result)
+        .map(([width, src]) => `${src} ${width}w`)
+        .join(', ') || null
+    )
   }
 
-  $: srcset = getImageSrcset(src, breakpoints)
+  $: _srcset = getImageSrcset(src, srcset)
+  $: _sizes = _srcset && sizes
   $: showCover = $$slots.default
 </script>
 
 <svelte:head>
   {#if priority}
-    <link rel="preload" as="image" href={src} imagesrcset={srcset} imagesizes={sizes} />
+    <link rel="preload" as="image" href={src} imagesrcset={_srcset} imagesizes={sizes} />
   {/if}
 </svelte:head>
 
@@ -90,8 +97,9 @@
     {width}
     {height}
     {alt}
-    {srcset}
-    sizes={srcset && sizes}
+    srcset={_srcset}
+    sizes={_sizes}
+    decoding="async"
     {...$$restProps}
     on:load={onLoad} />
 </div>

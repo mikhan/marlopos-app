@@ -17,11 +17,6 @@ function getImageKitURL(url: URL) {
     url.searchParams.get('ar'),
   )
 
-  const pathParams = Object.entries({ w, h, q })
-    .filter(([, value]) => typeof value !== 'undefined')
-    .map(([key, value]) => `${key}-${value}`)
-    .join(',')
-
   const newURL = new URL(url)
   newURL.pathname = newURL.pathname.replace(/^\/api\/assets\//, '/')
 
@@ -30,8 +25,17 @@ function getImageKitURL(url: URL) {
     newURL.pathname = newURL.pathname.replace(/(?<=.)\/[^/]+(?=\.[a-z]+$)/, '')
   }
 
-  if (pathParams) {
+  const pathParams = Object.entries({ w, h, q })
+    .filter(([, value]) => typeof value !== 'undefined' && value !== null)
+    .map(([key, value]) => `${key}-${value}`)
+    .join(',')
+
+  if (pathParams.length) {
     newURL.pathname = `/tr:${pathParams}` + newURL.pathname
+  }
+
+  for (const param of ['w', 'h', 'ar', 'q']) {
+    newURL.searchParams.delete(param)
   }
 
   return new URL(newURL.href.replace(newURL.origin + '/', PUBLIC_IMAGE_CDN_ENDPOINT))

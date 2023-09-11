@@ -2,13 +2,15 @@
   import { createContext } from '$core/services/context'
   import { writable, type Writable } from 'svelte/store'
 
-  export const uiShellContext = createContext<{
+  export type UiShellContext = {
     layoutTopbarHeight: Writable<number>
-  }>('uiShellContext')
+  }
+
+  export const [getUiShellContext, setUiShellContext] = createContext<UiShellContext>()
 </script>
 
 <script lang="ts">
-  uiShellContext.set({
+  setUiShellContext({
     layoutTopbarHeight: writable(0),
   })
 </script>

@@ -1,30 +1,36 @@
 <script lang="ts">
-  import { derived, type Readable } from 'svelte/store'
   import { matchMedia } from '$core/stores/match-media'
+  import { languageStore } from '$lib/stores/language.store'
 
-  export let data: Api.InformationSchedule[]
+  export let data: Api.PackageSchedule[]
+  let dateFormat: 'long' | 'short'
+  let locale: string
 
-  const isLargeScreen = matchMedia('(min-width: 768px)')
-  const schedule: Readable<{ start: String; end: String }[]> = derived(isLargeScreen, (isLargeScreen) => {
-    const dateStyle = isLargeScreen ? 'long' : 'medium'
+  const isLargeScreen = matchMedia('(min-width: 480px)')
+  const currentYear = new Date().getFullYear()
 
-    return data.map(({ start, end }) => ({
-      start: start.toLocaleDateString(undefined, { dateStyle }),
-      end: end.toLocaleDateString(undefined, { dateStyle }),
-    }))
-  })
+  $: dateFormat = $isLargeScreen ? 'long' : ('short' as const)
+  $: locale = $languageStore.locale
+
+  function dateToString(date: Date, format: 'long' | 'short', locale: string) {
+    return date.toLocaleDateString(locale, {
+      year: format === 'short' || currentYear !== date.getFullYear() ? 'numeric' : undefined,
+      month: format,
+      day: 'numeric',
+    })
+  }
 </script>
 
 <div
-  class="flex flex-col border divide-y elevation-low bg-surface-1-bg overflow-clip text-surface-1-fg divide-surface-1-border border-surface-1-border rounded-3xl">
+  class="flex flex-col border divide-y elevation-low bg-surface-1-bg overflow-clip text-surface-1-fg divide-surface-1-border border-surface-1-border rounded-xl">
   <div class="grid grid-cols-2 divide-x bg-surface-2-bg divide-surface-2-border">
-    <div class="px-8 py-4 font-bold text-center uppercase">Salida</div>
-    <div class="px-8 py-4 font-bold text-center uppercase">Regreso</div>
+    <div class="px-4 py-2 font-bold text-center uppercase md:px-8 md:py-4">Salida</div>
+    <div class="px-4 py-2 font-bold text-center uppercase md:px-8 md:py-4">Regreso</div>
   </div>
-  {#each $schedule as { start, end }}
+  {#each data as { start, end }}
     <div class="grid grid-cols-2 divide-x divide-surface-1-border">
-      <div class="px-8 py-4">{start}</div>
-      <div class="px-8 py-4">{end}</div>
+      <div class="px-4 py-2 md:px-8 md:py-4">{dateToString(start, dateFormat, locale)}</div>
+      <div class="px-4 py-2 md:px-8 md:py-4">{dateToString(end, dateFormat, locale)}</div>
     </div>
   {/each}
 </div>

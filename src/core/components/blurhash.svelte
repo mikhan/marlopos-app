@@ -9,15 +9,19 @@
   const dispatch = createEventDispatcher<Events>()
 
   let hash: string
-  let hashsize = 32
+  let renderSize = 32
   let width: number
   let height: number
-  let punch: number | undefined = undefined
+  let punch: number = 1
   let canvas: HTMLCanvasElement
 
-  $: renderingOptions = { width: hashsize, height: Math.round((hashsize * height) / width), punch }
-
   onMount(() => {
+    const renderingOptions = {
+      width: renderSize,
+      height: Math.round((renderSize * height) / width),
+      punch,
+    }
+
     canvas.width = renderingOptions.width
     canvas.height = renderingOptions.height
     const renderingContext = canvas.getContext('2d')
@@ -27,7 +31,7 @@
     dispatch('load', canvas)
   })
 
-  export { hash, width, height, punch }
+  export { hash, renderSize, width, height, punch }
 </script>
 
 <canvas {...$$restProps} bind:this={canvas} />

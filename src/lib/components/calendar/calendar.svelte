@@ -77,6 +77,7 @@
   //   console.log(maxColumns)
   const dayMs = 1000 * 60 * 60 * 24
   const getDayDif = (start: Date, end: Date) => Math.round((end.getTime() - start.getTime()) / dayMs) + 1
+  console.log(data)
 </script>
 
 <div class="flex flex-col">

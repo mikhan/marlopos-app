@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { getPackage } from '$lib/database/packages'
-import { getLanguage } from '$lib/utils/language'
 import { getPageLinks } from '$lib/services/api'
+import { getLanguage } from '$lib/utils/language'
 import type { PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
