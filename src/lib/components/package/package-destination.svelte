@@ -13,13 +13,12 @@
   id={`destination-${slugify(data.name)}`}
   tabindex="0"
   role="tab"
-  class="relative flex flex-col gap-4 p-4 focusable focusable-inner _card sm:max-md:flex-row sm:max-md:items-start rounded-3xl"
+  class="_card"
   on:mouseover={() => packageMap.highlightDestination(data.id)}
   on:mouseout={(event) => !event.currentTarget.matches(':focus') && packageMap.highlightDestination()}
   on:focus={() => packageMap.focusDestination(data.id)}
   on:blur={() => packageMap.focusDestination()}>
-  <picture
-    class="block border rounded-2xl aspect-video sm:max-md:aspect-square sm:max-md:w-40 shrink-0 overflow-clip border-canvas-border">
+  <picture class="_image">
     <Image
       class="w-full h-full"
       src={`/api/assets/${data.cover.id}`}
@@ -29,15 +28,14 @@
       color={data.cover.color}
       alt={data.cover.title}
       srcset={[
-        { w: 160, h: 160, q: 50 },
-        { w: 380, ar: '16-9' },
-        { w: 600, ar: '16-9' },
+        { w: 120, h: 120, q: 50 },
+        { w: 480, ar: '16-9' },
       ]}
-      sizes="(min-width: 1280px) 600px, (min-width: 768px) 380px, (min-width: 480px) 160px, 380px">
+      sizes="(min-width: 768px) 480px, (min-width: 480px) 120px, 480px">
       <Blurhash class="object-cover w-full h-full" hash={data.cover.blurhash} width={320} height={180} />
     </Image>
   </picture>
-  <div class="flex flex-col gap-4">
+  <div class="_content">
     <h1 class="text-2xl">{data.name}</h1>
     <DynamicContent html={data.description} />
   </div>
@@ -45,15 +43,51 @@
 
 <style lang="postcss">
   ._card {
-    border: 1px solid transparent;
-    transition-property: background-color, color;
-    transition-duration: 150ms;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: theme('spacing.4');
+    padding: theme('spacing.4');
+    color: theme('colors.surface-1.fg');
+    background-color: theme('colors.surface-1.bg');
+    border-radius: theme('borderRadius.DEFAULT');
+    border: 1px solid theme('colors.surface-1.border');
+    @apply focusable;
+    transition-property: outline-color, outline-offset, background-color, color;
+    transition-duration: 150ms, 250ms, 250ms, 250ms;
     transition-timing-function: theme('transitionTimingFunction.in-out');
+    overflow: clip;
+    box-shadow: theme('boxShadow.xl');
 
-    &:hover {
-      color: theme('colors.surface-1.fg');
-      background-color: theme('colors.surface-1.bg');
-      border-color: theme('colors.surface-1.border');
+    @media (theme('screens.sm') < width < theme('screens.md')) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    @media (theme('screens.md') < width) {
+      padding: 0;
+    }
+  }
+
+  ._image {
+    display: block;
+    aspect-ratio: 16/9;
+    flex-shrink: 0;
+    overflow: clip;
+
+    @media (theme('screens.sm') < width < theme('screens.md')) {
+      aspect-ratio: 1/1;
+      width: theme('spacing.32');
+    }
+  }
+
+  ._content {
+    display: flex;
+    flex-direction: column;
+    gap: theme('spacing.4');
+
+    @media (theme('screens.md') < width) {
+      padding: theme('spacing.4');
     }
   }
 </style>

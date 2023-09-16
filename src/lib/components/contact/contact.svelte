@@ -6,11 +6,11 @@
   export let data: Api.Information
 </script>
 
-<section class="h-full gap-8 py-16 mx-auto layout-lg md:layout-contain max-md:max-w-screen-sm">
+<section class="h-full gap-8 py-16 layout-lg">
   <div class="mx-auto mb-8">
     <SectionHeader>Contacto</SectionHeader>
   </div>
-  <div class="flex flex-col justify-between gap-8 mx-auto md:flex-row md:items-start">
+  <div class="flex flex-col items-stretch justify-between gap-8 mx-auto sm:flex-row md:items-start">
     <ContactForm />
     <ContactCard {data} />
   </div>

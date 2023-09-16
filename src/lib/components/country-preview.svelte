@@ -16,6 +16,12 @@
       width={data.cover.width}
       height={data.cover.height}
       color={data.cover.color}
+      srcset={[
+        { w: 280, ar: '1-2' },
+        { w: 320, ar: '1-1' },
+        { w: 480, ar: '16-9' },
+      ]}
+      sizes="(min-width: 768px) 280px, (min-width: 480px) 320px, 480px"
       fit="cover">
       <Blurhash
         class="object-cover w-full h-full"
@@ -25,7 +31,7 @@
     </Image>
   </picture>
   <div class="content">
-    <a class="text-2xl font-display" href="/">{data.name}</a>
+    <a class="text-xl" href="/">{data.name}</a>
     <div class="text-sm truncate opacity-75">
       <span class="whitespace-nowrap">{data.packages} paquetes</span><span class="whitespace-nowrap"
         >{data.destinations} destinos</span>
@@ -35,25 +41,29 @@
 
 <style lang="postcss">
   .wrapper {
-    --is-hover: 0;
-    --color: theme('colors.surface-1.fg');
+    --color: theme('colors.surface-2.fg');
     display: grid;
     position: relative;
     outline: 1px solid transparent;
     contain: content;
     border-radius: theme('borderRadius.DEFAULT');
     transition: box-shadow 150ms ease-in;
-    border: 1px solid theme('colors.surface-1.border');
+    border: 1px solid theme('colors.canvas.border');
     outline: 2px solid transparent;
     outline-offset: 8px;
     transition-property: outline-color, outline-offset;
     transition-duration: 150ms, 250ms;
+    width: 12rem;
+    aspect-ratio: 1/2;
+    max-height: calc(100vh - var(--layout-topbar-height));
+    user-select: none;
 
     &:first-child::before {
       content: '';
       display: block;
       width: 100%;
       aspect-ratio: 2/1;
+      pointer-events: none;
 
       @media (min-width: theme('screens.sm')) {
         aspect-ratio: 1/1;
@@ -61,10 +71,6 @@
     }
 
     &:is(:hover) {
-      --is-hover: 1;
-      --color: theme('colors.surface-primary.fg');
-      border: 1px solid theme('colors.surface-primary.border');
-
       .cover {
         transform: scale(1.1);
       }
@@ -93,23 +99,13 @@
       inset: 0;
       transition: opacity 250ms ease-in-out;
       z-index: -1;
+      pointer-events: none;
     }
 
     &::before {
-      opacity: calc(var(--is-hover) + 1);
       background-image: radial-gradient(circle at left bottom, theme('colors.canvas.bg / 50%'), 30%, transparent 50%),
         linear-gradient(0deg, theme('colors.canvas.bg / 50%'), transparent 12rem),
         linear-gradient(0deg, theme('colors.canvas.bg / 50%'), transparent 6rem);
-    }
-
-    &::after {
-      opacity: var(--is-hover);
-      background-image: linear-gradient(
-        to top,
-        theme('colors.surface-primary.bg / 90%'),
-        3rem,
-        theme('colors.surface-primary.bg / 50%') 12rem
-      );
     }
   }
 
@@ -135,11 +131,5 @@
     isolation: isolate;
     transform: scale(1) translate3d(0, 0, 0);
     transition: transform 250ms ease-in-out;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-    }
   }
 </style>

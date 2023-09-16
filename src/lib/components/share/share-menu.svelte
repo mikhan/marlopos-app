@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons'
+  import { faLink, faShareNodes } from '@fortawesome/free-solid-svg-icons'
+  import Fa from 'svelte-fa'
   import UiMenuDivider from '$core/components/menu/ui-menu-divider.svelte'
   import UiMenuItem from '$core/components/menu/ui-menu-item.svelte'
   import UiMenu from '$core/components/menu/ui-menu.svelte'
-  import { faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons'
-  import { faLink, faShareSquare } from '@fortawesome/free-solid-svg-icons'
   import { writeToClipboard } from '$core/utils/clipboard'
-  import Fa from 'svelte-fa'
 
   function shareToFacebook() {
     const url = new URL('https://facebook.com/sharer/sharer.php')
@@ -27,8 +27,8 @@
 
 <div>
   <button class="button" id="share-button-menu-trigger">
+    <Fa icon={faShareNodes} />
     Compartir
-    <Fa icon={faShareSquare} />
   </button>
 </div>
 

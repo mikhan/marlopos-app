@@ -1,7 +1,6 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
-  import { imageBreakpoints } from '$core/constants/breakpoints'
 
   export let id: string
   export let title: string
@@ -26,7 +25,11 @@
       {height}
       {color}
       {priority}
-      srcset={imageBreakpoints}>
+      srcset={[
+        { w: 480, h: 640, q: 50 },
+        { w: 960, h: 640, q: 75 },
+        { w: 1280, h: 640, q: 100 },
+      ]}>
       <Blurhash class="object-cover w-full h-full animate-pulse" hash={blurhash} {width} {height} renderSize={64} />
     </Image>
   </picture>
@@ -38,7 +41,7 @@
     inset: 0;
     background-color: var(--color);
     z-index: -1;
-    padding-left: max(0px, calc(100% - theme('screens.lg')));
+    padding-left: max(0px, calc(100% - theme('screens.2xl')));
 
     &::after {
       content: '';
@@ -50,7 +53,7 @@
         radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 30%, transparent 75%);
     }
 
-    @container carousel (width > theme('screens.lg')) {
+    @container carousel (width > theme('screens.xl')) {
       &::before {
         content: '';
         position: absolute;
@@ -66,7 +69,7 @@
     width: 100%;
     height: 100%;
 
-    @container carousel (width > theme('screens.lg')) {
+    @container carousel (width > theme('screens.xl')) {
       mask: linear-gradient(to right, transparent, black 50%);
     }
   }

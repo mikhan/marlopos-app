@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { mod } from '$core/utils/math'
 import { weekdays } from '$lib/constants/calendar'
 import { api } from '$lib/services/api'
@@ -36,6 +37,7 @@ export async function getInformation(): Promise<Api.Information> {
     .single()
 
   const { data, error } = await request
+  const timezoneOffset = -7
 
   if (error) throw error
 
@@ -43,31 +45,39 @@ export async function getInformation(): Promise<Api.Information> {
     ...data,
     contact: data.contact.filter((item): item is Api.InformationContact => ['phone', 'email'].includes(item.type)),
     networks: data.networks.filter((item): item is Api.InformationNetwork => ['facebook'].includes(item.type)),
-    schedule: data.schedule.map(mapSchedule).sort(sortSchedule),
+    schedule: data.schedule.map((schedule) => mapSchedule(schedule, timezoneOffset)).sort(sortSchedule),
   }
 }
 
-const mapSchedule = ({ weekday, start_time, end_time }: { weekday: string; start_time: string; end_time: string }) => {
+function mapSchedule(
+  { weekday, start_time, end_time }: { weekday: string; start_time: string; end_time: string },
+  timezoneOffset: number,
+) {
   if (!isWeekDay(weekday)) throw new Error()
 
   return {
     weekday,
-    start: getDate(start_time, 7, weekdays[weekday]),
-    end: getDate(end_time, 7, weekdays[weekday]),
+    start: getDate(start_time, weekdays[weekday], timezoneOffset),
+    end: getDate(end_time, weekdays[weekday], timezoneOffset),
   }
 }
 
-const sortSchedule = (a: Api.InformationSchedule, b: Api.InformationSchedule) =>
-  weekdays[a.weekday] - weekdays[b.weekday]
+function sortSchedule(a: Api.InformationSchedule, b: Api.InformationSchedule) {
+  return weekdays[a.weekday] - weekdays[b.weekday]
+}
 
-const isWeekDay = (value: string): value is Api.Weekday => value in weekdays
+function isWeekDay(value: string): value is Api.Weekday {
+  return value in weekdays
+}
 
-const getDate = (time: string, timezoneOffset: number, weekday: number) => {
-  const today = new Date()
-  const todayDate = today.toJSON().substring(0, 10)
-  const todayWeekday = today.getUTCDay()
-  const timeOffset = timezoneOffset * 60 * 60 * 1000
-  const weekdayOffset = mod(weekday - todayWeekday, 7) * 24 * 60 * 60 * 1000
+function getDate(time: string, weekday: number, timezoneOffset: number) {
+  if (!/^\d\d:\d\d:\d\d$/.test(time)) throw new Error(`Invalid date time '${time}'`)
+  if (weekday < 1 || weekday > 7) throw new Error(`Invalid weekday '${weekday}'`)
 
-  return new Date(Date.parse(`${todayDate}T${time}.000Z`) + timeOffset + weekdayOffset)
+  const [hour, minute, second] = time.split(':').map(Number) as [number, number, number]
+  const today = DateTime.now()
+    .setZone(`UTC${timezoneOffset < 0 ? '-' : '+'}${Math.abs(timezoneOffset)}`)
+    .set({ hour, minute, second, millisecond: 0 })
+
+  return today.plus({ days: mod(weekday - today.weekday, 7) }).toJSDate()
 }

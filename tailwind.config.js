@@ -3,8 +3,10 @@ import { createFluidValue, generatePalette, generateTailwindColors, pxToRem } fr
 import { cssVariablesPlugin } from './tools/tailwind/plugins/css-variables'
 import { elevationPlugin } from './tools/tailwind/plugins/elevation'
 import { focusablePlugin } from './tools/tailwind/plugins/focusable'
+import { formPlugin } from './tools/tailwind/plugins/form'
 import { hocusPlugin } from './tools/tailwind/plugins/hocus'
 import { layoutPlugin } from './tools/tailwind/plugins/layout'
+import { scrollbarPlugin } from './tools/tailwind/plugins/scrollbar'
 import { textShadowPlugin } from './tools/tailwind/plugins/text-shadow'
 
 const palette = generatePalette(
@@ -70,6 +72,7 @@ export default {
       'lg': '1024px',
       'xl': '1280px',
       '2xl': '1536px',
+      '3xl': '1920px',
     },
     focusable: {
       border: {
@@ -116,10 +119,12 @@ export default {
   },
   plugins: [
     textShadowPlugin(),
+    formPlugin(),
     cssVariablesPlugin(palette, alias),
     elevationPlugin(),
     hocusPlugin(),
     focusablePlugin(),
     layoutPlugin(),
+    scrollbarPlugin(),
   ],
 }

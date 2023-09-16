@@ -24,7 +24,7 @@
     <div class="_text">
       <div class="_title">{data.name}</div>
       <p class="_description">{@html data.description}</p>
-      <a {href} class="mt-8 button button-filled">Más información</a>
+      <a {href} class="mt-8 button button-primary button-filled">Más información</a>
     </div>
   </div>
 </div>
@@ -55,7 +55,6 @@
     max-width: theme('screens.md');
     margin: auto auto 0 0;
     color: theme('colors.surface-1.fg');
-    text-shadow: theme('textShadow.DEFAULT');
     outline: var(--debug) solid #f009;
     outline-offset: calc(var(--debug) * -1);
   }
@@ -64,6 +63,7 @@
     font-family: theme('fontFamily.display');
     font-size: theme('fontSize.4xl-fluid[0]');
     line-height: theme('fontSize.4xl-fluid[1]');
+    text-shadow: theme('textShadow.DEFAULT');
     text-wrap: balance;
   }
 
@@ -71,6 +71,7 @@
     font-size: theme('fontSize.xl[0]');
     line-height: theme('fontSize.xl[1]');
     margin-top: theme('spacing.2');
+    text-shadow: theme('textShadow.DEFAULT');
     text-wrap: balance;
   }
 </style>

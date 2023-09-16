@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
+  import { type Writable, writable } from 'svelte/store'
   import { createContext } from '$core/services/context'
-  import { writable, type Writable } from 'svelte/store'
 
   export type UiShellContext = {
     layoutTopbarHeight: Writable<number>
@@ -10,12 +10,12 @@
 </script>
 
 <script lang="ts">
-  setUiShellContext({
-    layoutTopbarHeight: writable(0),
-  })
+  const layoutTopbarHeight = writable(64)
+
+  setUiShellContext({ layoutTopbarHeight })
 </script>
 
-<div>
+<div style:--layout-topbar-height={$layoutTopbarHeight + 'px'}>
   <slot />
 </div>
 

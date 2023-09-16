@@ -23,5 +23,3 @@ export const load = (async ({ url, params }) => {
     page,
   }
 }) satisfies PageServerLoad
-
-export const prerender = true

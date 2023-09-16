@@ -16,9 +16,9 @@
 </script>
 
 <script lang="ts">
-  import { onMount, tick } from 'svelte'
-  import { createFloatingActions } from 'svelte-floating-ui'
-  import { type Placement, flip, offset, shift, size } from 'svelte-floating-ui/dom'
+  import { type Placement, flip, offset, shift, size } from '@floating-ui/dom'
+  import { onMount } from 'svelte'
+  import { createFloatingActions } from '$core/actions/floating'
   import { generateUID } from '$core/utils/element'
   import type { UiMenuitemContext } from './ui-menu-item.svelte'
 
@@ -34,7 +34,7 @@
   const menuitems: { element: HTMLLIElement; context: UiMenuitemContext }[] = []
   let currentMenuitem: { element: HTMLLIElement; context: UiMenuitemContext } | undefined = undefined
 
-  const [floatingRef, floatingContent] = createFloatingActions({
+  const [referenceAction, contentAction] = createFloatingActions({
     strategy: 'fixed',
     placement,
     middleware: [
@@ -43,7 +43,8 @@
       shift(),
       size({
         padding: 16,
-        apply({ availableWidth, availableHeight, elements }) {
+        apply({ availableWidth, availableHeight, elements, rects }) {
+          elements.floating.style.setProperty('min-width', `${rects.reference.width}px`)
           elements.floating.style.setProperty('max-width', `${availableWidth}px`)
           elements.floating.style.setProperty('max-height', `${availableHeight}px`)
         },
@@ -54,9 +55,8 @@
   async function show() {
     abortController?.abort()
     open = true
-    await tick()
-    currentMenuitem = menuitems.at(0)
-    currentMenuitem?.context.focus()
+    abortController = new AbortController()
+    window.addEventListener('scroll', () => hide(), { signal: abortController?.signal })
   }
 
   async function hide(options = { restoreFocus: true }) {
@@ -65,9 +65,62 @@
 
     if (!triggerElement) return
 
-    abortController = new AbortController()
     open = false
     if (options.restoreFocus) triggerElement.focus()
+  }
+
+  const isPrintableCharacter = (string: string) => string.length === 1 && string.match(/\S/)
+
+  function onKeyDown(event: KeyboardEvent) {
+    let eventHandled = false
+
+    switch (event.key) {
+      case 'Esc':
+      case 'Escape':
+        hide()
+        eventHandled = true
+        break
+
+      case 'ArrowDown':
+      case 'Down':
+        focusNextMenuitem()
+        eventHandled = true
+        break
+
+      case 'Up':
+      case 'ArrowUp':
+        focusPreviousMenuitem()
+        eventHandled = true
+        break
+
+      case 'Home':
+      case 'PageUp':
+        focusFirstMenuitem()
+        eventHandled = true
+        break
+
+      case 'End':
+      case 'PageDown':
+        focusLastMenuitem()
+        eventHandled = true
+        break
+
+      case 'Tab':
+        hide()
+        break
+
+      default:
+        if (isPrintableCharacter(event.key)) {
+          focusByFirstCharacter(event.key)
+          eventHandled = true
+        }
+        break
+    }
+
+    if (eventHandled) {
+      event.stopPropagation()
+      event.preventDefault()
+    }
   }
 
   function onTriggerClick(event: MouseEvent) {
@@ -166,6 +219,10 @@
     focusByFirstCharacter,
   })
 
+  function autofocus(element: HTMLElement) {
+    element.focus()
+  }
+
   onMount(() => {
     triggerElement = document.querySelector(trigger)
     document.body.append(container)
@@ -174,7 +231,7 @@
       triggerElement.setAttribute('aria-haspopup', 'true')
       triggerElement.setAttribute('aria-controls', id)
       triggerElement.addEventListener('click', onTriggerClick)
-      floatingRef(triggerElement)
+      referenceAction(triggerElement)
     }
 
     return () => {
@@ -196,10 +253,13 @@
     <ul
       class="_menu"
       role="menu"
+      tabindex="-1"
       aria-label={label}
       aria-labelledby={label ? undefined : trigger}
       {id}
-      use:floatingContent>
+      use:autofocus
+      use:contentAction
+      on:keydown={onKeyDown}>
       <slot />
     </ul>
   {/if}
@@ -222,5 +282,6 @@
     overflow: auto;
     z-index: 1;
     user-select: none;
+    outline: none;
   }
 </style>

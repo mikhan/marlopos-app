@@ -16,8 +16,8 @@
     color={data.color}
     priority={true}
     srcset={[
-      { w: 480, h: 640 },
-      { w: 960, h: 640 },
+      { w: 480, h: 640, q: 50 },
+      { w: 960, h: 640, q: 75 },
       { w: 1280, h: 640, q: 100 },
     ]}>
     <Blurhash
@@ -33,10 +33,10 @@
   ._image {
     position: relative;
     display: block;
-    height: 100%;
+    width: 100%;
+    aspect-ratio: 4/3;
     min-height: min(40rem, 75vh);
     max-height: min(40rem, 100vh);
-    margin-bottom: -12rem;
     mask: linear-gradient(0deg, transparent, white 30%);
 
     &::after {

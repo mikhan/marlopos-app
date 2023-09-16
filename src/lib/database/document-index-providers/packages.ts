@@ -27,6 +27,7 @@ export const packagesIndexProvider: DocumentIndexProvider = async (options) => {
 
   const documents = data.map(({ id, name, description, content }) => ({
     id: id.toString(),
+    type: 'package',
     title: name,
     description,
     content: content.replace(/<[^>]*>?/gm, ''),

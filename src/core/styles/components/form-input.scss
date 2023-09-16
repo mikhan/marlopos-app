@@ -1,24 +1,24 @@
-@layer components {
-  .form-input {
-    display: block;
-    width: 100%;
-    background-color: theme('colors.surface-2.bg');
-    color: theme('colors.surface-2.fg');
-    border-radius: theme('borderRadius.DEFAULT');
-    box-shadow: theme('elevation.low');
-    padding: theme('spacing.2');
-    outline: 2px solid transparent;
-    outline-offset: 8px;
-    transition-property: outline-color, outline-offset;
-    transition-duration: 150ms, 250ms;
+// @layer components {
+//   .form-input {
+//     display: block;
+//     width: 100%;
+//     background-color: theme('colors.surface-2.bg');
+//     color: theme('colors.surface-2.fg');
+//     border-radius: theme('borderRadius.DEFAULT');
+//     box-shadow: theme('elevation.low');
+//     padding: theme('spacing.2');
+//     outline: 2px solid transparent;
+//     outline-offset: 8px;
+//     transition-property: outline-color, outline-offset;
+//     transition-duration: 150ms, 250ms;
 
-    &:focus-visible {
-      outline-color: theme('colors.ring');
-      outline-offset: 2px;
-    }
+//     &:focus-visible {
+//       outline-color: theme('colors.ring');
+//       outline-offset: 2px;
+//     }
 
-    &::placeholder {
-      color: theme('colors.surface-2.fg / 50%');
-    }
-  }
-}
+//     &::placeholder {
+//       color: theme('colors.surface-2.fg / 50%');
+//     }
+//   }
+// }

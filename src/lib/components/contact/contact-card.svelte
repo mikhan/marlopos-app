@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Icon from '$core/components/icon.svelte'
-  import Image from '$core/components/image.svelte'
   import { faClock, faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
+  import Icon from '$core/components/icon.svelte'
+  import Image from '$core/components/image.svelte'
 
   export let data: Api.Information
 
@@ -17,19 +17,26 @@
     return `/api/map/${lon},${lat}?${searchParams.toString()}`
   }
 
-  function getScheduleStatus(schedule?: Api.InformationSchedule) {
-    if (!schedule) return 'Cerrado'
+  function getScheduleStatus(schedules: Api.InformationSchedule[]) {
+    schedules = [...schedules].sort((a, b) => a.start.getTime() - b.start.getTime())
+    const today = new Date()
+    const schedule = schedules.find(({ start, end }) => start < today && today < end)
 
-    return `Abierto hasta las ${schedule.end.toLocaleString('es', { timeStyle: 'short' })}`
+    if (!schedule) {
+      const schedule = schedules.find(({ start }) => start > today)
+      const weekday = schedule?.start.toLocaleString('es', { weekday: 'long' })
+      const time = schedule?.start.toLocaleString('es', { timeStyle: 'short', hour12: true })
+
+      return 'Cerrado' + (weekday && time ? `, abre el ${weekday} a las ${time}` : '')
+    }
+
+    return `Abierto hasta las ${schedule.end.toLocaleString('es', { timeStyle: 'short', hour12: true })}`
   }
 
   const [lon, lat] = data.coordinates
   const mapConfig = { lon, lat, zoom: 14, width: 320, height: 240 }
   const mapSrc = getMap(mapConfig)
-
-  const today = new Date()
-  const todaySchedule = data.schedule.find(({ start, end }) => start < today && today < end)
-  const scheduleStatus = getScheduleStatus(todaySchedule)
+  const scheduleStatus = getScheduleStatus(data.schedule)
 </script>
 
 <section

@@ -49,9 +49,11 @@ export const panning: Action<
     abortController.signal.onabort = () => node.style.removeProperty('pointer-events')
     document.body.addEventListener('pointermove', onPointerMove, { signal: abortController.signal })
     document.body.addEventListener('pointerup', onPointerUp, { signal: abortController.signal })
+    window.addEventListener('scroll', onPointerUp, { signal: abortController.signal })
   }
 
   function onPointerMove(event: PointerEvent) {
+    event.preventDefault()
     node.style.setProperty('pointer-events', 'none')
     x = event.screenX
     y = event.screenY

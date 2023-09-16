@@ -7,7 +7,11 @@ export type DismissOptions = {
   restoreFocus?: boolean
 }
 
-export function onDismiss(element: HTMLElement, callback: (event: Event) => void, options: DismissOptions = {}) {
+export const dismiss: Action<
+  HTMLElement,
+  DismissOptions | undefined,
+  { 'on:dismiss': (event: CustomEvent) => void }
+> = (element, options = {}) => {
   const controller = new AbortController()
   const clickOutside = options.clickOutside ?? true
   const scroll = options.scroll ?? false
@@ -28,11 +32,9 @@ export function onDismiss(element: HTMLElement, callback: (event: Event) => void
   }
 
   function dismiss(event: Event) {
-    callback(event)
-
+    notify()
+    
     if (event.defaultPrevented) return
-
-    controller.abort()
 
     if (previousActiveElement && restoreFocus) {
       previousActiveElement.focus()
@@ -51,20 +53,10 @@ export function onDismiss(element: HTMLElement, callback: (event: Event) => void
     keys && keys.includes(event.key) && dismiss(event)
   }
 
-  return controller
-}
-
-export const dismiss: Action<
-  HTMLElement,
-  DismissOptions | undefined,
-  { 'on:dismiss': (event: CustomEvent) => void }
-> = (node, options) => {
   function notify() {
     const event = new CustomEvent('dismiss')
-    node.dispatchEvent(event)
+    element.dispatchEvent(event)
   }
-
-  const controller = onDismiss(node, notify, options)
 
   return { destroy: () => controller.abort() }
 }

@@ -1,14 +1,13 @@
 <script lang="ts" generics="T">
-  import { getFocusableElements } from '$core/utils/focus'
-
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
-  import { writable } from 'svelte/store'
   import { quadOut } from 'svelte/easing'
-  import { panning, type PanEvent } from '$core/actions/pan'
-  import { useKeyboardNavigation, type KeyboardNavigation } from '../actions/keyboard-navigation'
+  import { writable } from 'svelte/store'
+  import { type PanEvent, panning } from '$core/actions/pan'
+  import { getFocusableElements } from '$core/utils/focus'
+  import { type KeyboardNavigation, useKeyboardNavigation } from '../actions/keyboard-navigation'
+  import { documentVisibilityState } from '../stores/document-visibility-state'
   import { IndexManagerStore } from '../stores/index-manager-store'
   import { IntervalPlayer } from '../types/interval-player'
-  import { documentVisibilityState } from '../stores/document-visibility-state'
 
   export let slides: T[] = []
   export let index = 0
@@ -84,6 +83,7 @@
 
   function onPanStart(event: PanEvent) {
     width = (event.target as HTMLElement).clientWidth
+    slidesContainer?.style.setProperty('touch-action', 'none')
   }
 
   function onPanMove(event: PanEvent) {
@@ -102,6 +102,7 @@
 
   function onPanStop() {
     displace = 0
+    slidesContainer?.style.removeProperty('touch-action')
   }
 
   onMount(() => {
@@ -160,7 +161,7 @@
     position: absolute;
     inset: 0;
     overflow: clip;
-    touch-action: none;
+    touch-action: pan-y;
   }
 
   .slide {

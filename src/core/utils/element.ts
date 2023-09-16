@@ -1,6 +1,6 @@
 let i = 0
 
-export function generateUID() {
+export function generateUID(prefix = 'id') {
   const id = Date.now() + ++i
-  return `id-${id.toString(36)}`
+  return `${prefix}-${id.toString(36)}`
 }

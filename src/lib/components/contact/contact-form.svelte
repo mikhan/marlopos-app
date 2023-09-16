@@ -16,7 +16,7 @@
   }
 </script>
 
-<form class="flex flex-col items-start w-full gap-4 grow" method="POST">
+<form class="flex flex-col items-start w-full gap-4 grow lg:max-w-prose" method="POST">
   <label class="form-field">
     <div class="form-label">{$t('contactForm.field.name.label')}</div>
     <input

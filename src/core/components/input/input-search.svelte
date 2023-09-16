@@ -1,46 +1,83 @@
 <script lang="ts">
-  import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons'
+  import { faTimes } from '@fortawesome/free-solid-svg-icons'
+  import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
 
-  export let value: string
-  export let placeholder = ''
-  let className = ''
-  export { className as class }
+  export let value = ''
+  export let autofocus = false
+  let element: HTMLInputElement
+  let container: HTMLElement
+
+  function onInput() {
+    value = element.value
+  }
+
+  function clear() {
+    value = element.value = ''
+    element.focus()
+  }
+
+  onMount(() => {
+    const input = container.querySelector('input')
+    if (!input) throw new Error('You need to provide an input element')
+
+    element = input
+    element.setAttribute('type', 'search')
+    element.addEventListener('input', onInput)
+
+    value = element.value
+
+    if (autofocus) element.focus()
+
+    return () => element.removeEventListener('input', onInput)
+  })
 </script>
 
-<div class="relative">
-  <div class="absolute top-0 left-0 grid w-6 h-6 m-2 place-content-center">
+<div class="_container" {...$$restProps} bind:this={container}>
+  <!-- <div class="absolute top-0 left-0 grid w-6 h-6 m-2 pointer-events-none place-content-center">
     <Fa icon={faSearch} />
-  </div>
-  <input
-    {...$$restProps}
-    {placeholder}
-    class="px-10 form-input {className}"
-    type="search"
-    name="q"
-    bind:value
-    autocomplete="off"
-    spellcheck="false" />
+  </div> -->
+  <slot>
+    <input />
+  </slot>
   <button
     type="button"
-    class="absolute top-0 right-0 grid w-6 h-6 m-2 rounded-full place-content-center focusable focusable-ring"
+    class="grid w-6 h-6 m-2 rounded-full place-content-center focusable focusable-ring shrink-0"
     class:hidden={value === ''}
     tabindex="-1"
     title="Borrar"
-    on:click={() => (value = '')}>
+    on:click={clear}>
     <Fa icon={faTimes} />
   </button>
 </div>
 
 <style lang="postcss">
-  input::-webkit-search-decoration,
-  input::-webkit-search-cancel-button,
-  input::-webkit-search-results-button,
-  input::-webkit-search-results-decoration {
-    -webkit-appearance: none !important;
-  }
+  :where(._container) {
+    display: flex;
+    position: relative;
+    width: 100%;
+    background-color: Field;
+    color: FieldText;
 
-  input::-webkit-calendar-picker-indicator {
-    display: none !important;
+    :global(:where(input)) {
+      background: transparent;
+      padding-left: 0;
+      border: none;
+    }
+
+    :global(:where(input:not(:placeholder-shown))) {
+      padding-right: theme('spacing.10');
+    }
+
+    :global(input::-webkit-search-decoration),
+    :global(input::-webkit-search-cancel-button),
+    :global(input::-webkit-search-results-button),
+    :global(input::-webkit-search-results-decoration) {
+      -webkit-appearance: none !important;
+    }
+
+    :global(input::-webkit-calendar-picker-indicator) {
+      display: none !important;
+    }
   }
 </style>

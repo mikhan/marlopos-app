@@ -1,7 +1,7 @@
-import { getCountriesPreview } from '$lib/database/countries'
 import { getBanners } from '$lib/database/banners'
+import { getCountriesPreview } from '$lib/database/countries'
 import { getPageLinks } from '$lib/services/api'
-import { getLanguage, isDefaultLanguage, LANGUAGE_CODES } from '$lib/utils/language'
+import { LANGUAGE_CODES, getLanguage, isDefaultLanguage } from '$lib/utils/language'
 import type { EntryGenerator, PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
@@ -23,5 +23,3 @@ export const load = (async ({ url, params }) => {
 
 export const entries: EntryGenerator = () =>
   LANGUAGE_CODES.map((lang) => ({ lang: isDefaultLanguage(lang) ? '' : lang }))
-
-export const prerender = true

@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+  import Fa from 'svelte-fa'
   import Carousel from '$core/components/carousel.svelte'
   import { followFocus } from '$lib/actions/follow-focus'
   import BannerSlide from './banner-slide.svelte'
-  import Fa from 'svelte-fa'
-  import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
   export let slides: Api.Banner[]
 
@@ -54,7 +54,7 @@
 
 <style lang="postcss">
   .wrapper {
-    --debug: 0;
+    --debug: 0px;
     --slide-indicators-size: theme('spacing.6');
     --slide-control-visibility: hidden;
     --slide-control-size: var(--layout-padding);

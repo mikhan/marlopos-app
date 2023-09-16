@@ -1,13 +1,20 @@
 <script lang="ts">
-  import CountryPreview from './country-preview.svelte'
+  import { browser } from '$app/environment'
+  import { mouseScroll } from '$core/actions/mouse-scroll'
   import SectionHeader from './common/section-header.svelte'
+  import CountryPreview from './country-preview.svelte'
 
   export let data: any[] = []
+
+  const mouseScrollIf = browser && matchMedia('(pointer: fine)').matches ? mouseScroll : () => {}
 </script>
 
-<section class="flex flex-col gap-8 py-16 layout-lg md:layout-contain">
-  <SectionHeader>Destinos principales</SectionHeader>
-  <ul>
+<div class="layout-lg">
+  <SectionHeader class="my-8">Destinos principales</SectionHeader>
+</div>
+
+<section class="_wrapper">
+  <ul class="_list" use:mouseScrollIf>
     {#each data as item}
       <CountryPreview data={item} />
     {/each}
@@ -15,66 +22,30 @@
 </section>
 
 <style lang="postcss">
-  section {
-    --app-layout-content: theme('screens.lg');
+  ._wrapper {
+    --padding: var(--layout-padding);
+    --mask-size: max(var(--padding), 20px);
+    /* mask: linear-gradient(to right, transparent, black var(--padding), black calc(100% - var(--padding)), transparent); */
   }
 
-  ul {
-    --grid_gap: 0.5rem;
+  ._list {
     display: grid;
-    grid-auto-rows: 1fr;
-    gap: var(--grid_gap);
+    grid-auto-flow: column;
+    gap: 1rem;
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 1rem var(--padding);
+    scroll-behavior: smooth;
+    padding: 1rem var(--padding);
+    margin: -1rem 0;
 
-    @media (min-width: theme('screens.sm')) {
-      --grid_gap: 1rem;
-      grid-template-columns: repeat(2, 1fr);
+    @media (pointer: fine) {
+      overflow: hidden;
     }
 
-    @media (theme('screens.md') < width < theme('screens.lg')) {
-      grid-template-columns: repeat(3, 1fr);
-
-      :global(li) {
-        &:first-child {
-          grid-row: span 2;
-          padding-top: var(--grid_gap);
-
-          &::before {
-            margin-top: 100%;
-          }
-        }
-
-        &:nth-child(2) {
-          grid-column: span 2;
-        }
-
-        &:nth-child(3):last-child {
-          grid-column: span 2;
-        }
-
-        &:nth-child(3n + 5):last-child {
-          grid-column: span 3;
-        }
-
-        &:nth-child(3n + 6):last-child {
-          grid-column: span 2;
-        }
-      }
-    }
-
-    @media (min-width: theme('screens.lg')) {
-      grid-template-columns: repeat(4, 1fr);
-
-      :global(li) {
-        & {
-          grid-column: span 1;
-          grid-row: span 2;
-          padding-top: var(--grid_gap);
-
-          &::before {
-            margin-top: 100%;
-          }
-        }
-      }
+    & > :global(*) {
+      scroll-snap-stop: always;
+      scroll-snap-align: start;
     }
   }
 </style>

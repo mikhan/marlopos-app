@@ -8,18 +8,9 @@ dependencies:
   '@fontsource-variable/caveat':
     specifier: ^5.0.8
     version: 5.0.8
-  '@fontsource-variable/inter':
-    specifier: ^5.0.8
-    version: 5.0.8
   '@fontsource-variable/quicksand':
     specifier: ^5.0.8
     version: 5.0.8
-  '@fontsource-variable/roboto-slab':
-    specifier: ^5.0.8
-    version: 5.0.8
-  '@fontsource/merriweather':
-    specifier: ^4.5.14
-    version: 4.5.14
   '@fortawesome/free-brands-svg-icons':
     specifier: ^6.4.2
     version: 6.4.2
@@ -32,6 +23,9 @@ dependencies:
   fast-blurhash:
     specifier: ^1.1.2
     version: 1.1.2
+  luxon:
+    specifier: ^3.4.3
+    version: 3.4.3
   mapbox-gl:
     specifier: ^2.15.0
     version: 2.15.0
@@ -43,9 +37,9 @@ dependencies:
     version: 7.8.1
 
 devDependencies:
-  '@floating-ui/core':
-    specifier: ^1.4.1
-    version: 1.4.1
+  '@floating-ui/dom':
+    specifier: ^1.5.2
+    version: 1.5.2
   '@poppanator/sveltekit-svg':
     specifier: ^2.1.2
     version: 2.1.2(svelte@4.1.1)(vite@4.4.5)
@@ -67,6 +61,9 @@ devDependencies:
   '@types/chroma-js':
     specifier: ^2.4.0
     version: 2.4.0
+  '@types/luxon':
+    specifier: ^3.3.2
+    version: 3.3.2
   '@types/mapbox-gl':
     specifier: ^2.7.12
     version: 2.7.12
@@ -118,9 +115,6 @@ devDependencies:
   svelte-fa:
     specifier: ^3.0.4
     version: 3.0.4
-  svelte-floating-ui:
-    specifier: ^1.5.3
-    version: 1.5.3
   svelte-preprocess:
     specifier: ^5.0.4
     version: 5.0.4(postcss@8.4.26)(sass@1.64.0)(svelte@4.1.1)(typescript@5.1.6)
@@ -510,38 +504,26 @@ packages:
   /@floating-ui/core@1.4.1:
     resolution: {integrity: sha512-jk3WqquEJRlcyu7997NtR5PibI+y5bi+LS3hPmguVClypenMsCY3CBa3LAQnozRCtCrYWSEtAdiskpamuJRFOQ==}
     dependencies:
-      '@floating-ui/utils': 0.1.1
+      '@floating-ui/utils': 0.1.2
     dev: true
 
-  /@floating-ui/dom@1.5.1:
-    resolution: {integrity: sha512-KwvVcPSXg6mQygvA1TjbN/gh///36kKtllIF8SUm0qpFj8+rvYrpvlYdL1JoA71SHpDqgSSdGOSoQ0Mp3uY5aw==}
+  /@floating-ui/dom@1.5.2:
+    resolution: {integrity: sha512-6ArmenS6qJEWmwzczWyhvrXRdI/rI78poBcW0h/456+onlabit+2G+QxHx5xTOX60NBJQXjsCLFbW2CmsXpUog==}
     dependencies:
       '@floating-ui/core': 1.4.1
-      '@floating-ui/utils': 0.1.1
+      '@floating-ui/utils': 0.1.2
     dev: true
 
-  /@floating-ui/utils@0.1.1:
-    resolution: {integrity: sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==}
+  /@floating-ui/utils@0.1.2:
+    resolution: {integrity: sha512-ou3elfqG/hZsbmF4bxeJhPHIf3G2pm0ujc39hYEZrfVqt7Vk/Zji6CXc3W0pmYM8BW1g40U+akTl9DKZhFhInQ==}
     dev: true
 
   /@fontsource-variable/caveat@5.0.8:
     resolution: {integrity: sha512-dHPoKRuGVPLjQgigcntm1TnlRSOanzJY0ejlQYuUDceaNw1DQ6/9haYzDD8z9DsrZNBOhfyh4legq0L22CXi3A==}
     dev: false
 
-  /@fontsource-variable/inter@5.0.8:
-    resolution: {integrity: sha512-WkYfFNccmEIeL2fNg0mYeLWqOoB7xD8MFxFRc4IwbSP2o8ZaBt36v5aW4by4MyrgGRMNk7uNi5LbvYKq6clPjw==}
-    dev: false
-
   /@fontsource-variable/quicksand@5.0.8:
     resolution: {integrity: sha512-q+/Rb74Jru/oxhg3cdhTTWZ6sl3utTWSHQZZz5oeWmqvNVMyEaqzEuVwKhkZgZ8p5XotzHyr8M9YEB1NsmYWjw==}
-    dev: false
-
-  /@fontsource-variable/roboto-slab@5.0.8:
-    resolution: {integrity: sha512-73p7cfchaJV+HWl50G/XLQlaXutYHkEzbBSxylrRcp3955Jf4revqzdQuoZtaBjPuZU5LPnpK+cIfyX/8wRfBg==}
-    dev: false
-
-  /@fontsource/merriweather@4.5.14:
-    resolution: {integrity: sha512-kDMIAokOvE9bYf+CDmEWzV3xtR8cRJlw/BipjhxqD9MIRZfU348cZ8xhHhmPXmxRiEjZLor4xxHXqps7eCvGQg==}
     dev: false
 
   /@fortawesome/fontawesome-common-types@6.4.2:
@@ -879,6 +861,10 @@ packages:
 
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
+    dev: true
+
+  /@types/luxon@3.3.2:
+    resolution: {integrity: sha512-l5cpE57br4BIjK+9BSkFBOsWtwv6J9bJpC7gdXIzZyI0vuKvNTk0wZZrkQxMGsUAuGW9+WMNWF2IJMD7br2yeQ==}
     dev: true
 
   /@types/mapbox-gl@2.7.12:
@@ -2075,6 +2061,11 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /luxon@3.4.3:
+    resolution: {integrity: sha512-tFWBiv3h7z+T/tDaoxA8rqTxy1CHV6gHS//QdaH4pulbq/JuBSGgQspQQqcgnwdAx6pNI7cmvz5Sv/addzHmUg==}
+    engines: {node: '>=12'}
+    dev: false
+
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
     engines: {node: '>=12'}
@@ -2787,13 +2778,6 @@ packages:
 
   /svelte-fa@3.0.4:
     resolution: {integrity: sha512-y04vEuAoV1wwVDItSCzPW7lzT6v1bj/y1p+W1V+NtIMpQ+8hj8MBkx7JFD7JHSnalPU1QiI8BVfguqheEA3nPg==}
-    dev: true
-
-  /svelte-floating-ui@1.5.3:
-    resolution: {integrity: sha512-yjLeRQ4SNcICbMabp5S2cXc5ubBd2eua+swfTqqGBeg8ZrUvotZYK8jsRWETl/3RgLQsaZbEYKx8OmLA3wL/yw==}
-    dependencies:
-      '@floating-ui/core': 1.4.1
-      '@floating-ui/dom': 1.5.1
     dev: true
 
   /svelte-hmr@0.15.2(svelte@4.1.1):
