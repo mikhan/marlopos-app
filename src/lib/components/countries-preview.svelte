@@ -1,35 +1,32 @@
 <script lang="ts">
-  import { browser } from '$app/environment'
   import { mouseScroll } from '$core/actions/mouse-scroll'
+  import { matchMedia } from '$core/stores/match-media'
+  import { createConditionalAction } from '$core/utils/actions'
   import SectionHeader from './common/section-header.svelte'
   import CountryPreview from './country-preview.svelte'
 
   export let data: any[] = []
 
-  const mouseScrollIf = browser && matchMedia('(pointer: fine)').matches ? mouseScroll : () => {}
+  const mouseScrollIf = createConditionalAction(matchMedia('(pointer: fine)'), mouseScroll)
 </script>
 
-<div class="layout-lg">
-  <SectionHeader class="my-8">Destinos principales</SectionHeader>
-</div>
+<div class="py-12 layout-container layout-padding bg-primary-800 text-primary-800-fg">
+  <div class="layout-lg">
+    <SectionHeader class="mb-8">Destinos principales</SectionHeader>
+  </div>
 
-<section class="_wrapper">
-  <ul class="_list" use:mouseScrollIf>
+  <ul use:mouseScrollIf>
     {#each data as item}
       <CountryPreview data={item} />
     {/each}
   </ul>
-</section>
+</div>
 
 <style lang="postcss">
-  ._wrapper {
+  ul {
     --padding: var(--layout-padding);
-    --mask-size: max(var(--padding), 20px);
-    /* mask: linear-gradient(to right, transparent, black var(--padding), black calc(100% - var(--padding)), transparent); */
-  }
-
-  ._list {
     display: grid;
+    justify-content: start;
     grid-auto-flow: column;
     gap: 1rem;
     overflow: auto;
@@ -41,6 +38,7 @@
 
     @media (pointer: fine) {
       overflow: hidden;
+      cursor: grab;
     }
 
     & > :global(*) {

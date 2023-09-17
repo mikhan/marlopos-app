@@ -52,7 +52,7 @@
       {/if}
       <a class="app-topbar-logo" href="/">
         <img class="w-auto h-8" src={logotipo} width="84" height="84" alt="Viajes Marlopos logo" />
-        <span class="font-bold tracking-wider">Viajes Marlopos</span>
+        <span class="font-bold tracking-wider uppercase">Viajes Marlopos</span>
       </a>
       <div class="ml-auto app-topbar-search">
         <Omnibox bind:expanded={searchActive} />

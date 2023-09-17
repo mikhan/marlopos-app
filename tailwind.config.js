@@ -6,36 +6,38 @@ import { focusablePlugin } from './tools/tailwind/plugins/focusable'
 import { formPlugin } from './tools/tailwind/plugins/form'
 import { hocusPlugin } from './tools/tailwind/plugins/hocus'
 import { layoutPlugin } from './tools/tailwind/plugins/layout'
+import { linkPlugin } from './tools/tailwind/plugins/link'
 import { scrollbarPlugin } from './tools/tailwind/plugins/scrollbar'
 import { textShadowPlugin } from './tools/tailwind/plugins/text-shadow'
 
 const palette = generatePalette(
   {
-    primary: 'hsl(254, 66%, 52%)',
-    neutral: '#6b7280',
+    primary: { color: 'hsl(254, 66%, 52%)', from: { s: 1, l: 0.35 }, to: { s: -0.3 } },
+    neutral: { color: 'hsl(215, 10%, 45%)', from: { s: 0.1, l: 0 }, to: { s: 0.3 } },
   },
   { dark: false },
 )
 
 const alias = (palette) => ({
   'base': palette.neutral['100'],
-  'ring': palette.primary['300'],
+  'ring': palette.primary['100'],
+  'link': palette.primary['50'],
   'canvas': {
     bg: palette.neutral['800'],
     fg: palette.neutral['800-fg'],
     border: palette.neutral['700'],
   },
   'surface-1': {
-    bg: palette.neutral['700'],
-    fg: palette.neutral['700-fg'],
-    border: palette.neutral['600'],
-    hover: palette.neutral['600'],
-  },
-  'surface-2': {
     bg: palette.neutral['600'],
     fg: palette.neutral['600-fg'],
     border: palette.neutral['500'],
     hover: palette.neutral['500'],
+  },
+  'surface-2': {
+    bg: palette.neutral['400'],
+    fg: palette.neutral['400-fg'],
+    border: palette.neutral['300'],
+    hover: palette.neutral['300'],
   },
   'surface-primary': {
     bg: palette.primary['300'],
@@ -120,6 +122,7 @@ export default {
   plugins: [
     textShadowPlugin(),
     formPlugin(),
+    linkPlugin(),
     cssVariablesPlugin(palette, alias),
     elevationPlugin(),
     hocusPlugin(),

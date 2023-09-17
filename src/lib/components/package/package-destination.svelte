@@ -13,12 +13,11 @@
   id={`destination-${slugify(data.name)}`}
   tabindex="0"
   role="tab"
-  class="_card"
   on:mouseover={() => packageMap.highlightDestination(data.id)}
   on:mouseout={(event) => !event.currentTarget.matches(':focus') && packageMap.highlightDestination()}
   on:focus={() => packageMap.focusDestination(data.id)}
   on:blur={() => packageMap.focusDestination()}>
-  <picture class="_image">
+  <picture>
     <Image
       class="w-full h-full"
       src={`/api/assets/${data.cover.id}`}
@@ -42,7 +41,7 @@
 </li>
 
 <style lang="postcss">
-  ._card {
+  li {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -52,7 +51,7 @@
     background-color: theme('colors.surface-1.bg');
     border-radius: theme('borderRadius.DEFAULT');
     border: 1px solid theme('colors.surface-1.border');
-    @apply focusable;
+    @apply focusable focusable-ring;
     transition-property: outline-color, outline-offset, background-color, color;
     transition-duration: 150ms, 250ms, 250ms, 250ms;
     transition-timing-function: theme('transitionTimingFunction.in-out');
@@ -69,7 +68,7 @@
     }
   }
 
-  ._image {
+  picture {
     display: block;
     aspect-ratio: 16/9;
     flex-shrink: 0;

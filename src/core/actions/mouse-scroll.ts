@@ -4,6 +4,7 @@ import { tweened } from 'svelte/motion'
 import { clamp } from '$core/utils/math'
 
 export const mouseScroll: Action<HTMLElement> = (element) => {
+  console.log('connect')
   const abortController = new AbortController()
   element.addEventListener('pointerdown', onPointerdown, { signal: abortController.signal })
   const properties = [
@@ -47,6 +48,9 @@ export const mouseScroll: Action<HTMLElement> = (element) => {
   }
 
   return {
-    destroy: () => abortController.abort(),
+    destroy: () => {
+      console.log('disconnect')
+      abortController.abort()
+    },
   }
 }

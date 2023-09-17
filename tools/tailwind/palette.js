@@ -19,18 +19,25 @@ export function generatePalette(config, { dark = false } = {}) {
   return colors
 }
 
+function transformColor(color, transformation = {}) {
+  let [h, s, l] = color.hsl()
+  h += transformation.h ?? 0
+  s += transformation.s ?? 0
+  l += transformation.l ?? 0
+  return chroma({ h, s, l })
+}
+
 /** @type {import('./tailwind.d.ts').GenerateColor} */
 export function generateColor(config, { dark = false } = {}) {
   const base = chroma(config.color)
-  const [l, c, h] = base.oklch()
-  const direction = dark ? -1000 : +1000
+  const from = transformColor(base, { l: 0.4, ...config.from })
+  const to = transformColor(base, { l: -0.4, ...config.to })
   const result = { DEFAULT: colorToVar(base) }
+  const colors = chroma.scale([from, to]).correctLightness().colors(config.shades.length)
 
-  for (const shade of config.shades) {
-    const delta = (config.shade - shade) / direction
-    const lightness = l + delta
-    const background = chroma.oklch(lightness, c, h)
-
+  for (const [index, color] of Object.entries(colors)) {
+    const background = chroma(color)
+    const shade = config.shades[index]
     result[shade] = colorToVar(background)
     result[`${shade}-fg`] = colorToVar(getForegroundColor(background))
   }

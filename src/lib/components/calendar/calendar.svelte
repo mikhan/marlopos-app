@@ -1,103 +1,152 @@
 <script lang="ts">
-  export let data: Api.CalendarEvent[]
-  //   console.log(data)
+  import { mouseScroll } from '$core/actions/mouse-scroll'
+  import CalendarEntry from '$lib/components/calendar/calendar-entry.svelte'
+  import CalendarEvent from '$lib/components/calendar/calendar-event.svelte'
+  import { languageStore } from '$lib/stores/language.store'
+
+  export let data: Api.CalendarEntry[]
 
   const today = new Date()
-  const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1)
-  data = data.filter(({ start }) => start.getTime() > today.getTime())
+  today.setUTCHours(0)
+  today.setUTCMinutes(0)
+  today.setUTCSeconds(0)
+  today.setUTCMilliseconds(0)
 
-  const maxDate = data.reduce((current, next) => {
-    return next.end.getTime() > current.end.getTime() ? next : current
-  }).end
-
-  let current = new Date(minDate)
-  const calendar: { date: Date; events: (Api.CalendarEvent | null)[] }[] = []
-  let i = 0
-  let maxColumns = 0
-  const row: (Api.CalendarEvent | null)[] = []
-
-  //   const toString = (date: Date) => date.toJSON().slice(0, 10).replaceAll('-', '')
-  const intl = new Intl.DateTimeFormat(['es'], { year: '2-digit', month: '2-digit', day: '2-digit' })
-  const toString = (date: Date) => intl.format(date)
-  const eventToString = (event: Api.CalendarEvent | null) =>
-    event === null ? '%c                 ' : `%c${toString(event.start)}|${toString(event.end)}`
-  const evenStyles = (event: Api.CalendarEvent | null) =>
-    `background:${event?.color ?? ''};color:black;margin:0 2px;padding:0 2px;`
-  console.clear()
-
-  while (current.getTime() < maxDate.getTime()) {
-    i++
-
-    const endEvents = data.filter(({ end }) => end.getTime() === current.getTime())
-    for (const event of endEvents) {
-      const index = row.indexOf(event)
-      row.splice(index, 1, null)
-    }
-
-    current = new Date(current.getFullYear(), current.getMonth(), current.getDate() + 1)
-
-    console.groupCollapsed(toString(current))
-
-    if (endEvents.length) {
-      console.log('- ' + endEvents.map(eventToString).join(''), ...endEvents.map(evenStyles))
-      console.log(row.map(eventToString).join(''), ...row.map(evenStyles))
-    }
-
-    const startEvents = data.filter(({ start }) => start.getTime() === current.getTime())
-    for (const event of startEvents) {
-      const index = row.findIndex((event) => event === null)
-      row.splice(index === -1 ? row.length : index, 1, event)
-    }
-
-    while (row.at(-1) === null) {
-      row.splice(row.length - 1, 1)
-    }
-
-    if (startEvents.length) {
-      console.log('+ ' + startEvents.map(eventToString).join(''), ...startEvents.map(evenStyles))
-      console.log(row.map(eventToString).join(''), ...row.map(evenStyles))
-    }
-    console.groupEnd()
-    // console.log(toString(current), row.length, { start: startEvents.length, end: endEvents.length })
-    // console.log(row.map(eventToString))
-
-    calendar.push({
-      date: current,
-      events: [...row],
-    })
-    maxColumns = Math.max(maxColumns, row.length)
+  const msInDay = 1000 * 60 * 60 * 24
+  function daysDiff(date1: Date, date2: Date) {
+    return Math.floor(Math.abs(date2.getTime() - date1.getTime()) / msInDay)
   }
 
-  //   console.log(data.map(eventToString).join('\n'))
+  function dateToString(date: Date, locale: string) {
+    return date.toLocaleString(locale, {
+      day: 'numeric',
+      month: 'short',
+      year: date.getFullYear() === today.getFullYear() ? undefined : 'numeric',
+    })
+  }
 
-  //   for (const { date, events } of calendar) {
-  //     console.log(toString(date), events.map(eventToString).join(' - '))
-  //   }
-  //   console.log(calendar)
-  //   console.log(maxColumns)
-  const dayMs = 1000 * 60 * 60 * 24
-  const getDayDif = (start: Date, end: Date) => Math.round((end.getTime() - start.getTime()) / dayMs) + 1
-  console.log(data)
+  function generateCalendarDays(dates: Date[]) {
+    const timestamps = dates.map((date) => date.getTime()).sort((a, b) => a - b)
+    const minDate = timestamps.at(0)!
+    const maxDate = timestamps.at(-1)!
+
+    return Array.from({ length: Math.ceil((maxDate - minDate) / msInDay) + 1 }, (_, index) => {
+      return new Date(minDate + index * msInDay)
+    })
+  }
+
+  const days = generateCalendarDays(data.map(({ events }) => events.map(({ start, end }) => [start, end])).flat(2))
 </script>
 
-<div class="flex flex-col">
-  {#each calendar as { date, events }}
-    <div class="grid h-12 gap-2" style:grid-template-columns={`100px repeat(${maxColumns}, 1fr)`}>
-      <div>{date.toLocaleString(undefined, { dateStyle: 'short' })}</div>
-      {#each events as event}
-        {#if event && event.start.getTime() === date.getTime()}
-          <div class="relative">
-            <div class="absolute w-full py-2" style:height={getDayDif(event.start, event.end) * 48 + 'px'}>
-              <div class="h-full px-2 text-black rounded-md" style:background-color={event.color}>
-                <div>{getDayDif(event.start, event.end)}</div>
-              </div>
-            </div>
-          </div>
-        {:else}
-          <div />
-        {/if}
+<div role="grid" aria-readonly="true" use:mouseScroll>
+  <div class="h-12" role="row" style:--index={1}>
+    <div role="columnheader">
+      <span class="self-end p-2 font-bold uppercase justify-self-center">Paquetes</span>
+    </div>
+    {#each days as date}
+      <div role="columnheader">
+        <span class="self-end p-2 font-bold uppercase justify-self-center">
+          {dateToString(date, $languageStore.locale)}
+        </span>
+      </div>
+    {/each}
+  </div>
+  {#each data as entry, rowIndex}
+    <div role="row" style:--index={rowIndex + 2}>
+      <div role="rowheader" style:--index="1">
+        <CalendarEntry data={entry} />
+      </div>
+      {#each days as _, columnIndex}
+        <div role="gridcell" style:--index={columnIndex + 2} />
+      {/each}
+      {#each entry.events as event}
+        <div
+          role="gridcell"
+          style:--index={daysDiff(today, event.start) + 2}
+          style:--span={daysDiff(event.start, event.end) + 1}>
+          <CalendarEvent data={event} />
+        </div>
       {/each}
     </div>
-    <hr class="-mb-px text-surface-1-border" />
   {/each}
 </div>
+
+<style lang="postcss">
+  [role='grid'] {
+    --first-column-size: 16rem;
+    --first-row-size: 48px;
+    --column-size: 120px;
+    --row-size: 64px;
+    --background: theme('colors.canvas.bg');
+    display: grid;
+    width: 100%;
+    height: 100%;
+    flex: 1 1 0px;
+    background-color: var(--background);
+    overflow: auto;
+    scroll-behavior: smooth;
+    user-select: none;
+    isolation: isolate;
+    @apply scrollbar-thin scrollbar-border-surface-1-border scrollbar-surface-1-fg/50;
+  }
+
+  [role='row'] {
+    --index: auto;
+    grid-column-start: 1;
+    grid-row-start: var(--index);
+    display: grid;
+    grid-template-columns: var(--first-column-size);
+    grid-auto-columns: var(--column-size);
+    grid-auto-flow: column;
+
+    &:first-child {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background-color: theme('colors.canvas.bg');
+      box-shadow: inset 0 -1px theme('colors.canvas.border');
+    }
+
+    & > * {
+      --index: auto;
+      --span: 1;
+      grid-column-start: var(--index);
+      grid-column-end: span var(--span);
+      grid-row-start: 1;
+      box-shadow: inset -1px 0 theme('colors.canvas.border');
+
+      &:first-child {
+        background-color: theme('colors.surface-1.bg');
+        box-shadow: inset -1px -1px theme('colors.surface-1.border');
+        position: sticky;
+        left: 0;
+        z-index: 1;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 1rem;
+          height: 100%;
+          pointer-events: none;
+          background-image: linear-gradient(to right, var(--background), 25%, transparent);
+          z-index: -1;
+        }
+      }
+    }
+  }
+
+  [role='columnheader'] {
+    display: grid;
+  }
+
+  [role='rowheader'] {
+    display: grid;
+  }
+
+  [role='gridcell'] {
+    display: grid;
+    cursor: grab;
+  }
+</style>

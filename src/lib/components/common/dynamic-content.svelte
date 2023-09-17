@@ -16,10 +16,6 @@
   }
 
   div :global(a[href]) {
-    color: theme('colors.primary.200');
-
-    &:hover {
-      text-decoration: underline;
-    }
+    @apply link;
   }
 </style>

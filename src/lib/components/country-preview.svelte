@@ -7,8 +7,8 @@
   $: imageSrc = `/api/assets/${data.cover.id}?w=320&h=320`
 </script>
 
-<li class="wrapper">
-  <picture class="cover">
+<li>
+  <picture>
     <Image
       class="w-full h-full"
       src={imageSrc}
@@ -40,7 +40,7 @@
 </li>
 
 <style lang="postcss">
-  .wrapper {
+  li {
     --color: theme('colors.surface-2.fg');
     display: grid;
     position: relative;
@@ -57,6 +57,7 @@
     aspect-ratio: 1/2;
     max-height: calc(100vh - var(--layout-topbar-height));
     user-select: none;
+    box-shadow: theme('elevation.low');
 
     &:first-child::before {
       content: '';
@@ -71,7 +72,7 @@
     }
 
     &:is(:hover) {
-      .cover {
+      picture {
         transform: scale(1.1);
       }
     }
@@ -103,9 +104,9 @@
     }
 
     &::before {
-      background-image: radial-gradient(circle at left bottom, theme('colors.canvas.bg / 50%'), 30%, transparent 50%),
-        linear-gradient(0deg, theme('colors.canvas.bg / 50%'), transparent 12rem),
-        linear-gradient(0deg, theme('colors.canvas.bg / 50%'), transparent 6rem);
+      background-image: radial-gradient(circle at left bottom, theme('colors.canvas.bg / 60%'), 30%, transparent 50%),
+        linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 12rem),
+        linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 6rem);
     }
   }
 
@@ -124,7 +125,7 @@
     content: '・';
   }
 
-  .cover {
+  picture {
     position: absolute;
     inset: 0;
     z-index: -1;

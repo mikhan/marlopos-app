@@ -1,19 +1,20 @@
-@layer components {
-  .link {
-    color: theme('colors.primary.200');
-    outline: 2px solid transparent;
-    outline-offset: 8px;
-    transition-property: outline-color, outline-offset;
-    transition-duration: 150ms, 250ms;
-    border-radius: theme('borderRadius.DEFAULT');
+// @layer components {
+//   .link {
+//     color: theme('colors.link');
+//     font-weight: bold;
+//     outline: 2px solid transparent;
+//     outline-offset: 8px;
+//     transition-property: outline-color, outline-offset;
+//     transition-duration: 150ms, 250ms;
+//     border-radius: theme('borderRadius.DEFAULT');
 
-    &:is(:hover, :active) {
-      text-decoration: underline;
-    }
+//     &:is(:hover, :active) {
+//       text-decoration: underline;
+//     }
 
-    &:focus-visible {
-      outline-color: theme('colors.ring');
-      outline-offset: 2px;
-    }
-  }
-}
+//     &:focus-visible {
+//       outline-color: theme('colors.ring');
+//       outline-offset: 2px;
+//     }
+//   }
+// }
