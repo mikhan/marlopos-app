@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ url, params, fetch }) => {
     zoom,
     width,
     height,
-    marker: { label: 'circle', color: '5a34d5' },
+    marker: { label: 'circle', color: '8471b1' },
   })
 
   return fetch(mapUrl.toString())

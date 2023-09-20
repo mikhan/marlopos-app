@@ -2,14 +2,13 @@
   import { page } from '$app/stores'
 
   const online = typeof navigator !== 'undefined' ? navigator.onLine : true
-  console.log($page)
 </script>
 
 <svelte:head>
   <title>Error {$page.status}</title>
 </svelte:head>
 
-<main class="layout grow place-content-center text-center">
+<main class="text-center layout grow place-content-center">
   <div>
     {#if $page.status === 404}
       <h1 class="text-4xl font-extralight">No se encontró el paquete</h1>

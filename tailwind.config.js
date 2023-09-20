@@ -9,6 +9,7 @@ import { layoutPlugin } from './tools/tailwind/plugins/layout'
 import { linkPlugin } from './tools/tailwind/plugins/link'
 import { scrollbarPlugin } from './tools/tailwind/plugins/scrollbar'
 import { textShadowPlugin } from './tools/tailwind/plugins/text-shadow'
+import { textWrapPlugin } from './tools/tailwind/plugins/text-wrap'
 
 const palette = generatePalette(
   {
@@ -96,7 +97,7 @@ export default {
     },
     fontFamily: {
       sans: ['Quicksand Variable', 'sans-serif'],
-      display: ['Caveat Variable', 'sans-serif'],
+      display: ['Rosarivo', 'sans-serif'],
       mono: ['monospace'],
     },
     extend: {
@@ -123,6 +124,7 @@ export default {
     textShadowPlugin(),
     formPlugin(),
     linkPlugin(),
+    textWrapPlugin(),
     cssVariablesPlugin(palette, alias),
     elevationPlugin(),
     hocusPlugin(),

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@fontsource-variable/caveat';
+@import '@fontsource/rosarivo';
 @import '@fontsource-variable/quicksand';
 @import '$core/styles.scss';
 
@@ -20,6 +20,7 @@ body {
   background-color: theme('colors.neutral.900');
   color: theme('colors.canvas.fg');
   overflow-y: scroll;
+  @apply scrollbar scrollbar-track-canvas-bg scrollbar-canvas-fg/50 scrollbar-border-canvas-border;
 }
 
 ::selection {

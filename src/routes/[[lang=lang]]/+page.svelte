@@ -4,12 +4,13 @@
   import Banner from '$lib/components/banner/banner.svelte'
   import Contact from '$lib/components/contact/contact.svelte'
   import CountriesPreview from '$lib/components/countries-preview.svelte'
+  import Services from '$lib/components/services/services.svelte'
   import type { PageData } from './$types'
 
   export let data: PageData
 </script>
 
-<div>
+<!-- <div>
   <div class="grid h-32 grid-cols-10">
     <div class="bg-primary-50" />
     <div class="bg-primary-100" />
@@ -34,10 +35,11 @@
     <div class="bg-neutral-800" />
     <div class="bg-neutral-900" />
   </div>
-</div>
-<AppContent className="gap-y-8 max-w-screen-2xl mx-auto" pageId={data.href}>
+</div> -->
+<AppContent className="max-w-screen-2xl mx-auto" pageId={data.href}>
   <Banner slides={data.featured} />
-  <CountriesPreview data={data.countriesPreview} />
+  <CountriesPreview data={[...data.countriesPreview, ...data.countriesPreview, ...data.countriesPreview]} />
+  <Services />
   <Contact data={data.information} />
   <AppFooter data={data.information} />
 </AppContent>

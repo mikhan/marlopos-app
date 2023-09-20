@@ -19,6 +19,7 @@
     font-weight: bold;
     font-size: theme('fontSize.sm[0]');
     line-height: theme('fontSize.sm[1]');
+    @apply focusable-visible focusable-ring focusable-inner;
 
     &::before {
       content: '';
@@ -40,7 +41,7 @@
     }
 
     &.active {
-      color: theme('colors.primary.300');
+      color: theme('colors.link');
 
       &::before {
         scale: 100% 100%;

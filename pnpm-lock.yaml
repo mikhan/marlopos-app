@@ -11,6 +11,9 @@ dependencies:
   '@fontsource-variable/quicksand':
     specifier: ^5.0.8
     version: 5.0.8
+  '@fontsource/rosarivo':
+    specifier: ^5.0.12
+    version: 5.0.12
   '@fortawesome/free-brands-svg-icons':
     specifier: ^6.4.2
     version: 6.4.2
@@ -524,6 +527,10 @@ packages:
 
   /@fontsource-variable/quicksand@5.0.8:
     resolution: {integrity: sha512-q+/Rb74Jru/oxhg3cdhTTWZ6sl3utTWSHQZZz5oeWmqvNVMyEaqzEuVwKhkZgZ8p5XotzHyr8M9YEB1NsmYWjw==}
+    dev: false
+
+  /@fontsource/rosarivo@5.0.12:
+    resolution: {integrity: sha512-cEmDRWppBMouE+P64MVycb1ejtPTxp9ppYGMPN8Wk1xE6k4p82VJ/bzSKh4z5vWXG1Mk2g/7U0xg6dYtL3Ohvg==}
     dev: false
 
   /@fortawesome/fontawesome-common-types@6.4.2:

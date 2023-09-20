@@ -2,15 +2,12 @@ import type { Action } from 'svelte/action'
 
 export type ShortcutConfig = {
   key: string
-  ctrl?: boolean
-  shift?: boolean
-  alt?: boolean
+  ctrlKey?: boolean
+  shiftKey?: boolean
+  altKey?: boolean
 }
 
-type Shortcut = {
-  config: ShortcutConfig
-  handler: (event: KeyboardEvent) => void
-}
+export type Shortcut = [handler: (event: KeyboardEvent) => void, config: ShortcutConfig]
 
 const index = new Map<HTMLElement, Shortcut[]>()
 
@@ -20,37 +17,39 @@ function onKeyPress(event: KeyboardEvent) {
 
   if (!shortcuts?.length) return
 
-  for (const { config, handler } of shortcuts) {
+  for (const [handler, config] of shortcuts) {
     if (
       config.key === event.key &&
-      config.ctrl === event.ctrlKey &&
-      config.shift == event.shiftKey &&
-      config.alt === event.altKey
+      config.ctrlKey === event.ctrlKey &&
+      config.shiftKey == event.shiftKey &&
+      config.altKey === event.altKey
     ) {
       handler(event)
+      event.preventDefault()
     }
   }
 }
 
-function registerListeners(element: HTMLElement, shortcuts: Shortcut[]) {
+function registerShortcuts(element: HTMLElement, shortcuts: Shortcut[]) {
   if (shortcuts.length) {
     index.set(element, shortcuts)
-    element.addEventListener('keypress', onKeyPress)
+    element.addEventListener('keydown', onKeyPress)
   } else {
     index.delete(element)
-    element.removeEventListener('keypress', onKeyPress)
+    element.removeEventListener('keydown', onKeyPress)
   }
 }
 
-export const shortcut: Action<HTMLElement, Shortcut> = (element, shortcut) => {
-  shortcut.config = { ctrl: false, shift: false, alt: false, ...shortcut.config }
-  const shortcuts = (index.get(element) ?? []).concat(shortcut)
-  registerListeners(element, shortcuts)
+export const shortcut: Action<HTMLElement, Shortcut> = (element, [handler, config]) => {
+  config = { ctrlKey: false, shiftKey: false, altKey: false, ...config, key: config.key.toLocaleLowerCase() }
+  const shortcut: Shortcut = [handler, config]
+  const shortcuts = [...(index.get(element) ?? []), shortcut]
+  registerShortcuts(element, shortcuts)
 
   return {
     destroy: () => {
-      const shortcuts = (index.get(element) ?? []).filter((s) => s === shortcut)
-      registerListeners(element, shortcuts)
+      const shortcuts = (index.get(element) ?? []).filter((s) => s !== shortcut)
+      registerShortcuts(element, shortcuts)
     },
   }
 }

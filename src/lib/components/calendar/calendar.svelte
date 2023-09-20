@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { mouseScroll } from '$core/actions/mouse-scroll'
+  import { mousescroll } from '$core/actions/mousescroll'
   import CalendarEntry from '$lib/components/calendar/calendar-entry.svelte'
   import CalendarEvent from '$lib/components/calendar/calendar-event.svelte'
   import { languageStore } from '$lib/stores/language.store'
@@ -38,7 +38,7 @@
   const days = generateCalendarDays(data.map(({ events }) => events.map(({ start, end }) => [start, end])).flat(2))
 </script>
 
-<div role="grid" aria-readonly="true" use:mouseScroll>
+<div role="grid" aria-readonly="true" use:mousescroll>
   <div class="h-12" role="row" style:--index={1}>
     <div role="columnheader">
       <span class="self-end p-2 font-bold uppercase justify-self-center">Paquetes</span>
@@ -87,7 +87,7 @@
     scroll-behavior: smooth;
     user-select: none;
     isolation: isolate;
-    @apply scrollbar-thin scrollbar-border-surface-1-border scrollbar-surface-1-fg/50;
+    @apply scrollbar-thin scrollbar-border-canvas-border scrollbar-canvas-fg/50;
   }
 
   [role='row'] {

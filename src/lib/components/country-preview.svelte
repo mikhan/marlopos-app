@@ -4,7 +4,7 @@
 
   export let data: Api.CountryPreview
 
-  $: imageSrc = `/api/assets/${data.cover.id}?w=320&h=320`
+  $: imageSrc = `/api/assets/${data.cover.id}?w=320&ar=2-3`
 </script>
 
 <li>
@@ -16,11 +16,7 @@
       width={data.cover.width}
       height={data.cover.height}
       color={data.cover.color}
-      srcset={[
-        { w: 280, ar: '1-2' },
-        { w: 320, ar: '1-1' },
-        { w: 480, ar: '16-9' },
-      ]}
+      srcset={[{ w: 280 }, { w: 320 }, { w: 480 }]}
       sizes="(min-width: 768px) 280px, (min-width: 480px) 320px, 480px"
       fit="cover">
       <Blurhash
@@ -44,17 +40,15 @@
     --color: theme('colors.surface-2.fg');
     display: grid;
     position: relative;
-    outline: 1px solid transparent;
     contain: content;
     border-radius: theme('borderRadius.DEFAULT');
     transition: box-shadow 150ms ease-in;
-    border: 1px solid theme('colors.canvas.border');
     outline: 2px solid transparent;
-    outline-offset: 8px;
+    outline-offset: -8px;
     transition-property: outline-color, outline-offset;
     transition-duration: 150ms, 250ms;
-    width: 12rem;
-    aspect-ratio: 1/2;
+    width: theme('spacing.64');
+    aspect-ratio: 2/3;
     max-height: calc(100vh - var(--layout-topbar-height));
     user-select: none;
     box-shadow: theme('elevation.low');
@@ -79,7 +73,7 @@
 
     &:has(:focus-visible) {
       outline-color: theme('colors.ring');
-      outline-offset: 2px;
+      outline-offset: -2px;
     }
   }
 
@@ -91,7 +85,7 @@
     inset: 0;
     padding: 1rem;
     color: var(--color);
-    transition: color 250ms ease-in-out;
+    transition: color 150ms ease-in-out;
 
     &::before,
     &::after {

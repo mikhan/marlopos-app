@@ -154,7 +154,7 @@
     outline-offset: calc(var(--debug) * -1);
     display: flex;
     align-items: center;
-    height: var(--slide-indicators-size);
+    height: theme('spacing.12');
     z-index: 2;
     position: absolute;
     bottom: 0;
@@ -163,7 +163,7 @@
   }
 
   .indicator {
-    --slide-control-icon-color: theme('colors.neutral.100 / 30%');
+    --slide-indicator-icon-color: theme('colors.surface-2.bg');
     display: grid;
     place-content: center;
     cursor: pointer;
@@ -175,11 +175,11 @@
 
     &:hover,
     &:focus {
-      --slide-control-icon-color: theme('colors.neutral.100 / 50%');
+      --slide-indicator-icon-color: theme('colors.surface-2.hover');
     }
 
     &.selected {
-      --slide-control-icon-color: theme('colors.neutral.100');
+      --slide-indicator-icon-color: theme('colors.surface-2.fg');
     }
 
     &:focus-visible::before {
@@ -193,7 +193,7 @@
       width: theme('spacing.2');
       height: theme('spacing.2');
       border-radius: 100%;
-      background-color: var(--slide-control-icon-color);
+      background-color: var(--slide-indicator-icon-color);
       outline: 2px solid transparent;
       outline-offset: 8px;
       transition-property: background-color, outline-color, outline-offset;

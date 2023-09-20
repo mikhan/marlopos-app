@@ -1,9 +1,10 @@
 import { getPageLinks } from '$lib/services/api'
 import { type SearchResult, search } from '$lib/services/search'
-import { LANGUAGE_CODES, getLanguage, isDefaultLanguage } from '$lib/utils/language'
-import type { EntryGenerator, PageServerLoad } from './$types'
+import { getLanguage } from '$lib/utils/language'
+import type { PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
+  console.log(url.href)
   const language = getLanguage(params.lang)
   const query = url.searchParams.get('q')
   let searchResults: SearchResult[] = []
@@ -22,8 +23,5 @@ export const load = (async ({ url, params }) => {
     searchResults,
   }
 }) satisfies PageServerLoad
-
-export const entries: EntryGenerator = () =>
-  LANGUAGE_CODES.map((lang) => ({ lang: isDefaultLanguage(lang) ? '' : lang }))
 
 export const prerender = false

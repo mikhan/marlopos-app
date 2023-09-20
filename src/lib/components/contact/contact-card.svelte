@@ -18,7 +18,7 @@
   }
 
   function getScheduleStatus(schedules: Api.InformationSchedule[]) {
-    schedules = [...schedules].sort((a, b) => a.start.getTime() - b.start.getTime())
+    schedules = schedules.toSorted((a, b) => a.start.getTime() - b.start.getTime())
     const today = new Date()
     const schedule = schedules.find(({ start, end }) => start < today && today < end)
 
@@ -40,7 +40,7 @@
 </script>
 
 <section
-  class="border rounded elevation-low md:max-w-sm bg-surface-2-bg text-surface-2-fg border-surface-1-border overflow-clip min-w-min">
+  class="max-w-screen-sm border rounded elevation-low md:max-w-xs bg-surface-2-bg text-surface-2-fg border-surface-1-border overflow-clip min-w-min">
   <a class="map-link" target="_blank" rel="noreferrer" href="https://goo.gl/maps/ReoWcHB4Ae6swoeHA">
     <Image src={mapSrc} width={mapConfig.width} height={mapConfig.height} alt="" fit="cover" />
     <span class="sr-only">Mapa de ubicación</span>

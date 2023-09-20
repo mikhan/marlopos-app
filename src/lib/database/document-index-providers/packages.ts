@@ -1,40 +1,50 @@
 import { api } from '$lib/services/api'
-import type { DocumentIndexProvider } from '$lib/services/search'
+import type { DocumentIndexProvider, SearchResult } from '$lib/services/search'
 
-export const packagesIndexProvider: DocumentIndexProvider = async (options) => {
+export interface PackageSearchResult extends SearchResult {
+  type: 'package'
+  title: string
+  description: string
+  content: string
+  href: string
+}
+
+export const packagesIndexProvider: DocumentIndexProvider<PackageSearchResult> = async (options) => {
+  console.log('packagesIndexProvider')
+  type Result = {
+    id: number
+    name: string
+    description: string
+    content: string
+    locale: string
+  }
+  const query = `
+    id,
+    name,
+    description,
+    content`
   const { data, error } = await api
     .from('package_translations')
-    .select(
-      `
-        id,
-        name,
-        description,
-        content`,
-    )
+    .select(query)
     .eq('languages_code', options.language.locale)
     .throwOnError()
-    .returns<
-      {
-        id: number
-        name: string
-        description: string
-        content: string
-        locale: string
-      }[]
-    >()
+    .returns<Result[]>()
 
   if (error) throw error
 
-  const documents = data.map(({ id, name, description, content }) => ({
-    id: id.toString(),
-    type: 'package',
-    title: name,
-    description,
-    content: content.replace(/<[^>]*>?/gm, ''),
-    href: `/packages/${id}`,
-  }))
-
-  const fields = ['title', 'description', 'content', 'aba']
-
-  return { documents, fields }
+  return {
+    documents: data.map(({ id, name, description, content }) => ({
+      id: id.toString(),
+      title: name,
+      description,
+      content: content.replace(/<[^>]*>?/gm, ''),
+      data: {
+        type: 'package',
+        title: name,
+        description,
+        href: `/packages/${id}`,
+      },
+    })),
+    fields: ['title', 'description', 'content'],
+  }
 }

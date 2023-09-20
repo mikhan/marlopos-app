@@ -1,9 +1,16 @@
 <script lang="ts">
   import type { ComponentType, SvelteComponent } from 'svelte'
+  import { groupBy } from '$core/utils/object'
+  import PackageResult from '$lib/database/document-index-providers/package-result.svelte'
   import type { SearchResult } from '$lib/services/search'
+  import SectionHeader from '../common/section-header.svelte'
 
-  export let components: Record<string, ComponentType<SvelteComponent<{ data: SearchResult }>>>
   export let results: SearchResult[]
+  const components: Record<string, ComponentType<SvelteComponent>> = {
+    package: PackageResult,
+  }
+
+  $: index = groupBy(results, (result) => result.type)
 
   function getComponent(type: string) {
     const component = components[type]
@@ -14,6 +21,10 @@
   }
 </script>
 
-{#each results as data}
-  <svelte:component this={getComponent(data.type)} {data} />
-{/each}
+<section class="layout-lg">
+  <SectionHeader class="mt-32">Resultados</SectionHeader>
+
+  {#each Object.entries(index) as [type, results]}
+    <svelte:component this={getComponent(type)} data={results} />
+  {/each}
+</section>

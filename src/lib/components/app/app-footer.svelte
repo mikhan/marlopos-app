@@ -1,9 +1,9 @@
 <script lang="ts">
-  // import { PUBLIC_TAWK_PROPERTY_ID, PUBLIC_TAWK_CHAT_ID } from '$env/static/public'
-  // import Chat from '$lib/components/chat.svelte'
-  import { browser } from '$app/environment'
+  import { browser, dev } from '$app/environment'
   import { faFacebook } from '@fortawesome/free-brands-svg-icons'
   import Fa from 'svelte-fa'
+  import { PUBLIC_TAWK_CHAT_ID, PUBLIC_TAWK_PROPERTY_ID } from '$env/static/public'
+  import Chat from '$lib/components/chat.svelte'
 
   export let data: Api.Information
 
@@ -29,8 +29,8 @@
       {/each}
     </div>
 
-    {#if browser && !isLighthouseAudit}
-      <!-- <Chat propertyId={PUBLIC_TAWK_PROPERTY_ID} chatId={PUBLIC_TAWK_CHAT_ID} /> -->
+    {#if browser && !isLighthouseAudit && !dev}
+      <Chat propertyId={PUBLIC_TAWK_PROPERTY_ID} chatId={PUBLIC_TAWK_CHAT_ID} />
     {/if}
   </div>
 </footer>

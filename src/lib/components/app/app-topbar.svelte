@@ -23,6 +23,11 @@
   $: opacity = menuExpanded || !opacityOffset ? 1 : Math.min(y / opacityOffset, 1)
   $: menuExpanded = $collapsed && menuExpanded
 
+  const sections = [
+    { name: 'Calendario', href: '/calendar' },
+    { name: 'Nosotros', href: '/about' },
+  ]
+
   onMount(() => {
     const observer = new ResizeObserver(() => {
       opacityOffset = Math.min(250, document.documentElement.scrollHeight - window.innerHeight)
@@ -58,20 +63,19 @@
         <Omnibox bind:expanded={searchActive} />
       </div>
       <nav class="app-topbar-sections">
-        <AppTopbarLink href="/calendar">Calendario</AppTopbarLink>
-        <AppTopbarLink href="/about">Nosotros</AppTopbarLink>
+        {#each sections as { name, href }}
+          <AppTopbarLink {href}>{name}</AppTopbarLink>
+        {/each}
       </nav>
     </div>
   </UiTopbar>
   {#if menuExpanded}
     <div class="fixed inset-0 -z-[1] bg-canvas-bg/75" />
     <nav class="flex flex-col">
-      <a
-        class="block p-4 hover:bg-surface-2-hover text-surface-2-fg focusable focusable-inner focusable-ring"
-        href="/calendar">Calendario</a>
-      <a
-        class="block p-4 hover:bg-surface-2-hover text-surface-2-fg focusable focusable-inner focusable-ring"
-        href="/about">Nosotros</a>
+      {#each sections as { name, href }}
+        <a class="block p-4 hover:bg-surface-2-hover text-surface-2-fg focusable focusable-inner focusable-ring" {href}
+          >{name}</a>
+      {/each}
     </nav>
   {/if}
 </header>
@@ -111,6 +115,7 @@
       border-bottom: 1px solid theme('colors.surface-1.border');
       backdrop-filter: blur(8px);
       opacity: var(--opacity, 0);
+      transition: opacity 150ms;
       z-index: -1;
     }
 
@@ -144,21 +149,24 @@
     gap: theme('spacing.4');
     width: 100%;
     height: theme('spacing.16');
+    isolation: isolate;
 
     &::before {
       content: '';
       display: block;
       position: absolute;
       width: 100%;
-      height: 100%;
+      height: 200%;
       max-width: theme('screens.xl');
       top: 0;
       left: 50%;
       transform: translateX(-50%);
       pointer-events: none;
       background-image: linear-gradient(to right, #a87ffb, #25a6e9);
-      filter: blur(64px);
-      opacity: calc(var(--opacity, 0) * 0.5);
+      filter: blur(128px);
+      opacity: calc(var(--opacity, 0) * 0.7);
+      transition: opacity 250ms;
+      z-index: -1;
     }
   }
 
@@ -170,17 +178,17 @@
     flex-shrink: 0;
     padding: theme('spacing.2');
     outline: none;
-
-    &:focus-visible {
-      background-color: theme('colors.primary.300');
-      border-radius: theme('borderRadius.DEFAULT');
-    }
+    border-radius: theme('borderRadius.DEFAULT');
+    @apply focusable-visible focusable-ring;
   }
 
   .app-topbar-search {
-    width: 40px;
+    width: theme('spacing.10');
     transition: width 250ms 250ms ease-in-out;
-    /* outline: 1px solid red; */
+
+    @media (min-width: theme('screens.md')) {
+      width: theme('spacing.44');
+    }
   }
 
   .app-topbar-sections {
