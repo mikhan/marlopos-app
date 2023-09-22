@@ -11,14 +11,6 @@
   let marker: Marker
   let markerElement: HTMLDivElement
 
-  onMount(() => {
-    marker = new Marker($$slots.default ? { element: markerElement } : { color })
-    marker.setLngLat(coordinates)
-    mapContext.addMarker(marker)
-
-    return () => mapContext.removeMarker(marker)
-  })
-
   export function highlight(marker: Marker | undefined, hightlight: boolean) {
     if (!marker) return
 
@@ -39,6 +31,14 @@
       if ((m === marker && !isOpen) || (m !== marker && isOpen)) m.togglePopup()
     }
   }
+
+  onMount(() => {
+    marker = new Marker($$slots.default ? { element: markerElement } : { color })
+    marker.setLngLat(coordinates)
+    mapContext.addMarker(marker)
+
+    return () => mapContext.removeMarker(marker)
+  })
 </script>
 
 <div bind:this={markerElement}>

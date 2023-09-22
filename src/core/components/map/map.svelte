@@ -18,7 +18,9 @@
   import { type IControl, Map, type MapboxOptions, Marker } from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
   import { onMount } from 'svelte'
-  import type { MapControlPosition } from './map-utils'
+  import type { Unsubscriber } from 'svelte/store'
+  import { languageStore } from '$lib/stores/language.store'
+  import { type MapControlPosition, setMapLanguage } from './map-utils'
 
   export let options: Omit<MapboxOptions, 'container'>
 
@@ -62,9 +64,22 @@
   setMapContext({ getMap, getMarkers, addMarker, removeMarker, getControls, addControl, removeControl })
 
   onMount(() => {
+    let languageUnsubscribe: Unsubscriber | undefined
+
     map = new Map({ ...options, container })
 
-    return () => map.remove()
+    map.once('style.load', () => {
+      languageUnsubscribe = languageStore.subscribe(({ code }) => {
+        console.log('languageStore.subscribe')
+        const style = setMapLanguage(map.getStyle(), code)
+        map.setStyle(style)
+      })
+    })
+
+    return () => {
+      map.remove()
+      languageUnsubscribe?.()
+    }
   })
 </script>
 

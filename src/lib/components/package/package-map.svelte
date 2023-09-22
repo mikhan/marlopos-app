@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     faArrowsToCircle,
-    faCircle,
     faCompress,
     faExpand,
     faLocationCrosshairs,
@@ -172,7 +171,7 @@
     {#if currentPosition}
       <MapMarker coordinates={currentPosition.coordinates}>
         <div class="_map_currentposition">
-          <Fa size="2x" icon={faCircle} />
+          <Fa size="2x" icon={faLocationCrosshairs} />
         </div>
       </MapMarker>
     {/if}
