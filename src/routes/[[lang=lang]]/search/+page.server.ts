@@ -1,17 +1,17 @@
 import { getPageLinks } from '$lib/services/api'
-import { type SearchResult, search } from '$lib/services/search'
+// import { type SearchResult, search } from '$lib/services/search'
 import { getLanguage } from '$lib/utils/language'
 import type { PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
   console.log(url.href)
   const language = getLanguage(params.lang)
-  const query = url.searchParams.get('q')
-  let searchResults: SearchResult[] = []
+  // const query = url.searchParams.get('q')
+  // let searchResults: SearchResult[] = []
 
-  if (query) {
-    searchResults = await search(query, { language })
-  }
+  // if (query) {
+  //   searchResults = await search(query, { language })
+  // }
 
   return {
     metadata: {
@@ -20,7 +20,8 @@ export const load = (async ({ url, params }) => {
       lang: language.code,
       links: getPageLinks(url, params.lang),
     },
-    searchResults,
+    // searchResults,
+    // index: (await fetch('/search/index.json')).json(),
   }
 }) satisfies PageServerLoad
 

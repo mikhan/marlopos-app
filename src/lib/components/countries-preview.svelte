@@ -36,10 +36,6 @@
     @media (min-width: theme('screens.md')) {
       grid-template-columns: auto 1fr;
       grid-column-start: _lg-start;
-
-      & :global([data-part='ui-scroller-previous-button']) {
-        margin-left: -50%;
-      }
     }
 
     & :global([data-component='ui-scroller']) {
@@ -47,6 +43,23 @@
       padding-block: 1rem;
       margin-block: -1rem;
       gap: theme('spacing.4');
+    }
+
+    & :global([data-part='ui-scroller-previous-button']) {
+      margin: 0 0 0 -50%;
+    }
+
+    @media (width < theme('screens.md')) {
+      & :global([data-component='ui-scroller']) {
+        padding-inline: var(--layout-padding);
+      }
+
+      & :global([data-part='ui-scroller-previous-button']) {
+        display: none;
+      }
+      & :global([data-part='ui-scroller-next-button']) {
+        display: none;
+      }
     }
   }
 

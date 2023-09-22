@@ -40,6 +40,7 @@ export const mousescroll: Action<HTMLElement, MouseScrollOptions | undefined, Mo
     const maxHeight = element.scrollHeight - element.clientHeight
     let restoreProperties: (() => void) | undefined
     let restoreDocumentProperties: (() => void) | undefined
+    let updateTask = Promise.resolve()
     top = element.scrollTop
     left = element.scrollLeft
     position.set({ top, left }, { duration: 0 })
@@ -64,14 +65,15 @@ export const mousescroll: Action<HTMLElement, MouseScrollOptions | undefined, Mo
 
       top = clamp(0, maxHeight, top - event.movementY)
       left = clamp(0, maxWidth, left - event.movementX)
-      position.set({ top, left }, { duration: speed })
+      updateTask = position.set({ top, left }, { duration: speed })
     }
 
-    function onPointerup() {
+    async function onPointerup() {
       window.removeEventListener('pointermove', onPointermove)
       window.removeEventListener('pointerup', onPointerup)
       restoreProperties?.()
       restoreDocumentProperties?.()
+      await updateTask
       dispatch('mousescrollend')
     }
   }

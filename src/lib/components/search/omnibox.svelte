@@ -8,6 +8,7 @@
   import IconButton from '$core/components/icon-button.svelte'
   import { debounce } from '$core/utils/async'
   import { generateUID } from '$core/utils/element'
+  import { getSearchEngine } from '$lib/services/search'
   import OmniboxSuggestions from './omnibox-suggestions.svelte'
 
   export let expanded = true
@@ -31,11 +32,20 @@
   }
 
   async function fetchSuggestions(query: string): Promise<string[] | null> {
-    const url = new URL('/api/search-suggestions', location.origin)
-    url.searchParams.set('q', query)
-    const response = await fetch(url)
-    const suggestions = await response.json()
-    return expanded ? suggestions : null
+    if (!expanded) return null
+
+    const searchEngine = await getSearchEngine()
+    const suggestions = searchEngine
+      .autoSuggest(query, {
+        combineWith: 'OR',
+        boost: { title: 2 },
+        prefix: true,
+        fuzzy: false,
+        filter: (result) => result['data']['locale'] === 'es-ES',
+      })
+      .map(({ suggestion }) => suggestion)
+
+    return suggestions
   }
 
   function open() {

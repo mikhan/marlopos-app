@@ -1,30 +1,44 @@
 <script lang="ts">
-  import type { ComponentType, SvelteComponent } from 'svelte'
-  import { groupBy } from '$core/utils/object'
-  import PackageResult from '$lib/database/document-index-providers/package-result.svelte'
-  import type { SearchResult } from '$lib/services/search'
+  import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+  import Fa from 'svelte-fa'
+  import { type SearchResult, getSearchEngine } from '$lib/services/search'
+  import { languageStore } from '$lib/stores/language.store'
+  import type { Language } from '$lib/utils/language'
   import SectionHeader from '../common/section-header.svelte'
+  import SearchResults from './search-results.svelte'
 
-  export let results: SearchResult[]
-  const components: Record<string, ComponentType<SvelteComponent>> = {
-    package: PackageResult,
+  export let query = ''
+
+  async function search(query: string, { locale }: Language): Promise<SearchResult[]> {
+    console.log('search', { query, locale })
+    if (!query) return []
+
+    // return new Promise(() => {})
+    const searchEngine = await getSearchEngine()
+
+    return searchEngine
+      .search(query, {
+        boost: { title: 2 },
+        fuzzy: 0.2,
+        prefix: true,
+        filter: (result) => result['data']['locale'] === locale,
+      })
+      .map((result) => result['data'])
   }
 
-  $: index = groupBy(results, (result) => result.type)
-
-  function getComponent(type: string) {
-    const component = components[type]
-
-    if (!component) throw new Error(`Unknown search type '${type}'`)
-
-    return component
-  }
+  let resultsPromise: Promise<SearchResult[]>
+  $: resultsPromise = search(query, $languageStore)
 </script>
 
-<section class="layout-lg">
+<section class="flex flex-col gap-8 layout-lg">
   <SectionHeader class="mt-32">Resultados</SectionHeader>
 
-  {#each Object.entries(index) as [type, results]}
-    <svelte:component this={getComponent(type)} data={results} />
-  {/each}
+  {#await resultsPromise}
+    <div class="flex items-center gap-2">
+      <Fa icon={faSpinner} spin />
+      Buscando...
+    </div>
+  {:then results}
+    <SearchResults {results} />
+  {/await}
 </section>

@@ -39,7 +39,7 @@
     display: grid;
     height: 100%;
     padding-inline: var(--slide-control-size);
-    padding-bottom: theme('spacing.24');
+    padding-bottom: theme('spacing.12');
     user-select: none;
     outline: var(--debug) solid #ff09;
     outline-offset: calc(var(--debug) * -1);
@@ -57,21 +57,27 @@
     color: hsl(0 0% 100% / 75%);
     outline: var(--debug) solid #f009;
     outline-offset: calc(var(--debug) * -1);
+    text-align: center;
+
+    @media (min-width: theme('screens.sm')) {
+      text-align: left;
+    }
   }
 
   ._title {
     font-family: theme('fontFamily.display');
     font-size: theme('fontSize.4xl-fluid[0]');
     line-height: theme('fontSize.4xl-fluid[1]');
-    text-shadow: 0 0 12px theme('colors.canvas.bg/50%'), 0 0 64px theme('colors.canvas.bg/50%');
     text-wrap: balance;
+    text-shadow: 0 0 12px theme('colors.canvas.bg/50%'), 0 0 64px theme('colors.canvas.bg/50%');
   }
 
   ._description {
     font-size: theme('fontSize.xl[0]');
     line-height: theme('fontSize.xl[1]');
     margin-top: theme('spacing.2');
-    text-shadow: 0 0 12px theme('colors.canvas.bg/50%'), 0 0 64px theme('colors.canvas.bg/50%');
     text-wrap: balance;
+    text-shadow: 0 0 3px theme('colors.canvas.bg'), 0 0 6px theme('colors.canvas.bg/75%'),
+      0 0 32px theme('colors.canvas.bg/75%');
   }
 </style>

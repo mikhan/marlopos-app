@@ -27,7 +27,7 @@
     </Image>
   </picture>
   <div class="content">
-    <a class="text-xl" href="/">{data.name}</a>
+    <a class="sm:text-xl" href="/">{data.name}</a>
     <div class="text-sm truncate opacity-75">
       <span class="whitespace-nowrap">{data.packages} paquetes</span><span class="whitespace-nowrap"
         >{data.destinations} destinos</span>
@@ -47,23 +47,12 @@
     outline-offset: -8px;
     transition-property: outline-color, outline-offset;
     transition-duration: 150ms, 250ms;
-    width: theme('spacing.64');
+    width: 50vw;
+    max-width: theme('spacing.64');
     aspect-ratio: 2/3;
     max-height: calc(100vh - var(--layout-topbar-height));
     user-select: none;
     box-shadow: theme('elevation.low');
-
-    &:first-child::before {
-      content: '';
-      display: block;
-      width: 100%;
-      aspect-ratio: 2/1;
-      pointer-events: none;
-
-      @media (min-width: theme('screens.sm')) {
-        aspect-ratio: 1/1;
-      }
-    }
 
     &:is(:hover) {
       picture {
@@ -86,22 +75,6 @@
     padding: 1rem;
     color: var(--color);
     transition: color 150ms ease-in-out;
-
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      transition: opacity 250ms ease-in-out;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    &::before {
-      background-image: radial-gradient(circle at left bottom, theme('colors.canvas.bg / 60%'), 30%, transparent 50%),
-        linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 12rem),
-        linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 6rem);
-    }
   }
 
   a {
@@ -123,8 +96,17 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    isolation: isolate;
     transform: scale(1) translate3d(0, 0, 0);
     transition: transform 250ms ease-in-out;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle at left bottom, theme('colors.canvas.bg / 60%'), 30%, transparent 50%),
+        linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 12rem),
+        linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 6rem);
+    }
   }
 </style>

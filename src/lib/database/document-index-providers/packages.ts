@@ -9,7 +9,7 @@ export interface PackageSearchResult extends SearchResult {
   href: string
 }
 
-export const packagesIndexProvider: DocumentIndexProvider<PackageSearchResult> = async (options) => {
+export const packagesIndexProvider: DocumentIndexProvider<PackageSearchResult> = async () => {
   console.log('packagesIndexProvider')
   type Result = {
     id: number
@@ -22,27 +22,25 @@ export const packagesIndexProvider: DocumentIndexProvider<PackageSearchResult> =
     id,
     name,
     description,
-    content`
-  const { data, error } = await api
-    .from('package_translations')
-    .select(query)
-    .eq('languages_code', options.language.locale)
-    .throwOnError()
-    .returns<Result[]>()
+    content,
+    locale:languages_code`
+  const { data, error } = await api.from('package_translations').select(query).throwOnError().returns<Result[]>()
 
   if (error) throw error
 
   return {
-    documents: data.map(({ id, name, description, content }) => ({
+    documents: data.map(({ id, name, description, content, locale }) => ({
       id: id.toString(),
       title: name,
       description,
       content: content.replace(/<[^>]*>?/gm, ''),
+      locale,
       data: {
         type: 'package',
         title: name,
         description,
         href: `/packages/${id}`,
+        locale,
       },
     })),
     fields: ['title', 'description', 'content'],

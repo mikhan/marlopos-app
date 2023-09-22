@@ -11,6 +11,9 @@ const config = {
   },
   kit: {
     adapter: adapter(),
+    prerender: {
+      entries: ['/search/index.json'],
+    },
     alias: {
       $core: 'src/core',
       $translations: 'src/translations',

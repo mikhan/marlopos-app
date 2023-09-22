@@ -48,9 +48,10 @@
       position: absolute;
       inset: 0;
       background-image: linear-gradient(0deg, theme('colors.canvas.bg / 50%'), 5%, transparent 15%),
-        /* linear-gradient(0deg, theme('colors.canvas.bg / 75%'), transparent 30%),
-        linear-gradient(0deg, theme('colors.canvas.bg / 100%'), transparent 45%), */
-          radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 30%, transparent 75%);
+        linear-gradient(0deg, theme('colors.canvas.bg / 75%'), transparent 30%),
+        linear-gradient(0deg, theme('colors.canvas.bg / 100%'), transparent 45%),
+        radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 30%, transparent 75%);
+      mix-blend-mode: multiply;
     }
 
     @container carousel (width > theme('screens.xl')) {

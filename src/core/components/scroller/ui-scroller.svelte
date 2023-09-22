@@ -1,10 +1,10 @@
 <script lang="ts">
   import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import { onMount } from 'svelte'
-  import type { Writable } from 'svelte/store'
   import { mousescroll } from '$core/actions/mousescroll'
   import { matchMedia } from '$core/stores/match-media'
   import { createConditionalAction } from '$core/utils/actions'
+  import { debounce } from '$core/utils/async'
   import IconButton from '../icon-button.svelte'
 
   let container: HTMLUListElement
@@ -14,7 +14,12 @@
   let showNext = false
 
   const mousescrollIf = createConditionalAction(matchMedia('(pointer: fine)'), mousescroll)
+  const debouncedOnResize = debounce(onResize, 250)
   let currentElement: HTMLElement | undefined
+
+  function onResize() {
+    if (currentElement) scrollTo(currentElement)
+  }
 
   function onIntersectionChange(changes: { target: Element; intersectionRatio: number }[]) {
     for (const { target, intersectionRatio } of changes) {
@@ -31,13 +36,9 @@
     showNext = container.scrollWidth - container.scrollLeft - container.clientWidth > 0
   }
 
-  function scrollSnap(position: Writable<{ top: number; left: number }>) {
-    if (!currentElement) return
-    if (container.scrollWidth - container.scrollLeft - container.clientWidth === 0) return
-
-    const paddingLeft = getPaddingLeft()
-    const offsetLeft = currentElement.offsetLeft
-    position.update(({ top }) => ({ top, left: offsetLeft - paddingLeft }))
+  function scrollSnap() {
+    if (container.scrollLeft === container.scrollWidth - container.clientWidth) return
+    if (currentElement) scrollTo(currentElement)
   }
 
   function getPaddingLeft() {
@@ -80,12 +81,13 @@
   })
 </script>
 
+<svelte:window on:resize={debouncedOnResize} />
+
 <div class="_container">
   <ul
     data-component="ui-scroller"
-    {...$$restProps}
     use:mousescrollIf={{ speed: 500 }}
-    on:mousescrollend={(event) => scrollSnap(event.detail.position)}
+    on:mousescrollend={scrollSnap}
     on:scroll={onScroll}
     bind:this={container}>
     <slot />
