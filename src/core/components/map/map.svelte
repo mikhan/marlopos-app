@@ -70,7 +70,6 @@
 
     map.once('style.load', () => {
       languageUnsubscribe = languageStore.subscribe(({ code }) => {
-        console.log('languageStore.subscribe')
         const style = setMapLanguage(map.getStyle(), code)
         map.setStyle(style)
       })
