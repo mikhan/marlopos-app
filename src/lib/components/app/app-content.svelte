@@ -9,21 +9,12 @@
 </script>
 
 <script lang="ts">
-  import { fly } from 'svelte/transition'
-
-  export let pageId: string
   export let className = ''
 </script>
 
-{#key pageId}
-  <main
-    class="layout-container layout-padding {className}"
-    {...$$restProps}
-    in:fly={{ y: -200, duration: 300, delay: 300 }}
-    out:fly={{ y: -200, duration: 300 }}>
-    <slot />
-  </main>
-{/key}
+<main class="layout-container layout-padding {className}" {...$$restProps}>
+  <slot />
+</main>
 
 <style lang="postcss">
   main {

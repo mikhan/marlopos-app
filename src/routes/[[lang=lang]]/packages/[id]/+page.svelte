@@ -7,7 +7,7 @@
   export let data: PageData
 </script>
 
-<AppContent className="gap-y-8 max-w-screen-2xl mx-auto" pageId={data.href}>
+<AppContent className="gap-y-8 max-w-screen-2xl mx-auto">
   <Package data={data.page} />
   <AppFooter data={data.information} />
 </AppContent>

@@ -36,7 +36,7 @@
     <div class="bg-neutral-900" />
   </div>
 </div> -->
-<AppContent className="max-w-screen-2xl mx-auto" pageId={data.href}>
+<AppContent className="max-w-screen-2xl mx-auto">
   <Banner slides={data.featured} />
   <CountriesPreview data={[...data.countriesPreview, ...data.countriesPreview, ...data.countriesPreview]} />
   <Services />
