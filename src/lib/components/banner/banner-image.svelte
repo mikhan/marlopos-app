@@ -1,6 +1,7 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
+  import { getResourceHref } from '$core/services/resource-provider'
 
   export let id: string
   export let title: string
@@ -10,8 +11,7 @@
   export let color: string
   export let priority: boolean
 
-  const src = `/api/assets/seo/${id.replace(/(?=\.[a-z]+$)/, '/' + title.replace(/ /g, '-'))}`
-  // + '/' + encodeURI(title.replace(/ /g, '-'))
+  const src = getResourceHref(id)
 </script>
 
 <div class="_image" style:--color={color}>

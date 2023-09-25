@@ -1,6 +1,7 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
+  import { getResourceHref } from '$core/services/resource-provider'
   import { slugify } from '$core/utils/string'
   import DynamicContent from '$lib/components/common/dynamic-content.svelte'
   import type PackageMap from './package-map.svelte'
@@ -20,7 +21,7 @@
   <picture>
     <Image
       class="w-full h-full"
-      src={`/api/assets/${data.cover.id}`}
+      src={getResourceHref(data.cover.id)}
       width={320}
       height={180}
       fit="cover"

@@ -1,10 +1,11 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
+  import { getResourceHref } from '$core/services/resource-provider'
 
   export let data: Api.CountryPreview
 
-  $: imageSrc = `/api/assets/${data.cover.id}?w=320&ar=2-3`
+  $: imageSrc = getResourceHref(data.cover.id, { width: 320, aspectRatio: '2-3' })
 </script>
 
 <li>

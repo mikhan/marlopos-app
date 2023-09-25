@@ -1,6 +1,7 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
+  import { getResourceHref } from '$core/services/resource-provider'
   import ItemPreview from '../common/item-preview.svelte'
 
   export let data: Api.Destination
@@ -17,7 +18,7 @@
     <picture slot="image">
       <Image
         class="w-full h-full"
-        src={`/api/assets/${data.cover.id}?w=320&h=180?q=50`}
+        src={getResourceHref(data.cover.id, { width: 320, height: 180, quality: 50 })}
         width={320}
         height={180}
         fit="cover"
