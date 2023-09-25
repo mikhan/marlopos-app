@@ -55,7 +55,7 @@
           <Fa icon={menuExpanded ? faTimes : faBars} />
         </button>
       {/if}
-      <a class="app-topbar-logo" href="/">
+      <a class="app-topbar-logo" href="/" data-sveltekit-preload-data>
         <img class="w-auto h-8" src={logotipo} width="84" height="84" alt="Viajes Marlopos logo" />
         <span class="font-bold tracking-wider uppercase">Viajes Marlopos</span>
       </a>
