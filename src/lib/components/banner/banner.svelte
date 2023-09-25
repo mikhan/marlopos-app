@@ -10,16 +10,15 @@
   let index = 0
   let carousel: Carousel<Api.Banner>
   const loop = true
-  const autoplay = false
 </script>
 
 <div class="wrapper">
-  <Carousel bind:this={carousel} bind:index {slides} {loop} {autoplay}>
+  <Carousel bind:this={carousel} bind:index {slides} {loop} autoplay={true} speed={5000}>
     <svelte:fragment slot="slide" let:slideIndex let:slide>
       <BannerSlide data={slide} index={slideIndex} />
     </svelte:fragment>
 
-    <svelte:fragment slot="controls">
+    <svelte:fragment slot="controls" let:index>
       <button class="control prev" type="button" tabindex="-1" on:click={carousel.previous}>
         <div class="control-icon">
           <Fa size="lg" icon={faChevronLeft} />
@@ -41,10 +40,9 @@
               type="button"
               class="indicator"
               tabindex={i === index ? 0 : -1}
-              class:selected={i === index}
               aria-current={i === index}
               aria-label={item.name}
-              on:click={() => (index = i)} />
+              on:click={() => carousel.goTo(i)} />
           </li>
         {/each}
       </ul>
@@ -55,7 +53,6 @@
 <style lang="postcss">
   .wrapper {
     --debug: 0px;
-    --slide-indicators-size: theme('spacing.6');
     --slide-control-visibility: hidden;
     --slide-control-size: var(--layout-padding);
     --slide-control-icon-opacity: 0;
@@ -76,12 +73,8 @@
     }
 
     @media (pointer: coarse) {
-      /* --slide-indicators-size: theme('spacing.12'); */
       --slide-control-visibility: hidden;
       --slide-control-size: max(var(--layout-padding), calc((calc(100% - theme('screens.lg')) / 2)));
-      .indicators {
-        pointer-events: none;
-      }
     }
 
     display: grid;
@@ -155,30 +148,45 @@
   .indicators {
     outline: var(--debug) solid #0f09;
     outline-offset: calc(var(--debug) * -1);
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: theme('spacing.6');
     align-items: center;
+    justify-content: center;
+    width: 100%;
     height: theme('spacing.12');
     z-index: 2;
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    padding-inline: var(--layout-padding);
+    padding-block: theme('spacing.2');
+
+    @media (pointer: coarse) {
+      gap: theme('spacing.1');
+      grid-auto-columns: 1fr;
+      align-items: flex-end;
+      pointer-events: none;
+      max-width: calc(theme('screens.lg') + calc(var(--layout-padding) * 2));
+    }
   }
 
   .indicator {
     display: grid;
-    place-content: center;
+    place-items: center;
     cursor: pointer;
     outline: none;
-    width: var(--slide-indicators-size);
-    aspect-ratio: 1/1;
+    width: 100%;
+    height: theme('spacing.1');
 
-    &:hover::before {
-      width: theme('spacing[2.5]');
+    @media (pointer: fine) {
+      width: theme('spacing.6');
+      height: theme('spacing.6');
     }
 
-    &.selected::before {
-      width: theme('spacing.3');
+    &:hover::before {
+      opacity: 1;
     }
 
     &:focus-visible::before {
@@ -189,15 +197,30 @@
     &::before {
       display: block;
       content: '';
-      width: theme('spacing.1');
-      aspect-ratio: 1/1;
-      border-radius: 100%;
+      width: 100%;
+      height: 100%;
+      border-radius: theme('spacing[1.5]');
       background-color: theme('colors.surface-2.fg');
       outline: 2px solid transparent;
       outline-offset: 8px;
-      transition-property: width, background-color, outline-color, outline-offset;
+      transition-property: scale, opacity, outline-color, outline-offset;
       transition-duration: 150ms, 150ms, 150ms, 250ms;
       transition-timing-function: theme('transitionTimingFunction.in');
+      opacity: 0.2;
+
+      @media (pointer: fine) {
+        width: theme('spacing.3');
+        height: theme('spacing.3');
+        scale: 0.5;
+        opacity: 0.5;
+      }
+    }
+
+    &[aria-current='true'] {
+      &::before {
+        scale: 1;
+        opacity: 1;
+      }
     }
   }
 </style>

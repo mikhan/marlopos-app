@@ -1,9 +1,9 @@
-import { writable, type Readable } from 'svelte/store'
+import { type Readable, writable } from 'svelte/store'
 
 export type IntervalPlayerState = 'playing' | 'paused' | 'stopped'
 
 export class IntervalPlayer {
-  #id?: NodeJS.Timer | void
+  #id?: NodeJS.Timeout | void
   #state: IntervalPlayerState = 'stopped'
   #enabled = true
 

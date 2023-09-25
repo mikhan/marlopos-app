@@ -23,6 +23,7 @@
   export const stop = () => intervalPlayer.stop()
   export const pause = () => intervalPlayer.pause()
   export const resume = () => intervalPlayer.resume()
+  export const goTo = (index: number) => (indexLoop.index = index)
 
   const dispatch = createEventDispatcher()
 
@@ -116,9 +117,9 @@
 </script>
 
 <section
-  class="carousel"
   role="listbox"
   tabindex="-1"
+  data-component="ui-carousel"
   use:useKeyboardNavigation={keyboardNavigation}
   use:panning
   on:panstart={onPanStart}
@@ -147,7 +148,7 @@
 </section>
 
 <style lang="postcss">
-  .carousel {
+  :global([data-component='ui-carousel']) {
     display: inline-block;
     contain: layout size;
     container: carousel / size;
