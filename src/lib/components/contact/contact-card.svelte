@@ -18,7 +18,7 @@
   }
 
   function getScheduleStatus(schedules: Api.InformationSchedule[]) {
-    schedules = schedules.toSorted((a, b) => a.start.getTime() - b.start.getTime())
+    schedules = [...schedules].sort((a, b) => a.start.getTime() - b.start.getTime())
     const today = new Date()
     const schedule = schedules.find(({ start, end }) => start < today && today < end)
 
