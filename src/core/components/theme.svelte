@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { generateShades, type Shades } from './theme/palette'
+  import { type Shades, generateShades } from './theme/palette'
   import Swatch from './theme/swatch.svelte'
 
   interface Palette {

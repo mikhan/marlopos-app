@@ -1,4 +1,4 @@
-import { writable, type Readable } from 'svelte/store'
+import { type Readable, writable } from 'svelte/store'
 
 export interface PreconnectLink {
   href: string

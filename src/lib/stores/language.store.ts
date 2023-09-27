@@ -1,5 +1,5 @@
+import { type Updater, writable } from 'svelte/store'
 import { DEFAULT_LANGUAGE, type Language } from '$lib/utils/language'
-import { writable, type Updater } from 'svelte/store'
 
 const { subscribe, update } = writable<Language>(DEFAULT_LANGUAGE)
 

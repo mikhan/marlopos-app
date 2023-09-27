@@ -1,6 +1,6 @@
 <script lang="ts">
-  import UiShell from '$core/components/shell/ui-shell.svelte'
   import { fly } from 'svelte/transition'
+  import UiShell from '$core/components/shell/ui-shell.svelte'
 
   export let href: string
 </script>

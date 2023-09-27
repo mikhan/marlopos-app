@@ -1,6 +1,7 @@
+import { type Readable, derived } from 'svelte/store'
 import { languageStore } from '$lib/stores/language.store'
-import { derived, type Readable } from 'svelte/store'
 import es, { type Translations } from './es'
+
 // import en from './en'
 
 export type TranslationKey = keyof Translations

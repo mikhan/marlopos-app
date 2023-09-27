@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { languageStore } from '$lib/stores/language.store'
-  import { getLanguage, type LanguageCode } from '$lib/utils/language'
   import { navigating } from '$app/stores'
-  import { alternateLanguagesStore } from '$lib/stores/alternate-languages.store'
   import { derived } from 'svelte/store'
+  import { alternateLanguagesStore } from '$lib/stores/alternate-languages.store'
+  import { languageStore } from '$lib/stores/language.store'
+  import { type LanguageCode, getLanguage } from '$lib/utils/language'
 
   const alternateLanguagesCode = derived(alternateLanguagesStore, (links) =>
     links.map(({ hreflang }) => hreflang as LanguageCode),

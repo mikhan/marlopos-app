@@ -33,7 +33,7 @@ export const dismiss: Action<
 
   function dismiss(event: Event) {
     notify()
-    
+
     if (event.defaultPrevented) return
 
     if (previousActiveElement && restoreFocus) {
@@ -42,7 +42,7 @@ export const dismiss: Action<
   }
 
   function onPointerDown(event: MouseEvent) {
-    event.target && !element.contains(<Node>event.target) && dismiss(event)
+    event.target && !element.contains(event.target as Node) && dismiss(event)
   }
 
   function onScroll(event: Event) {

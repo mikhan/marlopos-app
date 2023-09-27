@@ -1,4 +1,4 @@
-import { writable, type Writable } from 'svelte/store'
+import { type Writable, writable } from 'svelte/store'
 
 declare type Updater<T> = (value: T) => T
 declare type StoreDict<T> = { [key: string]: Writable<T> }
@@ -39,7 +39,7 @@ export function persisted<T>(key: string, initialValue: T, options?: Options<T>)
       const json = storage?.getItem(key)
 
       if (json) {
-        set(<T>serializer.parse(json))
+        set(serializer.parse(json) as T)
       } else {
         updateStorage(key, initialValue)
       }
@@ -51,7 +51,7 @@ export function persisted<T>(key: string, initialValue: T, options?: Options<T>)
           if (event.key === key) set(event.newValue ? serializer.parse(event.newValue) : null)
         }
 
-        window.addEventListener('storage', handleStorage, {signal: abortController.signal})
+        window.addEventListener('storage', handleStorage, { signal: abortController.signal })
       }
 
       return () => abortController.abort()

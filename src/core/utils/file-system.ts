@@ -1,5 +1,5 @@
-import { access } from 'node:fs/promises'
 import { constants } from 'node:fs'
+import { access } from 'node:fs/promises'
 
 export async function pathExists(path: string): Promise<boolean> {
   try {

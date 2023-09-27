@@ -5,6 +5,7 @@
   "quoteProps": "consistent",
   "semi": false,
   "printWidth": 120,
+  "endOfLine": "lf",
   "arrowParens": "always",
   "trailingComma": "all",
   "bracketSameLine": true,

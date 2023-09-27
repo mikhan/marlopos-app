@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition'
-  import { autofocus } from '../actions/autofocus'
-  import Fa from 'svelte-fa'
   import { faTimes } from '@fortawesome/free-solid-svg-icons'
   import { onMount } from 'svelte'
+  import Fa from 'svelte-fa'
+  import { fly } from 'svelte/transition'
+  import { autofocus } from '../actions/autofocus'
 
   let dialog: HTMLDialogElement
 
