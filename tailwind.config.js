@@ -8,6 +8,7 @@ import { hocusPlugin } from './tools/tailwind/plugins/hocus'
 import { layoutPlugin } from './tools/tailwind/plugins/layout'
 import { linkPlugin } from './tools/tailwind/plugins/link'
 import { scrollbarPlugin } from './tools/tailwind/plugins/scrollbar'
+import { squarePlugin } from './tools/tailwind/plugins/square'
 import { textShadowPlugin } from './tools/tailwind/plugins/text-shadow'
 import { textWrapPlugin } from './tools/tailwind/plugins/text-wrap'
 
@@ -16,7 +17,7 @@ const palette = generatePalette(
     primary: { color: 'hsl(254, 66%, 52%)', from: { s: 1, l: 0.35 }, to: { s: -0.3 } },
     neutral: { color: 'hsl(215, 10%, 45%)', from: { s: 0.1, l: 0 }, to: { s: 0.3 } },
   },
-  { dark: false },
+  { dark: true },
 )
 
 const alias = (palette) => ({
@@ -122,6 +123,7 @@ export default {
   },
   plugins: [
     textShadowPlugin(),
+    squarePlugin(),
     formPlugin(),
     linkPlugin(),
     textWrapPlugin(),

@@ -30,10 +30,13 @@ function transformColor(color, transformation = {}) {
 /** @type {import('./tailwind.d.ts').GenerateColor} */
 export function generateColor(config, { dark = false } = {}) {
   const base = chroma(config.color)
-  const from = transformColor(base, { l: 0.4, ...config.from })
-  const to = transformColor(base, { l: -0.4, ...config.to })
+  const darker = transformColor(base, { l: -0.4, ...config.to })
+  const lighter = transformColor(base, { l: 0.4, ...config.from })
   const result = { DEFAULT: colorToVar(base) }
-  const colors = chroma.scale([from, to]).correctLightness().colors(config.shades.length)
+  const colors = chroma
+    .scale(dark ? [lighter, darker] : [darker, lighter])
+    .correctLightness()
+    .colors(config.shades.length)
 
   for (const [index, color] of Object.entries(colors)) {
     const background = chroma(color)
