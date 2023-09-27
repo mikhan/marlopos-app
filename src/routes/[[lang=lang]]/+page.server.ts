@@ -5,7 +5,6 @@ import { LANGUAGE_CODES, getLanguage, isDefaultLanguage } from '$lib/utils/langu
 import type { EntryGenerator, PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
-  console.log(url.href)
   const language = getLanguage(params.lang)
   const featured = getBanners({ language })
   const countriesPreview = getCountriesPreview()

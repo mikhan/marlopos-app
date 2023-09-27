@@ -4,7 +4,6 @@ import { getLanguage } from '$lib/utils/language'
 import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ url, params }) => {
-  console.log(url.href)
   const language = getLanguage(params.lang)
   const query = url.searchParams.get('q')
   let result: string[] = []

@@ -10,7 +10,6 @@ export interface PackageSearchResult extends SearchResult {
 }
 
 export const packagesIndexProvider: DocumentIndexProvider<PackageSearchResult> = async () => {
-  console.log('packagesIndexProvider')
   type Result = {
     id: number
     name: string

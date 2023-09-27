@@ -3,7 +3,6 @@ import { api } from '../services/api'
 import type { Language } from '../utils/language'
 
 export async function getBanners(options: { language: Language }): Promise<Api.Banner[]> {
-  console.log('getBanners')
   const request = api
     .from('package_translations')
     .select(`id, name, description, package( cover!inner( id:filename_disk, title, width, height, blurhash ) )`)

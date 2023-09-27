@@ -10,10 +10,8 @@
   export let query = ''
 
   async function search(query: string, { locale }: Language): Promise<SearchResult[]> {
-    console.log('search', { query, locale })
     if (!query) return []
 
-    // return new Promise(() => {})
     const searchEngine = await getSearchEngine()
 
     return searchEngine
