@@ -12,7 +12,7 @@ const config = {
   kit: {
     adapter: adapter(),
     prerender: {
-      entries: ['/search/index.json'],
+      entries: ['/api/search/index.json'],
     },
     alias: {
       $core: 'src/core',

@@ -1,5 +1,4 @@
 import { getPageLinks } from '$lib/services/api'
-// import { type SearchResult, search } from '$lib/services/search'
 import { getLanguage } from '$lib/utils/language'
 import type { PageServerLoad } from './$types'
 
