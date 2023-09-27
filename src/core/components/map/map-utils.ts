@@ -4,30 +4,37 @@ export type MapControlAction = (map: Map) => ((map: Map) => void) | void
 
 export type MapControlPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
-export type MapBoundingBox = [[lng: number, lat: number], [lng: number, lat: number]]
+export type MapPoint = [lng: number, lat: number]
 
-export function getBoundingBox(points: [lng: number, lat: number][], { padding = 0.2 }: { padding?: number } = {}) {
-  const boundingBox: MapBoundingBox = points.reduce<[[number, number], [number, number]]>(
-    ([min, max], [lng, lat]) => {
-      if (lng < min[0]) min[0] = lng
-      if (lng > max[0]) max[0] = lng
-      if (lat < min[1]) min[1] = lat
-      if (lat > max[1]) max[1] = lat
+export type MapBoundingBox = [MapPoint, MapPoint]
 
-      return [min, max]
-    },
-    [
-      [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
-      [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER],
-    ],
-  )
+const MIN = 0
+const MAX = 1
+const LNG = 0
+const LAT = 1
+const pointsReducer = (boundingBox: MapBoundingBox, point: MapPoint) => {
+  if (point[LNG] < boundingBox[MIN][LNG]) boundingBox[MIN][LNG] = point[LNG]
+  if (point[LNG] > boundingBox[MAX][LNG]) boundingBox[MAX][LNG] = point[LNG]
+  if (point[LAT] < boundingBox[MIN][LAT]) boundingBox[MIN][LAT] = point[LAT]
+  if (point[LAT] > boundingBox[MAX][LAT]) boundingBox[MAX][LAT] = point[LAT]
 
-  const lngDiff = (boundingBox[1][0] - boundingBox[0][0]) * (padding / 2)
-  const latDiff = (boundingBox[1][1] - boundingBox[0][1]) * (padding / 2)
-  boundingBox[0][0] -= lngDiff
-  boundingBox[1][0] += lngDiff
-  boundingBox[0][1] -= latDiff
-  boundingBox[1][1] += latDiff
+  return boundingBox
+}
+
+export function getBoundingBox(points: MapPoint[], { padding = 0.2 }: { padding?: number } = {}) {
+  if (points.length === 0) throw new Error('No points supplied')
+
+  const boundingBox: MapBoundingBox = points.reduce<MapBoundingBox>(pointsReducer, [
+    [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
+    [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER],
+  ])
+
+  const lngDiff = (boundingBox[MAX][LNG] - boundingBox[MIN][LNG]) * (padding / 2)
+  const latDiff = (boundingBox[MAX][LAT] - boundingBox[MIN][LAT]) * (padding / 2)
+  boundingBox[MIN][LNG] -= lngDiff
+  boundingBox[MAX][LNG] += lngDiff
+  boundingBox[MIN][LAT] -= latDiff
+  boundingBox[MAX][LAT] += latDiff
 
   return boundingBox
 }

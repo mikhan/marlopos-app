@@ -12,9 +12,17 @@
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { PUBLIC_MAPBOX_ACCESS_TOKEN, PUBLIC_MAPBOX_STYLE, PUBLIC_MAPBOX_USER } from '$env/static/public'
+  import { dismiss } from '$core/actions/dismiss'
+  import { focusWithin } from '$core/actions/focus-within'
   import MapControl from '$core/components/map/map-control.svelte'
   import MapMarker from '$core/components/map/map-marker.svelte'
-  import { getBoundingBox, getCurrentPosition, isGeolocationEnabled } from '$core/components/map/map-utils'
+  import {
+    type MapBoundingBox,
+    type MapPoint,
+    getBoundingBox,
+    getCurrentPosition,
+    isGeolocationEnabled,
+  } from '$core/components/map/map-utils'
   import InteractiveMap from '$core/components/map/map.svelte'
   import { slugify } from '$core/utils/string'
 
@@ -23,18 +31,27 @@
   let highlightedDestination: Api.Destination | undefined
   let map: InteractiveMap
   const geolocationEnabled = isGeolocationEnabled()
-  let currentPosition: { coordinates: [number, number]; accuracyCoordinates: [number, number][] } | null = null
+  let currentPosition: { coordinates: MapPoint; accuracyCoordinates: MapPoint[] } | null = null
   let gettingCurrentPosition = false
   let pristine = true
+  let multiple: boolean
+  let coordinates: MapPoint[]
+  let bounds: MapBoundingBox
+  let zoom: number
+  let center: MapPoint
+  let mapOptions: Omit<mapboxgl.MapboxOptions, 'container'>
 
+  $: multiple = data.length > 1
   $: coordinates = data.map(({ coordinates }) => coordinates)
-  $: boundingBox = getBoundingBox(coordinates, { padding: 0.5 })
+  $: bounds = getBoundingBox(coordinates, { padding: 0.5 })
+  $: zoom = 12
+  $: center = coordinates[0]!
   $: mapOptions = {
     accessToken: PUBLIC_MAPBOX_ACCESS_TOKEN,
     style: `mapbox://styles/${PUBLIC_MAPBOX_USER}/${PUBLIC_MAPBOX_STYLE}`,
-    bounds: boundingBox,
     attributionControl: false,
     scrollZoom: false,
+    ...(multiple ? { bounds } : { zoom, center }),
   }
 
   const getDestinationById = (id: string) => data.find((destination) => id === destination.id)
@@ -54,7 +71,6 @@
 
   export function focusDestination(id = '') {
     highlightDestination(id)
-
     if (highlightedDestination) {
       map.getMap().flyTo({ center: highlightedDestination.coordinates })
     }
@@ -105,8 +121,21 @@
   }
 
   export function reset() {
-    map.getMap()?.fitBounds(boundingBox)
+    if (multiple) map.getMap().fitBounds(bounds)
+    else map.getMap().flyTo({ center, zoom })
     pristine = true
+  }
+
+  function enableInteraction() {
+    map.getMap().scrollZoom.enable()
+  }
+
+  function disableInteraction() {
+    map.getMap().scrollZoom.disable()
+  }
+
+  function onDismiss() {
+    ;(document.activeElement as HTMLElement)?.blur()
   }
 
   onMount(() => {
@@ -116,7 +145,14 @@
   })
 </script>
 
-<section {...$$restProps}>
+<section
+  {...$$restProps}
+  tabindex="-1"
+  use:focusWithin
+  use:dismiss={{ clickOutside: false, scroll: false }}
+  on:focusenter={enableInteraction}
+  on:focusexit={disableInteraction}
+  on:dismiss={onDismiss}>
   <InteractiveMap options={mapOptions} bind:this={map}>
     <MapControl>
       <button
@@ -195,10 +231,12 @@
   }
 
   ._map-marker {
+    display: block;
     font-size: theme('fontSize.base');
     color: theme('colors.primary.200');
     filter: drop-shadow(2px 2px 2px #0006);
     translate: 0 -50%;
+    transform-origin: bottom center;
     outline: none;
 
     &:hover,
