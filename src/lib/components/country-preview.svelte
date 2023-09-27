@@ -5,7 +5,7 @@
 
   export let data: Api.CountryPreview
 
-  $: imageSrc = getResourceHref(data.cover.id, { width: 320, aspectRatio: '2-3' })
+  $: imageSrc = getResourceHref(data.cover.id, { width: 256, height: 384 })
 </script>
 
 <li>
@@ -14,17 +14,11 @@
       class="w-full h-full"
       src={imageSrc}
       alt={data.cover.title}
-      width={data.cover.width}
-      height={data.cover.height}
+      width={256}
+      height={384}
       color={data.cover.color}
-      srcset={[{ w: 280 }, { w: 320 }, { w: 480 }]}
-      sizes="(min-width: 768px) 280px, (min-width: 480px) 320px, 480px"
       fit="cover">
-      <Blurhash
-        class="object-cover w-full h-full"
-        hash={data.cover.blurhash}
-        width={data.cover.width}
-        height={data.cover.height} />
+      <Blurhash class="object-cover w-full h-full" hash={data.cover.blurhash} width={256} height={384} />
     </Image>
   </picture>
   <div class="content">

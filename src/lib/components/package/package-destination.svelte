@@ -29,9 +29,9 @@
       alt={data.cover.title}
       srcset={[
         { w: 120, h: 120, q: 50 },
-        { w: 480, ar: '16-9' },
+        { w: 384, ar: '16-9' },
       ]}
-      sizes="(min-width: 768px) 480px, (min-width: 480px) 120px, 480px">
+      sizes="(min-width: 768px) 384px, (min-width: 384px) 120px, 384px">
       <Blurhash class="object-cover w-full h-full" hash={data.cover.blurhash} width={320} height={180} />
     </Image>
   </picture>
@@ -59,12 +59,12 @@
     overflow: clip;
     box-shadow: theme('boxShadow.xl');
 
-    @media (theme('screens.sm') < width < theme('screens.md')) {
+    @media (theme('screens.sm') <= width < theme('screens.md')) {
       flex-direction: row;
       align-items: flex-start;
     }
 
-    @media (theme('screens.md') < width) {
+    @media (theme('screens.md') <= width) {
       padding: 0;
     }
   }
@@ -75,9 +75,13 @@
     flex-shrink: 0;
     overflow: clip;
 
-    @media (theme('screens.sm') < width < theme('screens.md')) {
+    @media (theme('screens.sm') <= width < theme('screens.md')) {
       aspect-ratio: 1/1;
       width: theme('spacing.32');
+    }
+
+    @media (width < theme('screens.md')) {
+      border-radius: theme('borderRadius.DEFAULT');
     }
   }
 
@@ -86,7 +90,7 @@
     flex-direction: column;
     gap: theme('spacing.4');
 
-    @media (theme('screens.md') < width) {
+    @media (theme('screens.md') <= width) {
       padding: theme('spacing.4');
     }
   }

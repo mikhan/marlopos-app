@@ -54,8 +54,8 @@
       gap: theme('spacing.4');
     }
 
-    @media (min-width: theme('screens.lg')) {
-      grid-template-columns: theme('maxWidth.screen-sm') 1fr;
+    @media (min-width: theme('screens.md')) {
+      grid-template-columns: theme('spacing.96') 1fr;
     }
 
     &._fullscreen {
@@ -84,7 +84,6 @@
   ._destinations {
     display: flex;
     flex-direction: column;
-    padding-block: theme('spacing.4');
     gap: theme('spacing.2');
 
     & > :global(*) {
@@ -92,6 +91,7 @@
     }
 
     @media (min-width: theme('screens.md')) {
+      padding-block: theme('spacing.4');
       gap: theme('spacing.4');
       margin-left: auto;
       max-width: theme('maxWidth.screen-sm');
@@ -99,18 +99,15 @@
   }
 
   ._map {
-    aspect-ratio: 16/9;
-    max-height: calc(100vh - 64px);
-    padding-block: theme('spacing.4');
-    top: theme('spacing.16');
-
-    @media (min-width: theme('screens.sm')) {
-      width: 100%;
-      height: 100%;
-    }
+    width: 100%;
+    height: theme('spacing.96');
 
     @media (min-width: theme('screens.md')) {
+      height: 100%;
+      max-height: calc(100vh - 64px);
+      padding-block: theme('spacing.4');
       position: sticky;
+      top: theme('spacing.16');
     }
   }
 </style>
