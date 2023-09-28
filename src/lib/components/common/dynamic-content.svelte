@@ -1,9 +1,11 @@
 <script lang="ts">
-  export let html: string = ''
+  import DOMPurify from 'isomorphic-dompurify'
+
+  export let html = ''
 </script>
 
 <div>
-  {@html html}
+  {@html DOMPurify.sanitize(html, { ALLOWED_TAGS: ['p', 'li', 'a'] })}
 </div>
 
 <style lang="postcss">

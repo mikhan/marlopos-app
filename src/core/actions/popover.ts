@@ -60,13 +60,13 @@ function getAlign(anchoralign?: string) {
 
     if (anchorString) {
       const [y, x] = anchorString
-      anchor.y = isAlignY(y) ? y : 'top'
-      anchor.x = isAlignX(x) ? x : 'left'
+      anchor.y = y && isAlignY(y) ? y : 'top'
+      anchor.x = x && isAlignX(x) ? x : 'left'
     }
     if (targetString) {
       const [y, x] = targetString
-      target.y = isAlignY(y) ? y : 'top'
-      target.x = isAlignX(x) ? x : 'left'
+      target.y = y && isAlignY(y) ? y : 'top'
+      target.x = x && isAlignX(x) ? x : 'left'
     }
   }
 

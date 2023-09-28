@@ -1,8 +1,9 @@
 <script lang="ts">
   import UiScroller from '$core/components/scroller/ui-scroller.svelte'
+  import type { Api } from '$lib/api'
   import CountryPreview from './country-preview.svelte'
 
-  export let data: any[] = []
+  export let data: Api.CountryPreview[] = []
 </script>
 
 <section class="pr-0 _container layout-container layout-padding">

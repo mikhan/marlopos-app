@@ -3,6 +3,7 @@
   import Image from '$core/components/image.svelte'
   import { getResourceHref } from '$core/services/resource-provider'
   import { slugify } from '$core/utils/string'
+  import type { Api } from '$lib/api'
   import DynamicContent from '$lib/components/common/dynamic-content.svelte'
   import type PackageMap from './package-map.svelte'
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Api } from '$lib/api'
   import DynamicContent from '../common/dynamic-content.svelte'
   import SectionHeader from '../common/section-header.svelte'
   import ShareMenu from '../share/share-menu.svelte'

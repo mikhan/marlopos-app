@@ -2,6 +2,7 @@
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
   import { getResourceHref } from '$core/services/resource-provider'
+  import type { Api } from '$lib/api'
 
   export let data: Api.CountryPreview
 

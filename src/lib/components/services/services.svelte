@@ -1,17 +1,51 @@
-<script>
-  //   import SectionHeader from '../common/section-header.svelte'
+<script lang="ts">
+  import type { Action } from 'svelte/action'
   import Image from '$core/components/image.svelte'
+  import { clamp } from '$core/utils/math'
   import background from '$lib/assets/services-1.jpg'
+
+  const parallax: Action<HTMLElement> = (element) => {
+    const abortController = new AbortController()
+    let active = false
+
+    function onScroll() {
+      const limit = element.clientHeight + window.innerHeight
+      const offset = window.scrollY - (element.offsetTop - window.innerHeight)
+      const position = clamp(0, 1, offset / limit)
+      element.style.setProperty('--parallax-position', String(position))
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry || active === entry.isIntersecting) return
+
+        active = entry.isIntersecting
+
+        if (active) {
+          window.addEventListener('scroll', onScroll, { signal: abortController.signal })
+        } else {
+          window.removeEventListener('scroll', onScroll)
+        }
+      },
+      { threshold: [0, 1] },
+    )
+
+    observer.observe(element)
+    abortController.signal.onabort = () => {
+      observer.disconnect()
+    }
+
+    return {
+      destroy: () => abortController.abort(),
+    }
+  }
 </script>
 
-<section class="relative grid w-full isolate place-content-center px-12 py-[10%]">
-  <!-- <div>
-    <SectionHeader>Con nosotros encontrarás</SectionHeader>
-  </div> -->
+<section use:parallax>
   <picture>
-    <Image src={background} alt="" class="w-full h-full" fit="cover" width={900} height={300} />
+    <Image src={background} alt="" class="w-full h-full" fit="cover" width={1280} height={720} />
   </picture>
-  <div class="max-w-screen-md mx-auto">
+  <div>
     <p class="leading-relaxed text-center text-white text-balance text-xl-fluid font-display">
       Contamos con más de <strong class="bg-[hsl(172_38%_46%)] px-3 py-1 rounded whitespace-nowrap"
         >15 años de experiencia</strong> en la operación, programación y comercialización de todo tipo de servicios turísticos.
@@ -21,15 +55,24 @@
 
 <style lang="postcss">
   section {
-    aspect-ratio: 4/3;
-    max-height: 512px;
-    /* height: 50%; */
+    --parallax-offset: calc(864px - theme('screens.sm'));
+    --parallax-position: 0px;
+    position: relative;
+    display: grid;
+    place-content: center;
+    width: 100%;
+    height: theme('screens.sm');
+    padding-inline: theme('spacing.4');
+    overflow: hidden;
   }
 
   picture {
+    --offset: calc(var(--parallax-offset) * var(--parallax-position));
     position: absolute;
     inset: 0;
-    z-index: -1;
+    top: calc(var(--parallax-offset) * -1);
+    transform: translateY(var(--offset));
+    transition: transform 50ms linear;
 
     &::after {
       content: '';
@@ -40,6 +83,12 @@
       background-image: radial-gradient(rgb(0 0 0 / 75%) 1px, transparent 1px);
       background-size: 4px 4px;
       mix-blend-mode: multiply;
+      pointer-events: none;
     }
+  }
+
+  div {
+    max-width: theme('screens.md');
+    z-index: 1;
   }
 </style>

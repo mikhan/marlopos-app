@@ -1,21 +1,36 @@
 <script lang="ts">
-  import { today } from '$core/constants/today'
+  import type { Api } from '$lib/api'
   import { languageStore } from '$lib/stores/language.store'
 
   export let data: Api.CalendarEvent
+  let dates: string[]
+  $: dates = getDates(data.start, data.end, $languageStore.locale)
+
+  function getDates(start: Date, end: Date, locale: string) {
+    const dates: string[] = []
+
+    dates.push(dateToString(start, locale))
+
+    if (start.getTime() !== end.getTime()) {
+      dates.push(dateToString(end, locale))
+    }
+
+    return dates
+  }
 
   function dateToString(date: Date, locale: string) {
     return date.toLocaleString(locale, {
       day: 'numeric',
       month: 'short',
-      year: date.getFullYear() === today.getFullYear() ? undefined : 'numeric',
+      year: date.getFullYear() === new Date().getFullYear() ? undefined : 'numeric',
     })
   }
 </script>
 
 <div>
-  <span>{dateToString(data.start, $languageStore.locale)}</span>
-  <span>{dateToString(data.end, $languageStore.locale)}</span>
+  {#each dates as date}
+    <span>{date}</span>
+  {/each}
 </div>
 
 <style lang="postcss">
@@ -29,26 +44,20 @@
     color: var(--color);
     background-color: var(--background);
     border-radius: theme('borderRadius.lg');
-    font-size: theme('fontSize.sm');
-    line-height: 1;
     margin: var(--margin);
     align-self: center;
+    isolation: isolate;
+  }
 
-    /* &:hover {
-      --color: theme('colors.surface-primary.fg');
-      --background: theme('colors.surface-primary.bg');
-    } */
+  span {
+    position: sticky;
+    padding: theme('spacing.2') theme('spacing.3');
 
-    & > * {
-      position: sticky;
-      padding: theme('spacing.3') theme('spacing.4');
-    }
-
-    & > :first-child {
+    &:first-child:not(:last-child) {
       left: calc(var(--first-column-size));
     }
 
-    & > :last-child {
+    &:last-child:not(:first-child) {
       right: 0;
 
       &::before {

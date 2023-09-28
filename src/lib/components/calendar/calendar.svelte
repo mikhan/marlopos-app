@@ -1,17 +1,14 @@
 <script lang="ts">
   import { mousescroll } from '$core/actions/mousescroll'
+  import { getToday } from '$core/constants/today'
+  import type { Api } from '$lib/api'
   import CalendarEntry from '$lib/components/calendar/calendar-entry.svelte'
   import CalendarEvent from '$lib/components/calendar/calendar-event.svelte'
   import { languageStore } from '$lib/stores/language.store'
 
   export let data: Api.CalendarEntry[]
 
-  const today = new Date()
-  today.setUTCHours(0)
-  today.setUTCMinutes(0)
-  today.setUTCSeconds(0)
-  today.setUTCMilliseconds(0)
-
+  const today = getToday()
   const msInDay = 1000 * 60 * 60 * 24
   function daysDiff(date1: Date, date2: Date) {
     return Math.floor(Math.abs(date2.getTime() - date1.getTime()) / msInDay)
@@ -27,18 +24,27 @@
 
   function generateCalendarDays(dates: Date[]) {
     const timestamps = dates.map((date) => date.getTime()).sort((a, b) => a - b)
-    const minDate = timestamps.at(0)!
-    const maxDate = timestamps.at(-1)!
+    const minDate = timestamps.at(0) as number
+    const maxDate = timestamps.at(-1) as number
 
     return Array.from({ length: Math.ceil((maxDate - minDate) / msInDay) + 1 }, (_, index) => {
       return new Date(minDate + index * msInDay)
     })
   }
 
-  const days = generateCalendarDays(data.map(({ events }) => events.map(({ start, end }) => [start, end])).flat(2))
+  let days: Date[]
+  $: data = data
+    .map((entry) => ({
+      ...entry,
+      events: entry.events.filter(({ start }) => start.getTime() >= today.getTime()),
+    }))
+    .filter(({ events }) => events.length > 0)
+  $: days = generateCalendarDays(data.map(({ events }) => events.map(({ start, end }) => [start, end])).flat(2))
+  $: columns = Array.from(Array(days.length).keys())
+  $: minDate = days[0] as Date
 </script>
 
-<div role="grid" aria-readonly="true" use:mousescroll>
+<div role="grid" aria-readonly="true" use:mousescroll style:--rows={data.length} style:--columns={columns.length}>
   <div class="h-12" role="row" style:--index={1}>
     <div role="columnheader">
       <span class="self-end p-2 font-bold uppercase justify-self-center">Paquetes</span>
@@ -56,19 +62,27 @@
       <div role="rowheader" style:--index="1">
         <CalendarEntry data={entry} />
       </div>
-      {#each days as _, columnIndex}
-        <div role="gridcell" style:--index={columnIndex + 2} />
-      {/each}
       {#each entry.events as event}
         <div
           role="gridcell"
-          style:--index={daysDiff(today, event.start) + 2}
+          style:--index={daysDiff(minDate, event.start) + 2}
           style:--span={daysDiff(event.start, event.end) + 1}>
           <CalendarEvent data={event} />
         </div>
       {/each}
+      {#each columns as columnIndex}
+        <div role="gridcell" style:--index={columnIndex + 2} />
+      {/each}
+      <div role="gridcell" style:--index={columns.length + 2} />
     </div>
   {/each}
+  <div role="row">
+    <div role="rowheader" />
+    {#each columns as columnIndex}
+      <div role="gridcell" style:--index={columnIndex + 2} />
+    {/each}
+    <div role="gridcell" style:--index={columns.length + 2} />
+  </div>
 </div>
 
 <style lang="postcss">
@@ -79,6 +93,7 @@
     --row-size: 64px;
     --background: theme('colors.canvas.bg');
     display: grid;
+    grid-template-rows: var(--first-row-size) repeat(var(--rows), auto) 1fr;
     width: 100%;
     height: 100%;
     flex: 1 1 0px;
@@ -87,6 +102,7 @@
     scroll-behavior: smooth;
     user-select: none;
     isolation: isolate;
+    cursor: grab;
     @apply scrollbar-thin scrollbar-border-canvas-border scrollbar-canvas-fg/50;
   }
 
@@ -95,8 +111,7 @@
     grid-column-start: 1;
     grid-row-start: var(--index);
     display: grid;
-    grid-template-columns: var(--first-column-size);
-    grid-auto-columns: var(--column-size);
+    grid-template-columns: var(--first-column-size) repeat(var(--columns), var(--column-size)) 1fr;
     grid-auto-flow: column;
 
     &:first-child {
@@ -134,6 +149,10 @@
           z-index: -1;
         }
       }
+
+      &:not(:first-child) {
+        font-size: theme('fontSize.sm');
+      }
     }
   }
 
@@ -147,6 +166,5 @@
 
   [role='gridcell'] {
     display: grid;
-    cursor: grab;
   }
 </style>

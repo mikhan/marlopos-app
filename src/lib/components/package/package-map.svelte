@@ -9,6 +9,7 @@
     faPlus,
     faSpinner,
   } from '@fortawesome/free-solid-svg-icons'
+  import type { MapboxOptions } from 'mapbox-gl'
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { PUBLIC_MAPBOX_ACCESS_TOKEN, PUBLIC_MAPBOX_STYLE, PUBLIC_MAPBOX_USER } from '$env/static/public'
@@ -25,6 +26,7 @@
   } from '$core/components/map/map-utils'
   import InteractiveMap from '$core/components/map/map.svelte'
   import { slugify } from '$core/utils/string'
+  import type { Api } from '$lib/api'
 
   export let data: Api.Destination[]
   export let isFullscreen = false
@@ -39,13 +41,13 @@
   let bounds: MapBoundingBox
   let zoom: number
   let center: MapPoint
-  let mapOptions: Omit<mapboxgl.MapboxOptions, 'container'>
+  let mapOptions: Omit<MapboxOptions, 'container'>
 
   $: multiple = data.length > 1
   $: coordinates = data.map(({ coordinates }) => coordinates)
   $: bounds = getBoundingBox(coordinates, { padding: 0.5 })
   $: zoom = 12
-  $: center = coordinates[0]!
+  $: center = coordinates[0] as MapPoint
   $: mapOptions = {
     accessToken: PUBLIC_MAPBOX_ACCESS_TOKEN,
     style: `mapbox://styles/${PUBLIC_MAPBOX_USER}/${PUBLIC_MAPBOX_STYLE}`,
@@ -91,9 +93,9 @@
         const theta = (i / 64) * (2 * Math.PI)
         const x = distanceX * Math.cos(theta)
         const y = distanceY * Math.sin(theta)
-        return [longitude + x, latitude + y] as [number, number]
+        return [longitude + x, latitude + y] as MapPoint
       })
-      accuracyCoordinates.push(accuracyCoordinates[0]!)
+      accuracyCoordinates.push(accuracyCoordinates[0] as MapPoint)
       currentPosition = { coordinates: [longitude, latitude], accuracyCoordinates }
 
       map

@@ -43,7 +43,7 @@
 
   function getPaddingLeft() {
     const styleMap = container.computedStyleMap()
-    return (styleMap.get('padding-inline-start') as CSSUnitValue).value
+    return (styleMap.get('padding-inline-start') as { value: number }).value
   }
 
   function previous() {

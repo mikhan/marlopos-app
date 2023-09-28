@@ -22,7 +22,11 @@
   import { metadataStore } from '$lib/stores/metadata.store'
   import '../app.scss'
 
-  $: metadataStore.set($page.data.metadata)
+  $: if ($page.data.metadata) {
+    metadataStore.set($page.data.metadata)
+  } else {
+    throw new Error(`No metadata defined for page ${$page.url.href}`)
+  }
 
   onNavigate((navigation) => {
     if (!document.startViewTransition) return

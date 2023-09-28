@@ -3,30 +3,45 @@
   import Fa from 'svelte-fa'
   import Carousel from '$core/components/carousel.svelte'
   import { followFocus } from '$lib/actions/follow-focus'
+  import type { Api } from '$lib/api'
   import BannerSlide from './banner-slide.svelte'
 
   export let slides: Api.Banner[]
 
   let index = 0
   let carousel: Carousel<Api.Banner>
-  const loop = true
+
+  function previous() {
+    carousel.stop()
+    carousel.next()
+  }
+
+  function next() {
+    carousel.stop()
+    carousel.next()
+  }
+
+  function goTo(index: number) {
+    carousel.stop()
+    carousel.goTo(index)
+  }
 </script>
 
 <div class="wrapper">
-  <Carousel bind:this={carousel} bind:index {slides} {loop} autoplay={true} speed={5000}>
+  <Carousel bind:this={carousel} bind:index {slides} loop={true} autoplay={true} speed={5000}>
     <svelte:fragment slot="slide" let:slideIndex let:slide>
       <BannerSlide data={slide} index={slideIndex} />
     </svelte:fragment>
 
     <svelte:fragment slot="controls" let:index>
-      <button class="control prev" type="button" tabindex="-1" on:click={carousel.previous}>
+      <button class="control prev" type="button" tabindex="-1" on:click={previous}>
         <div class="control-icon">
           <Fa size="lg" icon={faChevronLeft} />
           <span class="sr-only">Previous</span>
         </div>
       </button>
 
-      <button class="control next" type="button" tabindex="-1" on:click={carousel.next}>
+      <button class="control next" type="button" tabindex="-1" on:click={next}>
         <div class="control-icon">
           <Fa size="lg" icon={faChevronRight} />
           <span class="sr-only">Next</span>
@@ -42,7 +57,7 @@
               tabindex={i === index ? 0 : -1}
               aria-current={i === index}
               aria-label={item.name}
-              on:click={() => carousel.goTo(i)} />
+              on:click={() => goTo(i)} />
           </li>
         {/each}
       </ul>
@@ -79,10 +94,9 @@
 
     display: grid;
     width: 100%;
+    height: 50rem;
     max-width: theme('screens.2xl');
-    min-height: min(40rem, 75vh);
-    max-height: min(40rem, 100vh);
-    aspect-ratio: 4/3;
+    max-height: min(50rem, 100vh);
     margin: 0 auto;
     outline: var(--debug) solid #0ff9;
     outline-offset: calc(var(--debug) * -1);

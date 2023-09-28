@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores'
+  import type { Api } from '$lib/api'
   import { languageStore } from '$lib/stores/language.store'
   import { getLocalizedUrl } from '$lib/utils/language'
   import BannerImage from './banner-image.svelte'
@@ -23,7 +24,7 @@
   <div class="_content">
     <div class="_text">
       <div class="_title">{data.name}</div>
-      <p class="_description">{@html data.description}</p>
+      <p class="_description">{data.description}</p>
       <a {href} class="mt-8 button button-primary button-filled" data-sveltekit-preload-data>Más información</a>
     </div>
   </div>
@@ -31,18 +32,20 @@
 
 <style lang="postcss">
   ._wrapper {
+    display: grid;
+    align-items: end;
     position: absolute;
     inset: 0;
   }
 
   ._content {
     display: grid;
-    height: 100%;
     padding-inline: var(--slide-control-size);
     padding-bottom: theme('spacing.12');
     user-select: none;
     outline: var(--debug) solid #ff09;
     outline-offset: calc(var(--debug) * -1);
+    z-index: 1;
 
     @container carousel (width > theme('screens.lg')) {
       width: 100%;

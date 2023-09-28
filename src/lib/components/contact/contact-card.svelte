@@ -3,6 +3,7 @@
   import Fa from 'svelte-fa'
   import Icon from '$core/components/icon.svelte'
   import Image from '$core/components/image.svelte'
+  import type { Api } from '$lib/api'
 
   export let data: Api.Information
 

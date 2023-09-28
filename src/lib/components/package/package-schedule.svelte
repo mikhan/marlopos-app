@@ -1,5 +1,6 @@
 <script lang="ts">
   import { matchMedia } from '$core/stores/match-media'
+  import type { Api } from '$lib/api'
   import { languageStore } from '$lib/stores/language.store'
 
   export let data: Api.PackageSchedule[]

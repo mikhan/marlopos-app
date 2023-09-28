@@ -12,7 +12,7 @@
   let renderSize = 32
   let width: number
   let height: number
-  let punch: number = 1
+  let punch = 1
   let canvas: HTMLCanvasElement
 
   onMount(() => {

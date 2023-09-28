@@ -13,7 +13,7 @@
   export let height: number
   export let srcset: Srcset[] = []
   export let sizes: string | null = null
-  export let priority: boolean = false
+  export let priority = false
   export let fit: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' = 'fill'
   export let color: string | null = null
 

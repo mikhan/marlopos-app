@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores'
   import Image from '$core/components/image.svelte'
+  import type { Api } from '$lib/api'
   import EmailIcon from '$lib/icons/email.svg?component'
   import LocationIcon from '$lib/icons/location.svg?component'
   import PhoneIcon from '$lib/icons/phone.svg?component'

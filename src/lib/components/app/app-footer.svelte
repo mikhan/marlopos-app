@@ -3,6 +3,7 @@
   import { faFacebook } from '@fortawesome/free-brands-svg-icons'
   import Fa from 'svelte-fa'
   import { PUBLIC_TAWK_CHAT_ID, PUBLIC_TAWK_PROPERTY_ID } from '$env/static/public'
+  import type { Api } from '$lib/api'
   import Chat from '$lib/components/chat.svelte'
 
   export let data: Api.Information
@@ -12,7 +13,7 @@
     facebook: { name: 'Facebook', icon: faFacebook },
   }
 
-  const isLighthouseAudit = 'navigator' in globalThis && navigator.userAgent.includes('Chrome-Lighthouse')
+  const isLighthouseAudit = browser && navigator.userAgent.includes('Chrome-Lighthouse')
 </script>
 
 <footer class="pt-8 pb-4 text-sm border-t layout text-canvas-fg/75 border-t-canvas-border">

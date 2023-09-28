@@ -11,7 +11,7 @@ export const load = (async ({ url, params }) => {
 
   return {
     metadata: {
-      title: 'Viajes Marlopos',
+      title: 'Inicio',
       description: 'Agencia de viajes Marlopos',
       lang: language.code,
       links: getPageLinks(url, params.lang),

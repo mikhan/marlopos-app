@@ -1,9 +1,10 @@
 <script lang="ts" context="module">
-  declare const window: Window &
-    typeof globalThis & {
-      Tawk_API: any
+  declare global {
+    interface Window {
+      Tawk_API: Record<string, unknown>
       Tawk_LoadStart: Date
     }
+  }
 </script>
 
 <script lang="ts">
@@ -19,7 +20,7 @@
     window.Tawk_LoadStart = new Date()
     window.Tawk_API ??= {}
 
-    window.Tawk_API.customStyle = {
+    window.Tawk_API['customStyle'] = {
       visibility: {
         desktop: {
           position: 'br',

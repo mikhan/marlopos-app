@@ -1,7 +1,3 @@
-import type { Map } from 'mapbox-gl'
-
-export type MapControlAction = (map: Map) => ((map: Map) => void) | void
-
 export type MapControlPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
 export type MapPoint = [lng: number, lat: number]

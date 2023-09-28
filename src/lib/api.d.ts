@@ -1,31 +1,31 @@
-declare namespace Api {
-  type Resource = {
+export namespace Api {
+  export type Resource = {
     meta: Metadata
     [K in string]: unknown
   }
 
-  type Metadata = {
+  export type Metadata = {
     title: string
     description: string
     lang: string
     links: Link[]
   }
 
-  type Link = LinkAlternate | LinkCanonical
+  export type Link = LinkAlternate | LinkCanonical
 
-  type LinkAlternate = {
+  export type LinkAlternate = {
     rel: 'alternate'
     href: string
     hreflang: string
   }
 
-  type LinkCanonical = {
+  export type LinkCanonical = {
     rel: 'canonical'
     href: string
     href: string
   }
 
-  type Package = {
+  export type Package = {
     id: string
     name: string
     description: string
@@ -35,12 +35,12 @@ declare namespace Api {
     destinations: Destination[]
   }
 
-  type PackageSchedule = {
+  export type PackageSchedule = {
     start: Date
     end: Date
   }
 
-  type Destination = {
+  export type Destination = {
     id: string
     name: string
     description: string
@@ -49,7 +49,7 @@ declare namespace Api {
     coordinates: [lng: number, lat: number]
   }
 
-  type Image = {
+  export type Image = {
     id: string
     title: string
     width: number
@@ -58,14 +58,14 @@ declare namespace Api {
     color: string
   }
 
-  type Banner = {
+  export type Banner = {
     id: string
     name: string
     description: string
     cover: Image
   }
 
-  type CountryPreview = {
+  export type CountryPreview = {
     id: number
     name: string
     destinations: 1
@@ -74,19 +74,19 @@ declare namespace Api {
     cover: Image
   }
 
-  type CalendarEntry = {
+  export type CalendarEntry = {
     id: string
     name: string
     description: string
     events: CalendarEvent[]
   }
 
-  type CalendarEvent = {
+  export type CalendarEvent = {
     start: Date
     end: Date
   }
 
-  type Information = {
+  export type Information = {
     address: string
     coordinates: [number, number]
     contact: InformationContact[]
@@ -94,21 +94,21 @@ declare namespace Api {
     schedule: InformationSchedule[]
   }
 
-  type InformationContact = {
+  export type InformationContact = {
     type: 'phone' | 'email'
     value: string
   }
 
-  type InformationNetwork = {
+  export type InformationNetwork = {
     type: 'facebook'
     value: string
   }
 
-  type InformationSchedule = {
+  export type InformationSchedule = {
     weekday: Weekday
     start: Date
     end: Date
   }
 
-  type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
+  export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
 }

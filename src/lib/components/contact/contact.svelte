@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Api } from '$lib/api'
   import SectionHeader from '../common/section-header.svelte'
   import ContactCard from './contact-card.svelte'
   import ContactForm from './contact-form.svelte'

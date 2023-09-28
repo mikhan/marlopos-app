@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from '$app/environment'
+  import type { Api } from '$lib/api'
   import PackageDestination from './package-destination.svelte'
   import PackageMap from './package-map.svelte'
 
