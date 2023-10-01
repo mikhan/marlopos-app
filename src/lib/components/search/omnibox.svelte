@@ -107,7 +107,7 @@
         </div>
       {/if}
       {#if !expanded}
-        <code class="">CTRL+K</code>
+        <code aria-hidden="true">CTRL+K</code>
       {/if}
     </div>
     {#if expanded && suggestions?.length}
@@ -150,7 +150,7 @@
     width: 100%;
     transform: scale(0.9);
     transform-origin: right center;
-    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
     color: theme('colors.surface-1.fg');
     background-color: theme('colors.surface-1.bg');
     outline: 1px solid theme('colors.surface-1.border');
@@ -161,7 +161,7 @@
     transition-delay: 0ms;
     transition-timing-function: ease-in-out;
     box-shadow: none;
-    overflow: clip;
+    overflow: hidden;
 
     &:has([aria-expanded='true']) {
       transition-delay: 250ms;

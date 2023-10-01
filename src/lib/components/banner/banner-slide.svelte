@@ -41,7 +41,7 @@
   ._content {
     display: grid;
     padding-inline: var(--slide-control-size);
-    padding-bottom: theme('spacing.12');
+    padding-bottom: max(10vh, theme('spacing.12'));
     user-select: none;
     outline: var(--debug) solid #ff09;
     outline-offset: calc(var(--debug) * -1);

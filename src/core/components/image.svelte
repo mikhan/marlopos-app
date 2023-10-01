@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
   import { sortNumberArray } from '$core/utils/array'
   import { coerceToNumber } from '$core/utils/coerce'
   import { getImageSize } from '$core/utils/image'
@@ -17,6 +17,7 @@
   export let fit: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' = 'fill'
   export let color: string | null = null
 
+  let image: HTMLImageElement
   let className = ''
   export { className as class }
 
@@ -27,9 +28,9 @@
   const loading = priority ? 'eager' : 'lazy'
   let loaded = false
 
-  function onLoad(event: Event) {
+  function onLoad(image: HTMLImageElement) {
     loaded = true
-    dispatch('load', event.currentTarget as HTMLImageElement)
+    dispatch('load', image)
   }
 
   function getImageSizeFromURL(url: URL) {
@@ -74,6 +75,15 @@
   $: _srcset = getImageSrcset(src, srcset)
   $: _sizes = _srcset && sizes
   $: showCover = $$slots.default
+
+  onMount(() => {
+    if (image.complete) {
+      image.style.setProperty('transition', 'none')
+      onLoad(image)
+    } else {
+      image.addEventListener('load', () => onLoad(image), { once: true })
+    }
+  })
 </script>
 
 <svelte:head>
@@ -89,7 +99,7 @@
     </div>
   {/if}
   <img
-    class="_image"
+    bind:this={image}
     style:object-fit={fit}
     style:opacity={showCover && !loaded ? 0 : 1}
     {loading}
@@ -100,8 +110,7 @@
     srcset={_srcset}
     sizes={_sizes}
     decoding="async"
-    {...$$restProps}
-    on:load={onLoad} />
+    {...$$restProps} />
 </div>
 
 <style lang="postcss">
@@ -110,7 +119,7 @@
     position: relative;
   }
 
-  ._image {
+  img {
     width: 100%;
     height: 100%;
     max-width: 100%;

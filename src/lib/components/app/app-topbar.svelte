@@ -4,8 +4,9 @@
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { getUiShellContext } from '$core/components/shell/ui-shell.svelte'
-  import UiTopbar from '$core/components/shell/ui-topbar.svelte'
+  import { disableDocumentScrolling, enableDocumentScrolling } from '$core/services/popup'
   import { matchMedia } from '$core/stores/match-media'
+  import { generateUID } from '$core/utils/element'
   import logotipo from '$lib/assets/logotipo.png'
   import AppNavigationProgress from '$lib/components/app/app-navigation-progress.svelte'
   import Omnibox from '../search/omnibox.svelte'
@@ -14,6 +15,8 @@
   const { layoutTopbarHeight } = getUiShellContext()
 
   const collapsed = matchMedia('(width < 768px)')
+  const navigationMenuId = generateUID()
+  let container: HTMLElement
   let opacityOffset = 0
   let searchActive = false
   let menuExpanded = false
@@ -22,6 +25,11 @@
 
   $: opacity = menuExpanded || !opacityOffset ? 1 : Math.min(y / opacityOffset, 1)
   $: menuExpanded = $collapsed && menuExpanded
+  $: if (menuExpanded) {
+    disableDocumentScrolling()
+  } else {
+    enableDocumentScrolling()
+  }
 
   const sections = [
     { name: 'Calendario', href: '/calendar' },
@@ -29,11 +37,18 @@
   ]
 
   onMount(() => {
-    const observer = new ResizeObserver(() => {
-      opacityOffset = Math.min(250, document.documentElement.scrollHeight - window.innerHeight)
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === document.documentElement) {
+          opacityOffset = Math.min(250, document.documentElement.scrollHeight - window.innerHeight)
+        } else if (entry.target === container) {
+          layoutTopbarHeight.set(entry.contentRect.height)
+        }
+      }
     })
 
     observer.observe(document.documentElement)
+    observer.observe(container)
 
     return () => observer.disconnect()
   })
@@ -44,38 +59,49 @@
 <svelte:window bind:scrollY={y} bind:innerHeight={height} />
 
 <header
-  class="app-topbar"
+  class="app-topbar layout-container"
   style:--opacity={opacity}
   class:__search-active={searchActive}
-  bind:clientHeight={$layoutTopbarHeight}>
-  <UiTopbar>
-    <div class="app-topbar-content">
-      {#if $collapsed}
-        <button class="app-topbar-menu-button" on:click={() => (menuExpanded = !menuExpanded)}>
-          <Fa icon={menuExpanded ? faTimes : faBars} />
-        </button>
-      {/if}
-      <a class="app-topbar-logo" href="/" data-sveltekit-preload-data>
-        <img class="w-auto h-8" src={logotipo} width="84" height="84" alt="Viajes Marlopos logo" />
-        <span class="font-bold tracking-wider uppercase">Viajes Marlopos</span>
-      </a>
-      <div class="ml-auto app-topbar-search">
-        <Omnibox bind:expanded={searchActive} />
-      </div>
-      <nav class="app-topbar-sections">
-        {#each sections as { name, href }}
-          <AppTopbarLink {href}>{name}</AppTopbarLink>
-        {/each}
-      </nav>
+  class:__expanded={menuExpanded}
+  bind:this={container}>
+  <div class="app-topbar-content layout-lg">
+    {#if $collapsed}
+      <button
+        class="app-topbar-menu-button"
+        on:click={() => (menuExpanded = !menuExpanded)}
+        title={menuExpanded ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
+        aria-haspopup="true"
+        aria-expanded={menuExpanded}
+        aria-controls={navigationMenuId}>
+        <Fa icon={menuExpanded ? faTimes : faBars} />
+      </button>
+    {/if}
+    <a class="app-topbar-logo" href="/" data-sveltekit-preload-data>
+      <img class="w-auto h-8" src={logotipo} width="84" height="84" alt="Viajes Marlopos logo" />
+      <span class="font-bold tracking-wider uppercase">Viajes Marlopos</span>
+    </a>
+    <div class="ml-auto app-topbar-search">
+      <Omnibox bind:expanded={searchActive} />
     </div>
-  </UiTopbar>
+    <nav class="app-topbar-sections">
+      <ul class="flex h-full gap-4">
+        {#each sections as { name, href }}
+          <li>
+            <AppTopbarLink {href}>{name}</AppTopbarLink>
+          </li>
+        {/each}
+      </ul>
+    </nav>
+  </div>
   {#if menuExpanded}
-    <div class="fixed inset-0 -z-[1] bg-canvas-bg/75" />
-    <nav class="flex flex-col">
-      {#each sections as { name, href }}
-        <a class="block p-4 hover:bg-surface-2-hover text-surface-2-fg focusable focusable-inner focusable-ring" {href}
-          >{name}</a>
-      {/each}
+    <nav class="flex flex-col" id={navigationMenuId}>
+      <ul>
+        {#each sections as { name, href }}
+          <li>
+            <AppTopbarLink {href}>{name}</AppTopbarLink>
+          </li>
+        {/each}
+      </ul>
     </nav>
   {/if}
 </header>
@@ -85,7 +111,7 @@
 
 <style lang="postcss">
   .app-topbar {
-    display: grid;
+    --opacity: 0;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -98,7 +124,7 @@
       height: 6rem;
       z-index: -1;
       pointer-events: none;
-      opacity: calc(1 - var(--opacity, 0));
+      opacity: calc(1 - var(--opacity));
       transition: opacity 150ms;
       background-image: linear-gradient(180deg, theme('colors.neutral.900 / 50%'), transparent 100%),
         linear-gradient(180deg, theme('colors.neutral.900 / 50%'), transparent 66%),
@@ -115,7 +141,7 @@
       border-bottom: 1px solid theme('colors.surface-1.border');
       backdrop-filter: blur(8px);
       opacity: var(--opacity, 0);
-      transition: opacity 150ms;
+      transition: opacity 150ms, background-color 250ms;
       z-index: -1;
     }
 
@@ -131,6 +157,14 @@
       .app-topbar-search {
         width: 100%;
         transition: width 250ms ease-in-out;
+      }
+    }
+
+    &.__expanded {
+      height: 100dvh;
+
+      &::after {
+        background-color: theme('colors.surface-1.bg');
       }
     }
   }
@@ -156,7 +190,7 @@
       display: block;
       position: absolute;
       width: 100%;
-      height: 200%;
+      height: theme('spacing.32');
       max-width: theme('screens.xl');
       top: 0;
       left: 50%;
@@ -164,7 +198,7 @@
       pointer-events: none;
       background-image: linear-gradient(to right, #a87ffb, #25a6e9);
       filter: blur(128px);
-      opacity: calc(var(--opacity, 0) * 0.7);
+      opacity: calc(var(--opacity) * 0.75);
       transition: opacity 250ms;
       z-index: -1;
     }
@@ -193,11 +227,10 @@
 
   .app-topbar-sections {
     display: none;
+    height: 100%;
 
     @media (min-width: theme('screens.md')) {
-      display: flex;
-      height: 100%;
-      gap: theme('spacing.4');
+      display: block;
     }
   }
 </style>

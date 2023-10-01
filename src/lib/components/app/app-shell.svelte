@@ -20,7 +20,7 @@
   .app-shell {
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
+    min-height: 100vh;
     isolation: isolate;
   }
 </style>

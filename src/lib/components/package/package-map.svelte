@@ -126,6 +126,7 @@
     if (multiple) map.getMap().fitBounds(bounds)
     else map.getMap().flyTo({ center, zoom })
     pristine = true
+    map.getMap().getCanvas().focus()
   }
 
   function enableInteraction() {
@@ -153,7 +154,7 @@
   use:focusWithin
   use:dismiss={{ clickOutside: false, scroll: false }}
   on:focusenter={enableInteraction}
-  on:focusexit={disableInteraction}
+  on:focusleave={disableInteraction}
   on:dismiss={onDismiss}>
   <InteractiveMap options={mapOptions} bind:this={map}>
     <MapControl>

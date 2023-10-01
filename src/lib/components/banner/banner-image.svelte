@@ -10,24 +10,22 @@
   export let blurhash: string
   export let color: string
   export let priority: boolean
-
-  const src = getResourceHref(id)
 </script>
 
-<picture style:--color={color}>
+<picture>
   <Image
     class="w-full h-full"
     fit="cover"
-    {src}
+    src={getResourceHref(id)}
     alt={title}
     {width}
     {height}
     {color}
     {priority}
     srcset={[
-      { w: 480, h: 640, q: 50 },
-      { w: 960, h: 640, q: 75 },
-      { w: 1280, h: 640, q: 100 },
+      { w: 480, h: 864, q: 50 },
+      { w: 960, h: 864, q: 75 },
+      { w: 1280, h: 864, q: 100 },
     ]}>
     <Blurhash class="object-cover w-full h-full animate-pulse" hash={blurhash} {width} {height} renderSize={64} />
   </Image>
@@ -38,20 +36,22 @@
     display: block;
     position: absolute;
     inset: 0;
-    background-color: var(--color);
-    padding-left: max(0px, calc(100% - theme('screens.2xl')));
+    background-color: theme('colors.canvas.bg');
+
+    & > :global(*) {
+      mask: linear-gradient(0deg, transparent, white 30%);
+    }
 
     &::after {
       content: '';
       position: absolute;
       inset: 0;
-      z-index: 1;
-      background-image: linear-gradient(0deg, theme('colors.canvas.bg / 50%'), 5%, transparent 15%),
-        linear-gradient(0deg, theme('colors.canvas.bg / 75%'), transparent 30%),
-        linear-gradient(0deg, theme('colors.canvas.bg / 100%'), transparent 45%),
-        radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 30%, transparent 75%);
-      mix-blend-mode: multiply;
       pointer-events: none;
+      background-image: radial-gradient(
+        circle farthest-side at left bottom,
+        theme('colors.canvas.bg / 50%') 30%,
+        transparent 75%
+      );
     }
   }
 </style>

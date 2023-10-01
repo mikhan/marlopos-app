@@ -16,7 +16,8 @@
   const isLighthouseAudit = browser && navigator.userAgent.includes('Chrome-Lighthouse')
 </script>
 
-<footer class="pt-8 pb-4 text-sm border-t layout text-canvas-fg/75 border-t-canvas-border">
+<hr class="border-t-canvas-border" />
+<footer class="pt-8 pb-4 text-sm text-canvas-fg/75 layout-lg">
   <div class="flex items-end gap-2">
     <div class="flex flex-col items-start md:items-center md:flex-row justify-between gap-2 min-h-[60px] grow">
       <div>© {currentYear} VIAJES MARLOPOS SA DE CV.</div>

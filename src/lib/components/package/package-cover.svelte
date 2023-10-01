@@ -7,7 +7,7 @@
   export let data: Api.Image
 </script>
 
-<picture class="_image">
+<picture>
   <Image
     class="w-full h-full"
     fit="cover"
@@ -18,12 +18,12 @@
     color={data.color}
     priority={true}
     srcset={[
-      { w: 480, h: 640, q: 50 },
-      { w: 960, h: 640, q: 75 },
-      { w: 1280, h: 640, q: 100 },
+      { w: 480, h: 864, q: 50 },
+      { w: 960, h: 864, q: 75 },
+      { w: 1280, h: 864, q: 100 },
     ]}>
     <Blurhash
-      class="object-cover w-full h-full"
+      class="object-cover w-full h-full animate-pulse"
       hash={data.blurhash}
       renderSize={64}
       width={data.width}
@@ -32,14 +32,15 @@
 </picture>
 
 <style lang="postcss">
-  ._image {
-    position: relative;
+  picture {
     display: block;
-    width: 100%;
-    aspect-ratio: 4/3;
-    min-height: min(40rem, 75vh);
-    max-height: min(40rem, 100vh);
-    mask: linear-gradient(0deg, transparent, white 30%);
+    position: absolute;
+    inset: 0;
+    background-color: theme('colors.canvas.bg');
+
+    & > :global(*) {
+      mask: linear-gradient(0deg, transparent, white 30%);
+    }
 
     &::after {
       content: '';

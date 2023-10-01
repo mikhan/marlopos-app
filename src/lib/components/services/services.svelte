@@ -41,20 +41,18 @@
   }
 </script>
 
-<section use:parallax>
+<article use:parallax>
   <picture>
     <Image src={background} alt="" class="w-full h-full" fit="cover" width={1280} height={720} />
   </picture>
-  <div>
-    <p class="leading-relaxed text-center text-white text-balance text-xl-fluid font-display">
-      Contamos con más de <strong class="bg-[hsl(172_38%_46%)] px-3 py-1 rounded whitespace-nowrap"
-        >15 años de experiencia</strong> en la operación, programación y comercialización de todo tipo de servicios turísticos.
-    </p>
-  </div>
-</section>
+  <p class="leading-relaxed text-center text-white text-balance text-xl-fluid font-display">
+    Contamos con más de <strong class="bg-[hsl(172_38%_46%)] px-3 py-1 rounded whitespace-nowrap"
+      >15 años de experiencia</strong> en la operación, programación y comercialización de todo tipo de servicios turísticos.
+  </p>
+</article>
 
 <style lang="postcss">
-  section {
+  article {
     --parallax-offset: calc(864px - theme('screens.sm'));
     --parallax-position: 0px;
     position: relative;
@@ -87,7 +85,7 @@
     }
   }
 
-  div {
+  p {
     max-width: theme('screens.md');
     z-index: 1;
   }

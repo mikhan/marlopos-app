@@ -44,12 +44,12 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    overflow: clip;
+    overflow: hidden;
 
     svg {
       width: 100%;
       height: 100%;
-      scale: 1.01;
+      transform: scale(1.01);
     }
   }
 </style>

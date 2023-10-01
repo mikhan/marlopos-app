@@ -10,7 +10,7 @@
   export let data: Api.Package
 </script>
 
-<div class="w-full mx-auto max-w-screen-3xl">
+<div class="relative h-[54rem] max-h-[100svh]">
   <PackageCover data={data.cover} />
 </div>
 <div class="flex flex-col lg:flex-row gap-8 layout-2xl z-[1] justify-between -mt-36">

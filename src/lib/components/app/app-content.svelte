@@ -12,7 +12,7 @@
   export let className = ''
 </script>
 
-<main class="layout-container layout-padding {className}" {...$$restProps}>
+<main class="layout-container {className}" {...$$restProps}>
   <slot />
 </main>
 

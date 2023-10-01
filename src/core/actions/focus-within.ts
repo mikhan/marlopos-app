@@ -2,7 +2,7 @@ import type { Action } from 'svelte/action'
 
 type Attributes = {
   'on:focusenter': (event: CustomEvent<FocusEvent>) => void
-  'on:focusexit': (event: CustomEvent<FocusEvent>) => void
+  'on:focusleave': (event: CustomEvent<FocusEvent>) => void
 }
 
 export const focusWithin: Action<HTMLElement, undefined, Attributes> = (element) => {
@@ -21,6 +21,6 @@ export const focusWithin: Action<HTMLElement, undefined, Attributes> = (element)
   element.addEventListener('focusout', () => {
     if (element.matches(':focus-within')) return
     focused = false
-    element.dispatchEvent(new CustomEvent('focusexit', { detail: event }))
+    element.dispatchEvent(new CustomEvent('focusleave', { detail: event }))
   })
 }
