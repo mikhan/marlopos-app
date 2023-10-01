@@ -1,6 +1,7 @@
 import type { Action } from 'svelte/action'
 import { cubicOut } from 'svelte/easing'
 import { type Tweened, tweened } from 'svelte/motion'
+import { overrideProperties } from '$core/services/element'
 import { clamp } from '$core/utils/math'
 
 export type MousescrollEvent = CustomEvent<{
@@ -84,11 +85,4 @@ export const mousescroll: Action<HTMLElement, MouseScrollOptions | undefined, Mo
       abortController.abort()
     },
   }
-}
-
-function overrideProperties(element: HTMLElement, properties: Record<string, string>): () => void {
-  const backup = Object.entries(properties).map(([key]) => [key, element.style.getPropertyValue(key)] as const)
-  Object.entries(properties).forEach(([key, val]) => element.style.setProperty(key, val))
-
-  return () => backup.forEach(([key, val]) => element.style.setProperty(key, val))
 }

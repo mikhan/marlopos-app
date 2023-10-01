@@ -19,12 +19,6 @@ const config = {
       $translations: 'src/translations',
       $tailwind: 'tools/tailwind/config.cjs',
     },
-    csp: {
-      mode: 'auto',
-      directives: {
-        'script-src': ['self', 'blob:', '*.tawk.to', 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
-      },
-    },
   },
 }
 

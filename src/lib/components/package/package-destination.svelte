@@ -57,7 +57,7 @@
     transition-property: outline-color, outline-offset, background-color, color;
     transition-duration: 150ms, 250ms, 250ms, 250ms;
     transition-timing-function: theme('transitionTimingFunction.in-out');
-    overflow: clip;
+    overflow: hidden;
     box-shadow: theme('boxShadow.xl');
 
     @media (theme('screens.sm') <= width < theme('screens.md')) {
@@ -74,7 +74,7 @@
     display: block;
     aspect-ratio: 16/9;
     flex-shrink: 0;
-    overflow: clip;
+    overflow: hidden;
 
     @media (theme('screens.sm') <= width < theme('screens.md')) {
       aspect-ratio: 1/1;

@@ -17,7 +17,7 @@ export function useKeyboardNavigation(node: HTMLElement, handlers: KeyboardNavig
     }
   }
 
-  node.addEventListener('keyup', listener, { signal: abortController.signal })
+  node.addEventListener('keydown', listener, { signal: abortController.signal })
 
   return {
     destroy() {

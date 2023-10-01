@@ -4,7 +4,7 @@
   import about2 from '$lib/assets/about2.jpg'
 </script>
 
-<div class="layout-container layout-padding grow">
+<div class="layout-container grow">
   <section class="layout-lg">
     <div class="">
       <Image class="w-full h-full rounded-3xl" src={about1} alt="" width={600} height={400} fit="cover" />

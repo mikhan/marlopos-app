@@ -5,6 +5,6 @@
   export let data: PageData
 </script>
 
-<main class="my-auto layout-container layout-padding">
+<main class="my-auto layout-container">
   <Contact data={data.information} />
 </main>

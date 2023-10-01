@@ -25,6 +25,7 @@
       name="name"
       bind:value={data.name}
       placeholder={$t('contactForm.field.name.placeholder')}
+      autocomplete="name"
       required />
   </label>
   <label class="form-field">
@@ -35,6 +36,7 @@
       name="email"
       bind:value={data.email}
       placeholder={$t('contactForm.field.email.placeholder')}
+      autocomplete="email"
       required />
   </label>
   <label class="form-field">

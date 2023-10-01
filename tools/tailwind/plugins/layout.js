@@ -2,7 +2,7 @@ import plugin from 'tailwindcss/plugin'
 
 export function layoutPlugin() {
   return plugin(
-    function ({ addUtilities, theme }) {
+    function ({ addBase, addUtilities, theme }) {
       const screens = Object.entries(theme('screens'))
         .map(([name, size]) => ({ name, size: size }))
         .sort((a, b) => parseInt(b.size) - parseInt(a.size))
@@ -10,7 +10,6 @@ export function layoutPlugin() {
       const vars = []
       let prevScreen
 
-      vars.push(['--layout-padding', '0px'])
       vars.push(['--layout-size', 'calc(100% - calc(var(--layout-padding) * 2))'])
 
       for (const screen of screens) {
@@ -44,6 +43,7 @@ export function layoutPlugin() {
 
       vars.push(['display', 'grid'])
       vars.push(['grid-template-columns', gridTemplateColumns])
+      vars.push(['align-content', 'start'])
 
       addUtilities({
         '.layout-container': Object.fromEntries(vars),
@@ -82,21 +82,21 @@ export function layoutPlugin() {
 
       const layoutPadding = { ...theme('layoutPadding') }
       const css = {
-        '.layout-padding': {},
+        ':root': {},
       }
 
       if ('DEFAULT' in layoutPadding) {
-        css['.layout-padding']['--layout-padding'] = layoutPadding['DEFAULT']
+        css[':root']['--layout-padding'] = layoutPadding['DEFAULT']
         delete layoutPadding['DEFAULT']
       }
 
       for (const [breakpoint, padding] of Object.entries(layoutPadding)) {
-        css['.layout-padding'][`@media (min-width: ${breakpoint})`] = {
+        css[':root'][`@media (min-width: ${breakpoint})`] = {
           '--layout-padding': padding,
         }
       }
 
-      addUtilities(css)
+      addBase(css)
     },
     {
       theme: {
