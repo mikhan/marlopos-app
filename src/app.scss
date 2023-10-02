@@ -19,8 +19,11 @@ body {
   font-family: theme('fontFamily.sans');
   background-color: theme('colors.neutral.900');
   color: theme('colors.canvas.fg');
-  overflow-y: scroll;
-  @apply scrollbar scrollbar-track-canvas-bg scrollbar-canvas-fg/50 scrollbar-border-canvas-border;
+
+  @media (pointer: fine) {
+    overflow-y: scroll;
+    @apply scrollbar scrollbar-track-canvas-bg scrollbar-canvas-fg/50 scrollbar-border-canvas-border;
+  }
 }
 
 ::selection {

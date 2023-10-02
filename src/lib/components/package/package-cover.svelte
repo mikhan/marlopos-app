@@ -36,22 +36,14 @@
     display: block;
     position: absolute;
     inset: 0;
-    background-color: theme('colors.canvas.bg');
-
-    & > :global(*) {
-      mask: linear-gradient(0deg, transparent, white 30%);
-    }
 
     &::after {
       content: '';
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background-image: radial-gradient(
-        circle farthest-side at left bottom,
-        theme('colors.canvas.bg / 50%') 30%,
-        transparent 75%
-      );
+      background-image: linear-gradient(0deg, theme('colors.canvas.bg'), transparent 30%),
+        radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 30%, transparent 75%);
     }
   }
 </style>

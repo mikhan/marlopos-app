@@ -1,6 +1,5 @@
 <script lang="ts" generics="T">
   import { createEventDispatcher, onDestroy, onMount } from 'svelte'
-  import { quadOut } from 'svelte/easing'
   import { writable } from 'svelte/store'
   import { type PanEvent, panning } from '$core/actions/pan'
   import { getFocusableElements } from '$core/utils/focus'
@@ -83,6 +82,7 @@
   let width = 0
 
   function onPanStart(event: PanEvent) {
+    pause()
     width = (event.target as HTMLElement).clientWidth
     slidesContainer?.style.setProperty('touch-action', 'none')
   }
@@ -91,7 +91,7 @@
     const threshold = width / 3
     const deltaX = event.detail.deltaX
     const progress = Math.min(1, Math.abs(deltaX) / threshold)
-    displace = Math.round(quadOut(progress) * threshold * Math.sign(deltaX))
+    displace = Math.round(progress * threshold * Math.sign(deltaX))
 
     if (progress < 1) return
     if (event.detail.directionX === 'left') next()
@@ -102,6 +102,7 @@
   }
 
   function onPanStop() {
+    resume()
     displace = 0
     slidesContainer?.style.removeProperty('touch-action')
   }
@@ -127,9 +128,9 @@
   on:panstop={onPanStop}
   on:mouseenter={pause}
   on:mouseleave={resume}
-  on:focusin={() => (intervalPlayer.enabled = false)}
-  on:focusout={() => (intervalPlayer.enabled = true)}>
-  <ul class="slides" aria-live="polite" style:--displace={displace + 'px'} bind:this={slidesContainer}>
+  on:focusin={pause}
+  on:focusout={resume}>
+  <ul class="slides" style:--displace={displace + 'px'} bind:this={slidesContainer}>
     {#each slides as slide, slideIndex (slideIndex)}
       <li
         class="slide"
@@ -149,25 +150,29 @@
 
 <style lang="postcss">
   :global([data-component='ui-carousel']) {
-    display: inline-block;
-    contain: layout size;
-    container: carousel / size;
-    outline: none;
-    contain-intrinsic-size: auto 30rem auto 15rem;
-    min-width: 0;
-    min-height: 0;
+    position: relative;
+    /* display: inline-block; */
+    /* contain: layout size; */
+    /* container: carousel / size; */
+    /* outline: none; */
+    /* contain-intrinsic-size: auto 30rem auto 15rem; */
+    /* min-width: 0; */
+    /* min-height: 0; */
   }
 
   .slides {
-    position: absolute;
-    inset: 0;
-    overflow: clip;
-    touch-action: pan-y;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* position: absolute; */
+    /* inset: 0; */
+    /* overflow: clip; */
+    /* touch-action: pan-y; */
   }
 
   .slide {
-    contain: strict;
-    isolation: isolate;
+    display: grid;
     position: absolute;
     inset: 0;
 

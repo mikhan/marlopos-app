@@ -27,8 +27,8 @@
   }
 </script>
 
-<div class="wrapper">
-  <Carousel bind:this={carousel} bind:index {slides} loop={true} autoplay={true} speed={5000}>
+<div class="wrapper h-[54rem] max-h-[100svh]">
+  <Carousel bind:this={carousel} bind:index {slides} loop={true} autoplay={false} speed={5000}>
     <svelte:fragment slot="slide" let:slideIndex let:slide>
       <BannerSlide data={slide} index={slideIndex} />
     </svelte:fragment>
@@ -68,7 +68,6 @@
 <style lang="postcss">
   .wrapper {
     --debug: 0px;
-    --slide-control-visibility: hidden;
     --slide-control-size: var(--layout-padding);
     --slide-control-icon-opacity: 0;
     --slide-control-icon-size: theme('spacing.7');
@@ -77,7 +76,6 @@
     --slide-control-icon-outline: none;
 
     @media (min-width: theme('screens.md')) {
-      --slide-control-visibility: visible;
       --slide-control-size: theme('spacing.16');
       --slide-control-icon-size: theme('spacing.10');
     }
@@ -88,18 +86,13 @@
     }
 
     @media (pointer: coarse) {
-      --slide-control-visibility: hidden;
       --slide-control-size: max(var(--layout-padding), calc((calc(100% - theme('screens.lg')) / 2)));
     }
 
     display: grid;
-    width: 100%;
-    height: 50rem;
-    max-width: theme('screens.2xl');
-    max-height: min(50rem, 100vh);
-    margin: 0 auto;
     outline: var(--debug) solid #0ff9;
     outline-offset: calc(var(--debug) * -1);
+    position: relative;
 
     &:hover,
     &:focus-within {
@@ -108,8 +101,7 @@
   }
 
   .control {
-    display: grid;
-    visibility: var(--slide-control-visibility);
+    display: none;
     place-content: center;
     cursor: pointer;
     outline: none;
@@ -119,6 +111,10 @@
     position: absolute;
     outline: var(--debug) dashed #00f9;
     outline-offset: calc(var(--debug) * -1);
+
+    @media (min-width: theme('screens.md')) and (pointer: fine) {
+      display: grid;
+    }
 
     &.prev {
       inset: 0 auto 0 0;
@@ -154,8 +150,8 @@
     transition-timing-function: theme('transitionTimingFunction.in-out');
 
     & > :global(*) {
-      width: 100%;
-      height: 100%;
+      /* width: 100%;
+      height: 100%; */
     }
   }
 

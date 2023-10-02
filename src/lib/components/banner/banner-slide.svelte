@@ -12,7 +12,7 @@
   $: href = makeRelative(getLocalizedUrl(new URL(`/packages/${data.id}`, $page.url), $languageStore.code))
 </script>
 
-<div class="_wrapper">
+<div class="banner-slide">
   <BannerImage
     id={data.cover.id}
     title={data.cover.title}
@@ -22,44 +22,26 @@
     color={data.cover.color}
     priority={index === 0} />
   <div class="_content">
-    <div class="_text">
-      <div class="_title">{data.name}</div>
-      <p class="_description">{data.description}</p>
-      <a {href} class="mt-8 button button-primary button-filled" data-sveltekit-preload-data>Más información</a>
-    </div>
+    <div class="_title">{data.name}</div>
+    <p class="_description">{data.description}</p>
+    <a {href} class="mt-8 button button-primary button-filled" data-sveltekit-preload-data>Más información</a>
   </div>
 </div>
 
 <style lang="postcss">
-  ._wrapper {
+  .banner-slide {
     display: grid;
     align-items: end;
-    position: absolute;
-    inset: 0;
+    position: relative;
+    isolation: isolate;
   }
 
   ._content {
-    display: grid;
+    color: white;
     padding-inline: var(--slide-control-size);
     padding-bottom: max(10vh, theme('spacing.12'));
     user-select: none;
-    outline: var(--debug) solid #ff09;
-    outline-offset: calc(var(--debug) * -1);
     z-index: 1;
-
-    @container carousel (width > theme('screens.lg')) {
-      width: 100%;
-      min-width: theme('screens.sm');
-    }
-  }
-
-  ._text {
-    width: 100%;
-    max-width: theme('screens.md');
-    margin: auto auto 0 0;
-    color: hsl(0 0% 100% / 75%);
-    outline: var(--debug) solid #f009;
-    outline-offset: calc(var(--debug) * -1);
     text-align: center;
 
     @media (min-width: theme('screens.sm')) {
@@ -72,7 +54,9 @@
     font-size: theme('fontSize.4xl-fluid[0]');
     line-height: theme('fontSize.4xl-fluid[1]');
     text-wrap: balance;
-    text-shadow: 0 0 12px theme('colors.canvas.bg/50%'), 0 0 64px theme('colors.canvas.bg/50%');
+    max-width: theme('screens.sm');
+    text-shadow: 0 0 4px theme('colors.canvas.bg');
+    /* text-shadow: 0 0 12px theme('colors.canvas.bg/50%'), 0 0 64px theme('colors.canvas.bg/50%'); */
   }
 
   ._description {
@@ -80,7 +64,9 @@
     line-height: theme('fontSize.xl[1]');
     margin-top: theme('spacing.2');
     text-wrap: balance;
-    text-shadow: 0 0 3px theme('colors.canvas.bg'), 0 0 6px theme('colors.canvas.bg/75%'),
-      0 0 32px theme('colors.canvas.bg/75%');
+    max-width: theme('screens.sm');
+    text-shadow: 0 0 4px theme('colors.canvas.bg');
+    /* text-shadow: 0 0 3px theme('colors.canvas.bg'), 0 0 6px theme('colors.canvas.bg/75%'),
+      0 0 32px theme('colors.canvas.bg/75%'); */
   }
 </style>

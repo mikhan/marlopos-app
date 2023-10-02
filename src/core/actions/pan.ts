@@ -28,9 +28,11 @@ export const panning: Action<
   let directionY = ''
   let abortController: AbortController | undefined
 
-  function onPointerDown(event: PointerEvent) {
-    x = startX = event.screenX
-    y = startY = event.screenY
+  function onPointerDown(event: TouchEvent) {
+    const touch = event.touches[0]
+    if (!touch) return
+    x = startX = touch.screenX
+    y = startY = touch.screenY
     deltaX = 0
     deltaY = 0
     directionX = ''
@@ -46,17 +48,19 @@ export const panning: Action<
 
     abortController?.abort()
     abortController = new AbortController()
-    abortController.signal.onabort = () => node.style.removeProperty('pointer-events')
-    document.body.addEventListener('pointermove', onPointerMove, { signal: abortController.signal })
-    document.body.addEventListener('pointerup', onPointerUp, { signal: abortController.signal })
-    window.addEventListener('scroll', onPointerUp, { signal: abortController.signal })
+    // abortController.signal.onabort = () => node.style.removeProperty('pointer-events')
+    window.addEventListener('touchmove', onPointerMove, { signal: abortController.signal })
+    window.addEventListener('touchend', onPointerUp, { signal: abortController.signal })
+    // window.addEventListener('scroll', onPointerUp, { signal: abortController.signal })
   }
 
-  function onPointerMove(event: PointerEvent) {
-    event.preventDefault()
-    node.style.setProperty('pointer-events', 'none')
-    x = event.screenX
-    y = event.screenY
+  function onPointerMove(event: TouchEvent) {
+    const touch = event.touches[0]
+    if (!touch) return
+
+    // node.style.setProperty('pointer-events', 'none')
+    x = touch.screenX
+    y = touch.screenY
     deltaX = x - startX
     deltaY = y - startY
     directionX = x > startX ? 'right' : 'left'
@@ -68,7 +72,7 @@ export const panning: Action<
     })
     node.dispatchEvent(panMoveEvent)
     if (panMoveEvent.defaultPrevented) {
-      document.body.removeEventListener('pointermove', onPointerMove)
+      abortController?.abort()
     }
   }
 
@@ -77,9 +81,9 @@ export const panning: Action<
     node.dispatchEvent(new CustomEvent('panstop', { detail: { x, y, deltaX, deltaY, directionX, directionY } }))
   }
 
-  node.addEventListener('pointerdown', onPointerDown)
+  node.addEventListener('touchstart', onPointerDown, { passive: true })
 
   return {
-    destroy: () => node.removeEventListener('pointerdown', onPointerDown),
+    destroy: () => node.removeEventListener('touchstart', onPointerDown),
   }
 }
