@@ -9,15 +9,13 @@ export type PanEvent = CustomEvent<{
   directionY: 'top' | 'bottom' | ''
 }>
 
-export const panning: Action<
-  HTMLElement,
-  undefined,
-  {
-    'on:panstart': (event: PanEvent) => void
-    'on:panmove': (event: PanEvent) => void
-    'on:panstop': (event: PanEvent) => void
-  }
-> = (node) => {
+type Attributes = {
+  'on:panstart': (event: PanEvent) => void
+  'on:panmove': (event: PanEvent) => void
+  'on:panstop': (event: PanEvent) => void
+}
+
+export const panning: Action<HTMLElement, undefined, Attributes> = (element) => {
   let startX = 0
   let startY = 0
   let x = 0
@@ -26,64 +24,65 @@ export const panning: Action<
   let deltaY = 0
   let directionX = ''
   let directionY = ''
-  let abortController: AbortController | undefined
+  let abortController = new AbortController()
+  let panning = false
 
-  function onPointerDown(event: TouchEvent) {
-    const touch = event.touches[0]
-    if (!touch) return
-    x = startX = touch.screenX
-    y = startY = touch.screenY
-    deltaX = 0
-    deltaY = 0
-    directionX = ''
-    directionY = ''
+  element.addEventListener('touchstart', onTouchstart, { passive: true })
 
-    const panStartEvent = new CustomEvent('panstart', {
-      detail: { x, y, deltaX, deltaY, directionX, directionY },
-      cancelable: true,
-    })
-    node.dispatchEvent(panStartEvent)
-
-    if (panStartEvent.defaultPrevented) return
-
-    abortController?.abort()
+  function onTouchstart() {
+    abortController.abort()
     abortController = new AbortController()
-    // abortController.signal.onabort = () => node.style.removeProperty('pointer-events')
-    window.addEventListener('touchmove', onPointerMove, { signal: abortController.signal })
-    window.addEventListener('touchend', onPointerUp, { signal: abortController.signal })
-    // window.addEventListener('scroll', onPointerUp, { signal: abortController.signal })
+    window.addEventListener('touchmove', onTouchmove, { signal: abortController.signal })
+    window.addEventListener('touchend', onTouchend, { signal: abortController.signal })
   }
 
-  function onPointerMove(event: TouchEvent) {
+  function onTouchmove(event: TouchEvent) {
     const touch = event.touches[0]
     if (!touch) return
 
-    // node.style.setProperty('pointer-events', 'none')
-    x = touch.screenX
-    y = touch.screenY
-    deltaX = x - startX
-    deltaY = y - startY
-    directionX = x > startX ? 'right' : 'left'
-    directionY = y > startY ? 'bottom' : 'top'
+    if (!panning) {
+      panning = true
+      x = startX = touch.screenX
+      y = startY = touch.screenY
+      deltaX = 0
+      deltaY = 0
+      directionX = ''
+      directionY = ''
 
-    const panMoveEvent = new CustomEvent('panmove', {
-      detail: { x, y, deltaX, deltaY, directionX, directionY },
-      cancelable: true,
-    })
-    node.dispatchEvent(panMoveEvent)
-    if (panMoveEvent.defaultPrevented) {
-      abortController?.abort()
+      abortController.signal.addEventListener('abort', () => (panning = false))
+
+      if (!dispatchEvent('panstart', true)) {
+        onTouchend()
+      }
+    } else {
+      x = touch.screenX
+      y = touch.screenY
+      deltaX = x - startX
+      deltaY = y - startY
+      directionX = x > startX ? 'right' : 'left'
+      directionY = y > startY ? 'bottom' : 'top'
+
+      if (!dispatchEvent('panmove', true)) {
+        onTouchend()
+      }
     }
   }
 
-  function onPointerUp() {
-    abortController?.abort()
-    node.dispatchEvent(new CustomEvent('panstop', { detail: { x, y, deltaX, deltaY, directionX, directionY } }))
+  function onTouchend() {
+    abortController.abort()
+    dispatchEvent('panstop', false)
   }
 
-  node.addEventListener('touchstart', onPointerDown, { passive: true })
+  function dispatchEvent(name: string, cancelable: boolean) {
+    return element.dispatchEvent(
+      new CustomEvent(name, {
+        detail: { x, y, deltaX, deltaY, directionX, directionY },
+        cancelable,
+      }),
+    )
+  }
 
   return {
-    destroy: () => node.removeEventListener('touchstart', onPointerDown),
+    destroy: () => abortController.abort(),
   }
 }

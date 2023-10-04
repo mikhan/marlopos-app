@@ -17,7 +17,7 @@
 </script>
 
 <hr class="border-t-canvas-border" />
-<footer class="pt-8 pb-4 text-sm text-canvas-fg/75 layout-lg">
+<footer class="px-4 pt-8 pb-4 text-sm text-canvas-fg/75 layout-lg">
   <div class="flex items-end gap-2">
     <div class="flex flex-col items-start md:items-center md:flex-row justify-between gap-2 min-h-[60px] grow">
       <div>© {currentYear} VIAJES MARLOPOS SA DE CV.</div>

@@ -12,7 +12,7 @@
 
 <AppContent className="max-w-screen-2xl mx-auto">
   <Banner slides={data.featured} />
-  <CountriesPreview data={[...data.countriesPreview, ...data.countriesPreview, ...data.countriesPreview]} />
+  <CountriesPreview data={data.countriesPreview} />
   <Services />
   <Contact data={data.information} />
   <AppFooter data={data.information} />

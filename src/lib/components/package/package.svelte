@@ -13,8 +13,8 @@
 <div class="relative h-[54rem] max-h-[100svh]">
   <PackageCover data={data.cover} />
 </div>
-<div class="flex flex-col lg:flex-row gap-8 layout-2xl z-[1] justify-between -mt-36">
-  <div class="max-w-screen-md">
+<div class="flex flex-col lg:flex-row gap-8 layout-2xl z-[1] justify-between -mt-96">
+  <div class="max-w-screen-md px-4">
     <header class="text-shadow">
       <h1 class="font-display text-4xl-fluid text-surface-1-fg">{data.name}</h1>
       <div class="my-8 text-xl text-surface-1-fg">{data.description}</div>
@@ -26,7 +26,7 @@
     <ShareMenu />
   </div>
 </div>
-<div class="layout-2xl">
+<div class="px-4 layout-2xl">
   <SectionHeader class="mt-8" id="destinations-list-header">Destinos incluídos</SectionHeader>
 </div>
 <div class="layout-2xl">

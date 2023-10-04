@@ -34,6 +34,7 @@
     align-items: end;
     position: relative;
     isolation: isolate;
+    padding-inline: theme('spacing.4');
   }
 
   ._content {

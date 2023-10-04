@@ -31,5 +31,9 @@
     &[data-size='lg'] {
       width: theme('spacing.14');
     }
+
+    &[disabled] {
+      cursor: not-allowed;
+    }
   }
 </style>

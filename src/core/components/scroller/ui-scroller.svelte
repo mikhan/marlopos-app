@@ -1,21 +1,35 @@
 <script lang="ts">
-  import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import { onMount } from 'svelte'
-  import { mousescroll } from '$core/actions/mousescroll'
-  import { matchMedia } from '$core/stores/match-media'
-  import { createConditionalAction } from '$core/utils/actions'
+  import { type PanEvent, panning } from '$core/actions/pan'
+  import { overrideProperties } from '$core/services/element'
   import { debounce } from '$core/utils/async'
-  import IconButton from '../icon-button.svelte'
 
   let container: HTMLUListElement
   let elements: Element[] = []
   let itemsMap = new Map<Element, { target: Element; isVisible: boolean; intersectionRatio: number }>()
-  let showPrevious = false
-  let showNext = false
 
-  const mousescrollIf = createConditionalAction(matchMedia('(pointer: fine)'), mousescroll)
   const debouncedOnResize = debounce(onResize, 250)
   let currentElement: HTMLElement | undefined
+
+  export function getContainer() {
+    return container
+  }
+
+  export function previous() {
+    const currentIndex = elements.findIndex((e) => e === currentElement)
+    scrollTo(elements.at(Math.max(currentIndex - 1, 0)) as HTMLElement)
+  }
+
+  export function next() {
+    const currentIndex = elements.findIndex((e) => e === currentElement)
+    scrollTo(elements.at(Math.min(currentIndex + 1, elements.length - 1)) as HTMLElement)
+  }
+
+  export function scrollTo(element: HTMLElement) {
+    const firstElement = elements.at(0) as HTMLElement
+    const offsetLeft = firstElement.offsetLeft
+    container.scrollTo({ left: element.offsetLeft - offsetLeft, behavior: 'smooth' })
+  }
 
   function onResize() {
     if (currentElement) scrollTo(currentElement)
@@ -31,34 +45,31 @@
     currentElement = firstVisible?.target as HTMLElement
   }
 
-  function onScroll() {
-    showPrevious = container.scrollLeft > 0
-    showNext = container.scrollWidth - container.scrollLeft - container.clientWidth > 0
-  }
-
   function scrollSnap() {
     if (container.scrollLeft === container.scrollWidth - container.clientWidth) return
     if (currentElement) scrollTo(currentElement)
   }
 
-  function getPaddingLeft() {
-    const styleMap = container.computedStyleMap()
-    return (styleMap.get('padding-inline-start') as { value: number }).value
-  }
+  function onPanstart() {
+    const scrollLeft = container.scrollLeft
+    const abortController = new AbortController()
+    const restoreProperties = overrideProperties(container, {
+      'scroll-behavior': 'auto',
+    })
 
-  function previous() {
-    const currentIndex = elements.findIndex((e) => e === currentElement)
-    scrollTo(elements.at(Math.max(currentIndex - 1, 0)) as HTMLElement)
-  }
+    container.addEventListener('panmove', onPanmove, { signal: abortController.signal })
+    container.addEventListener('panstop', onPanstop, { signal: abortController.signal })
 
-  function next() {
-    const currentIndex = elements.findIndex((e) => e === currentElement)
-    scrollTo(elements.at(Math.min(currentIndex + 1, elements.length - 1)) as HTMLElement)
-  }
+    function onPanmove(event: Event) {
+      const { detail } = event as PanEvent
+      container.scrollTo({ left: scrollLeft - detail.deltaX })
+    }
 
-  function scrollTo(element: HTMLElement) {
-    const paddingLeft = getPaddingLeft()
-    container.scrollLeft = element.offsetLeft - paddingLeft
+    function onPanstop() {
+      abortController.abort()
+      restoreProperties()
+      scrollSnap()
+    }
   }
 
   onMount(() => {
@@ -73,8 +84,6 @@
       intersectionObserver.observe(target)
     }
 
-    onScroll()
-
     return () => {
       intersectionObserver?.disconnect()
     }
@@ -83,42 +92,11 @@
 
 <svelte:window on:resize={debouncedOnResize} />
 
-<div class="_container">
-  <ul
-    data-component="ui-scroller"
-    use:mousescrollIf={{ speed: 500 }}
-    on:mousescrollend={scrollSnap}
-    on:scroll={onScroll}
-    bind:this={container}>
-    <slot />
-  </ul>
-  <div class="_controllers">
-    <div class:visible={showPrevious}>
-      <IconButton
-        data-part="ui-scroller-previous-button"
-        type="button"
-        on:click={previous}
-        icon={faChevronLeft}
-        title="Anterior" />
-    </div>
-    <div class:visible={showNext}>
-      <IconButton
-        data-part="ui-scroller-next-button"
-        type="button"
-        on:click={next}
-        icon={faChevronRight}
-        title="Siguiente" />
-    </div>
-  </div>
-</div>
+<ul data-component="ui-scroller" use:panning on:panstart={onPanstart} on:scroll bind:this={container}>
+  <slot />
+</ul>
 
 <style lang="postcss">
-  ._container {
-    position: relative;
-    width: 100%;
-    min-width: 0;
-  }
-
   ul {
     --scrollbar-size: 0;
     display: grid;
@@ -127,29 +105,5 @@
     grid-auto-flow: column;
     overflow: hidden;
     scroll-behavior: smooth;
-
-    @media (pointer: fine) {
-      cursor: grab;
-    }
-  }
-
-  ._controllers {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    visibility: hidden;
-
-    & :global([data-component='ui-icon-button']) {
-      background-color: theme('colors.surface-2.bg');
-      color: theme('colors.surface-2.fg');
-      box-shadow: theme('elevation.low');
-      margin: theme('spacing.4');
-
-      &:hover {
-        background-color: theme('colors.surface-2.hover');
-      }
-    }
   }
 </style>
