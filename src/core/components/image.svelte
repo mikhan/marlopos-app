@@ -1,19 +1,3 @@
-<script lang="ts" context="module">
-  const origins = new Set()
-
-  function preconnect(href: string): string | undefined {
-    if (!href.startsWith('http')) return
-
-    const url = new URL(href)
-
-    if (origins.has(url.origin)) return
-
-    origins.add(url.origin)
-
-    return url.origin
-  }
-</script>
-
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte'
   import { transformURL } from '$core/services/resource-provider'
@@ -90,11 +74,10 @@
     )
   }
 
-  $: _src = transformURL(src)
-  $: _srcset = getImageSrcset(src, srcset)
-  $: _sizes = _srcset && sizes
-  $: showCover = $$slots.default
-  $: origin = preconnect(_src)
+  let _src = transformURL(src)
+  let _srcset = getImageSrcset(src, srcset)
+  let _sizes = _srcset && sizes
+  let showCover = $$slots.default
 
   onMount(() => {
     if (image.complete) {
@@ -105,15 +88,6 @@
     }
   })
 </script>
-
-<svelte:head>
-  {#if origin}
-    <link rel="preconnect" href={origin} />
-  {/if}
-  {#if priority}
-    <link rel="preload" as="image" href={_src} imagesrcset={_srcset} imagesizes={sizes} />
-  {/if}
-</svelte:head>
 
 <div class={'_wrapper ' + className} style:background-color={color}>
   {#if showCover}

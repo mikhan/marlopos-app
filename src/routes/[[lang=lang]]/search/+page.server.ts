@@ -11,6 +11,7 @@ export const load = (async ({ url, params }) => {
       description: 'Agencia de viajes Marlopos',
       lang: language.code,
       links: getPageLinks(url, params.lang),
+      preconnect: [],
     },
   }
 }) satisfies PageServerLoad

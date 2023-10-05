@@ -1,30 +1,4 @@
 export namespace Api {
-  export type Resource = {
-    meta: Metadata
-    [K in string]: unknown
-  }
-
-  export type Metadata = {
-    title: string
-    description: string
-    lang: string
-    links: Link[]
-  }
-
-  export type Link = LinkAlternate | LinkCanonical
-
-  export type LinkAlternate = {
-    rel: 'alternate'
-    href: string
-    hreflang: string
-  }
-
-  export type LinkCanonical = {
-    rel: 'canonical'
-    href: string
-    href: string
-  }
-
   export type Package = {
     id: string
     name: string

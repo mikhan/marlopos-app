@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit'
+import { PUBLIC_IMAGE_CDN_ENDPOINT } from '$env/static/public'
 import { getPackage } from '$lib/database/packages'
-import { getPageLinks } from '$lib/services/api'
+import { getExternalOrigins, getPageLinks } from '$lib/services/api'
 import { getLanguage } from '$lib/utils/language'
 import type { PageServerLoad } from './$types'
 
@@ -19,6 +20,7 @@ export const load = (async ({ url, params }) => {
       description: page.description,
       lang: language.code,
       links: getPageLinks(url, params.lang),
+      preconnect: getExternalOrigins([PUBLIC_IMAGE_CDN_ENDPOINT, 'http://api.mapbox.com']),
     },
     page,
   }

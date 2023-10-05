@@ -27,7 +27,7 @@
   }
 </script>
 
-<div class="wrapper h-[54rem] max-h-[100svh]">
+<article class="h-[54rem] max-h-[100svh]">
   <Carousel bind:this={carousel} bind:index {slides} loop={true} autoplay={false} speed={5000}>
     <svelte:fragment slot="slide" let:slideIndex let:slide>
       <BannerSlide data={slide} index={slideIndex} />
@@ -48,25 +48,25 @@
         </div>
       </button>
 
-      <ul class="indicators" use:followFocus>
+      <div class="indicators" use:followFocus role="tablist" aria-label="Slides">
         {#each slides as item, i (item.id)}
-          <li>
-            <button
-              type="button"
-              class="indicator"
-              tabindex={i === index ? 0 : -1}
-              aria-current={i === index}
-              aria-label={item.name}
-              on:click={() => goTo(i)} />
-          </li>
+          <button
+            type="button"
+            class="indicator"
+            role="tab"
+            tabindex={i === index ? 0 : -1}
+            aria-selected={i === index}
+            aria-label={`Slide ${item.name}`}
+            aria-controls=""
+            on:click={() => goTo(i)} />
         {/each}
-      </ul>
+      </div>
     </svelte:fragment>
   </Carousel>
-</div>
+</article>
 
 <style lang="postcss">
-  .wrapper {
+  article {
     --debug: 0px;
     --slide-control-size: var(--layout-padding);
     --slide-control-icon-opacity: 0;
@@ -226,7 +226,7 @@
       }
     }
 
-    &[aria-current='true'] {
+    &[aria-selected='true'] {
       &::before {
         scale: 1;
         opacity: 1;

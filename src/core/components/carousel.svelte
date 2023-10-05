@@ -118,8 +118,9 @@
 </script>
 
 <section
-  role="listbox"
   tabindex="-1"
+  role="group"
+  aria-roledescription="carousel"
   data-component="ui-carousel"
   use:useKeyboardNavigation={keyboardNavigation}
   use:panning
@@ -130,34 +131,29 @@
   on:mouseleave={resume}
   on:focusin={pause}
   on:focusout={resume}>
-  <ul class="slides" style:--displace={displace + 'px'} bind:this={slidesContainer}>
+  <div class="slides" style:--displace={displace + 'px'} bind:this={slidesContainer} aria-live="off">
     {#each slides as slide, slideIndex (slideIndex)}
-      <li
+      <div
         class="slide"
         class:panning={displace !== 0}
+        class:hidden={rotation.includes(slideIndex) === false}
         class:slide-prev={slideIndex === rotation[0]}
         class:slide-current={slideIndex === rotation[1]}
         class:slide-next={slideIndex === rotation[2]}
+        role="tabpanel"
         aria-roledescription="slide"
-        aria-hidden={rotation.includes(slideIndex) === false}
+        aria-label={`${slideIndex + 1} de ${slides.length}`}
         use:registerSlide={slideIndex}>
         <slot name="slide" {slides} {index} {slide} {slideIndex} />
-      </li>
+      </div>
     {/each}
-  </ul>
+  </div>
   <slot name="controls" {slides} {index} />
 </section>
 
 <style lang="postcss">
   :global([data-component='ui-carousel']) {
     position: relative;
-    /* display: inline-block; */
-    /* contain: layout size; */
-    /* container: carousel / size; */
-    /* outline: none; */
-    /* contain-intrinsic-size: auto 30rem auto 15rem; */
-    /* min-width: 0; */
-    /* min-height: 0; */
   }
 
   .slides {
@@ -165,10 +161,6 @@
     position: relative;
     width: 100%;
     height: 100%;
-    /* position: absolute; */
-    /* inset: 0; */
-    /* overflow: clip; */
-    /* touch-action: pan-y; */
   }
 
   .slide {
@@ -199,7 +191,7 @@
       transform: translateX(calc(100% + var(--displace, 0px)));
     }
 
-    &[aria-hidden='true'] {
+    &.hidden {
       display: none;
     }
   }

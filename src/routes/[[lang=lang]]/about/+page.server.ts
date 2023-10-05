@@ -11,6 +11,7 @@ export const load = (async ({ url, params }) => {
       description: 'Quiénes somos',
       lang: language.code,
       links: getPageLinks(url, params.lang),
+      preconnect: [],
     },
   }
 }) satisfies PageServerLoad

@@ -50,7 +50,7 @@ export function layoutPlugin() {
       })
 
       addUtilities({
-        [`.layout-container > *`]: {
+        [`:where(.layout-container > *)`]: {
           'grid-column': `_full-start / _full-end`,
         },
       })
@@ -65,7 +65,7 @@ export function layoutPlugin() {
 
       for (const { name, size } of [...screens].reverse()) {
         addUtilities({
-          [`.layout-container > .layout-${name}`]: {
+          [`:where(.layout-container > .layout-${name})`]: {
             '--layout-size': `calc(${size} - calc(var(--layout-padding) * 2))`,
             'grid-column': `_${name}-start / _${name}-end`,
           },

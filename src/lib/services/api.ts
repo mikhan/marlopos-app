@@ -12,8 +12,8 @@ export const api = createClient<Database>(SUPABASE_URL, SUPABASE_TOKEN, {
   auth: { persistSession: false },
 })
 
-export function getPageLinks(url: URL, lang = ''): Api.Link[] {
-  const links: Api.Link[] = []
+export function getPageLinks(url: URL, lang = ''): App.Link[] {
+  const links: App.Link[] = []
 
   for (const code of LANGUAGE_CODES) {
     if (code === lang && code === DEFAULT_LANGUAGE.code) {
@@ -28,4 +28,16 @@ export function getPageLinks(url: URL, lang = ''): Api.Link[] {
   }
 
   return links
+}
+
+export function getExternalOrigins(hrefs: string[]): string[] {
+  const origins: string[] = []
+
+  for (const href of hrefs) {
+    const { origin, host } = new URL(href, 'http://localhost')
+    if (host === 'localhost' || origins.includes(origin)) continue
+    origins.push(origin)
+  }
+
+  return origins
 }

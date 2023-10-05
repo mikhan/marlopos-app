@@ -36,5 +36,9 @@
         <link rel="alternate" href={link.href} hreflang={link.hreflang} />
       {/if}
     {/each}
+
+    {#each $metadataStore.preconnect as origin}
+      <link rel="preconnect" href={origin} />
+    {/each}
   {/if}
 </svelte:head>

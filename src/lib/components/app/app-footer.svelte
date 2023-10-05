@@ -1,10 +1,7 @@
 <script lang="ts">
-  import { browser, dev } from '$app/environment'
   import { faFacebook } from '@fortawesome/free-brands-svg-icons'
   import Fa from 'svelte-fa'
-  import { PUBLIC_TAWK_CHAT_ID, PUBLIC_TAWK_PROPERTY_ID } from '$env/static/public'
   import type { Api } from '$lib/api'
-  import Chat from '$lib/components/chat.svelte'
 
   export let data: Api.Information
 
@@ -12,15 +9,14 @@
   const networks = {
     facebook: { name: 'Facebook', icon: faFacebook },
   }
-
-  const isLighthouseAudit = browser && navigator.userAgent.includes('Chrome-Lighthouse')
 </script>
 
 <hr class="border-t-canvas-border" />
-<footer class="px-4 pt-8 pb-4 text-sm text-canvas-fg/75 layout-lg">
-  <div class="flex items-end gap-2">
-    <div class="flex flex-col items-start md:items-center md:flex-row justify-between gap-2 min-h-[60px] grow">
-      <div>© {currentYear} VIAJES MARLOPOS SA DE CV.</div>
+
+<footer class="flex layout-lg col-end-[\_full-end] items-end">
+  <div class="flex flex-col gap-4 px-4 py-8 text-sm grow text-canvas-fg/75">
+    <div>© {currentYear} VIAJES MARLOPOS SA DE CV.</div>
+    <div class="flex gap-2">
       {#each data.networks as network}
         <a
           class="transition-all rounded-full hover:text-canvas-fg focus:text-canvas-fg focusable-visible"
@@ -30,9 +26,16 @@
         </a>
       {/each}
     </div>
-
-    {#if browser && !isLighthouseAudit && !dev}
-      <Chat propertyId={PUBLIC_TAWK_PROPERTY_ID} chatId={PUBLIC_TAWK_CHAT_ID} />
-    {/if}
   </div>
+
+  <div class="_support" />
 </footer>
+
+<style lang="postcss">
+  ._support {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    margin: 16px;
+  }
+</style>
