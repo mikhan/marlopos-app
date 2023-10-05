@@ -1,13 +1,11 @@
-<script lang="ts" context="module">
-  export type NewTicket = {
+<script lang="ts">
+  import { t } from '$translations/translations'
+
+  type NewTicket = {
     name: string
     email: string
     message: string
   }
-</script>
-
-<script lang="ts">
-  import { t } from '$translations/translations'
 
   let data: NewTicket = {
     name: '',

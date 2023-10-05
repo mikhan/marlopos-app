@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Action } from 'svelte/action'
-  import Image from '$core/components/image.svelte'
   import { clamp } from '$core/utils/math'
   import background from '$lib/assets/services-1.jpg'
 
@@ -43,7 +42,7 @@
 
 <article use:parallax>
   <picture>
-    <Image src={background} alt="" class="w-full h-full" fit="cover" width={1280} height={720} />
+    <img src={background} alt="" class="object-cover w-full h-full" width={1280} height={720} loading="lazy" />
   </picture>
   <p class="leading-relaxed text-center text-white text-balance text-xl-fluid font-display">
     Contamos con más de <strong class="bg-[hsl(172_38%_46%)] px-3 py-1 rounded whitespace-nowrap"

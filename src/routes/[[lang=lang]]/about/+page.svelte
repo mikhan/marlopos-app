@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Image from '$core/components/image.svelte'
   import about1 from '$lib/assets/about1.jpg'
   import about2 from '$lib/assets/about2.jpg'
 </script>
@@ -7,10 +6,10 @@
 <div class="layout-container grow">
   <section class="layout-lg">
     <div class="">
-      <Image class="w-full h-full rounded-3xl" src={about1} alt="" width={600} height={400} fit="cover" />
+      <img class="w-full h-full rounded-3xl object-cover" src={about1} alt="" width={600} height={400} />
     </div>
     <div class="elevation-low">
-      <Image class="w-full h-full rounded-3xl" src={about2} alt="" width={450} height={600} fit="cover" />
+      <img class="w-full h-full rounded-3xl object-cover" src={about2} alt="" width={450} height={600} />
     </div>
     <div class="p-8 rounded-3xl bg-neutral-100 text-neutral-100-fg elevation-hight">
       <h1 class="pb-8 text-xl-fluid">Misión</h1>

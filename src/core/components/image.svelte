@@ -1,11 +1,28 @@
+<script lang="ts" context="module">
+  const origins = new Set()
+
+  function preconnect(href: string): string | undefined {
+    if (!href.startsWith('http')) return
+
+    const url = new URL(href)
+
+    if (origins.has(url.origin)) return
+
+    origins.add(url.origin)
+
+    return url.origin
+  }
+</script>
+
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte'
+  import { transformURL } from '$core/services/resource-provider'
   import { sortNumberArray } from '$core/utils/array'
   import { coerceToNumber } from '$core/utils/coerce'
   import { getImageSize } from '$core/utils/image'
   import { isAbsoluteURL } from '$core/utils/predicate'
 
-  type Srcset = Record<string, unknown> & { w: number; h?: number }
+  type Srcset = { w: number; h?: number; q?: number }
 
   export let src: string
   export let alt: string
@@ -29,6 +46,7 @@
   let loaded = false
 
   function onLoad(image: HTMLImageElement) {
+    image.classList.remove('_reveal')
     loaded = true
     dispatch('load', image)
   }
@@ -38,7 +56,7 @@
   }
 
   function getImageSrcset(src: string, srcset: ReadonlyArray<Srcset>): string | null {
-    if (!srcset.length) return null
+    if (!srcset.length || isAbsoluteURL(src)) return null
 
     const absoluteURL = isAbsoluteURL(src)
     const url = new URL(src, 'http://localhost')
@@ -62,7 +80,7 @@
 
       let src = newURL.href
       if (!absoluteURL) src = src.replace(newURL.origin, '')
-      result.set(width, src)
+      result.set(width, transformURL(src))
     }
 
     return (
@@ -72,23 +90,28 @@
     )
   }
 
+  $: _src = transformURL(src)
   $: _srcset = getImageSrcset(src, srcset)
   $: _sizes = _srcset && sizes
   $: showCover = $$slots.default
+  $: origin = preconnect(_src)
 
   onMount(() => {
     if (image.complete) {
-      image.style.setProperty('transition', 'none')
       onLoad(image)
     } else {
+      if (showCover) image.classList.add('_reveal')
       image.addEventListener('load', () => onLoad(image), { once: true })
     }
   })
 </script>
 
 <svelte:head>
+  {#if origin}
+    <link rel="preconnect" href={origin} />
+  {/if}
   {#if priority}
-    <link rel="preload" as="image" href={src} imagesrcset={_srcset} imagesizes={sizes} />
+    <link rel="preload" as="image" href={_src} imagesrcset={_srcset} imagesizes={sizes} />
   {/if}
 </svelte:head>
 
@@ -101,9 +124,8 @@
   <img
     bind:this={image}
     style:object-fit={fit}
-    style:opacity={showCover && !loaded ? 0 : 1}
     {loading}
-    {src}
+    src={_src}
     {width}
     {height}
     {alt}
@@ -124,8 +146,13 @@
     height: 100%;
     max-width: 100%;
     max-height: 100%;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 500ms;
+
+    &._reveal {
+      transition-duration: 0ms;
+      opacity: 0;
+    }
   }
 
   ._overlay {

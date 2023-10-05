@@ -1,9 +1,14 @@
 import type { ResourceProvider } from '$core/services/resource-provider'
 
 export class ImagekitResourceProvider implements ResourceProvider {
-  constructor(readonly endpoint: string) {}
+  readonly endpoint: string
 
-  transform(url: URL) {
+  constructor(endpoint: string) {
+    this.endpoint = endpoint.replace(/\/$/, '')
+  }
+
+  transform(path: URL | string): string {
+    const url = new URL(path, 'http://localhost')
     const q = Number.parseInt(url.searchParams.get('q') ?? '') || undefined
     const { width: w, height: h } = getSize(
       url.searchParams.get('w'),
@@ -32,7 +37,7 @@ export class ImagekitResourceProvider implements ResourceProvider {
       newURL.searchParams.delete(param)
     }
 
-    return new URL(newURL.href.replace(newURL.origin + '/', this.endpoint))
+    return newURL.href.replace(newURL.origin, this.endpoint)
   }
 }
 

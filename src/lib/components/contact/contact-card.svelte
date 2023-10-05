@@ -2,20 +2,22 @@
   import { faClock, faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
   import Icon from '$core/components/icon.svelte'
-  import Image from '$core/components/image.svelte'
   import type { Api } from '$lib/api'
+  import { getStaticMapURL } from '$lib/services/map'
 
   export let data: Api.Information
 
   type MapConfig = { lon: number; lat: number; zoom: number; width: number; height: number }
 
-  function getMap({ lon, lat, zoom, width, height }: MapConfig) {
-    const searchParams = new URLSearchParams()
-    searchParams.set('z', zoom.toString())
-    searchParams.set('w', width.toString())
-    searchParams.set('h', height.toString())
-
-    return `/api/map/${lon},${lat}?${searchParams.toString()}`
+  function getMap({ lon, lat, zoom, width, height }: MapConfig): string {
+    return getStaticMapURL({
+      lon,
+      lat,
+      zoom,
+      width,
+      height,
+      marker: { label: 'circle', color: '8471b1' },
+    }).href
   }
 
   function getScheduleStatus(schedules: Api.InformationSchedule[]) {
@@ -43,7 +45,13 @@
 <section
   class="max-w-screen-sm border rounded elevation-low md:max-w-xs bg-surface-2-bg text-surface-2-fg border-surface-1-border overflow-clip min-w-min">
   <a class="map-link" target="_blank" rel="noreferrer" href="https://goo.gl/maps/ReoWcHB4Ae6swoeHA">
-    <Image src={mapSrc} width={mapConfig.width} height={mapConfig.height} alt="" fit="cover" />
+    <img
+      class="object-cover w-full h-full"
+      src={mapSrc}
+      width={mapConfig.width}
+      height={mapConfig.height}
+      alt=""
+      loading="lazy" />
     <span class="sr-only">Mapa de ubicación</span>
   </a>
 

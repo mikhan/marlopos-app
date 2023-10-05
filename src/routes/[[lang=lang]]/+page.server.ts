@@ -23,3 +23,4 @@ export const load = (async ({ url, params }) => {
 
 export const entries: EntryGenerator = () =>
   LANGUAGE_CODES.map((lang) => ({ lang: isDefaultLanguage(lang) ? '' : lang }))
+// export const csr = false

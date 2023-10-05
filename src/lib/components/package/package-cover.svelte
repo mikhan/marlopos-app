@@ -19,8 +19,8 @@
     priority={true}
     srcset={[
       { w: 480, h: 864, q: 50 },
-      { w: 960, h: 864, q: 75 },
-      { w: 1280, h: 864, q: 100 },
+      { w: 1024, h: 864, q: 75 },
+      { w: 1536, h: 864, q: 100 },
     ]}>
     <Blurhash
       class="object-cover w-full h-full animate-pulse"

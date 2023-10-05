@@ -30,7 +30,7 @@
       alt={data.cover.title}
       srcset={[
         { w: 120, h: 120, q: 50 },
-        { w: 384, ar: '16-9' },
+        { w: 384, h: 216 },
       ]}
       sizes="(min-width: 768px) 384px, (min-width: 384px) 120px, 384px">
       <Blurhash class="object-cover w-full h-full" hash={data.cover.blurhash} width={320} height={180} />

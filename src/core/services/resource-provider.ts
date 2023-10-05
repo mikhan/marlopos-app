@@ -1,8 +1,8 @@
 export interface ResourceProvider {
-  transform: (url: URL) => URL
+  transform: (path: URL | string) => string
 }
 
-let resourceProvider: ResourceProvider = { transform: (url) => url }
+let resourceProvider: ResourceProvider = { transform: (path) => (typeof path === 'string' ? path : path.href) }
 
 export function setResourceProvider(provider: ResourceProvider): void {
   resourceProvider = provider
@@ -12,11 +12,11 @@ export function getResourceProvider(): ResourceProvider {
   return resourceProvider
 }
 
-export function transformURL(url: URL): URL {
-  return resourceProvider.transform(url)
+export function transformURL(path: URL | string): string {
+  return resourceProvider.transform(path)
 }
 
-export type getResourceURLOptions = {
+export type ResourceURLOptions = {
   width?: number
   height?: number
   aspectRatio?: string
@@ -24,7 +24,7 @@ export type getResourceURLOptions = {
   name?: string
 }
 
-export function getResourceURL(origin: string, filename: string, options: getResourceURLOptions = {}): URL {
+export function getResourceURL(origin: string, filename: string, options: ResourceURLOptions = {}): URL {
   if (options.name) {
     const name = encodeURIComponent(options.name.replace(/ /g, '-'))
     filename = filename.replace(/([^/.]+)\.(.+)$/, (_, filename, ext) => `seo/${filename}/${name}.${ext}`)
@@ -40,9 +40,9 @@ export function getResourceURL(origin: string, filename: string, options: getRes
   return url
 }
 
-export function getResourceHref(filename: string, options: getResourceURLOptions = {}): string {
+export function getResourceHref(path: string, options: ResourceURLOptions = {}): string {
   const origin = 'http://localhost'
-  const url = getResourceURL(origin, filename, options)
+  const url = getResourceURL(origin, path, options)
 
   return url.href.substring(origin.length)
 }
