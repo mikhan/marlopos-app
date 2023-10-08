@@ -54,7 +54,7 @@
     "isomorphic-dompurify": "^1.8.0",
     "mapbox-gl": "^2.15.0",
     "minisearch": "^6.1.0",
-    "postcss": "^8.4.30",
+    "postcss": "^8.4.31",
     "postcss-import": "^15.1.0",
     "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.1",
