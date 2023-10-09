@@ -23,7 +23,7 @@
 </script>
 
 <div
-  class="flex flex-col border divide-y rounded elevation-low bg-surface-1-bg overflow-clip text-surface-1-fg divide-surface-1-border border-surface-1-border">
+  class="flex flex-col overflow-hidden border divide-y rounded elevation-low bg-surface-1-bg text-surface-1-fg divide-surface-1-border border-surface-1-border">
   <div class="grid grid-cols-2 divide-x bg-surface-2-bg divide-surface-2-border">
     <div class="px-4 py-2 font-bold text-center uppercase md:px-8 md:py-4">Salida</div>
     <div class="px-4 py-2 font-bold text-center uppercase md:px-8 md:py-4">Regreso</div>

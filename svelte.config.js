@@ -17,7 +17,6 @@ const config = {
     alias: {
       $core: 'src/core',
       $translations: 'src/translations',
-      $tailwind: 'tools/tailwind/config.cjs',
     },
   },
 }

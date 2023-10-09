@@ -1,4 +1,5 @@
 import { getBlurHashColor } from '$core/utils/image'
+import type { Api } from '$lib/api'
 import { notFound } from '$lib/services/server'
 import { api } from '../services/api'
 import type { Language } from '../utils/language'

@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { mod } from '$core/utils/math'
+import type { Api } from '$lib/api'
 import { weekdays } from '$lib/constants/calendar'
 import { api } from '$lib/services/api'
 

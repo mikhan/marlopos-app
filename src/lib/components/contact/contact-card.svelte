@@ -37,13 +37,13 @@
   }
 
   const [lon, lat] = data.coordinates
-  const mapConfig = { lon, lat, zoom: 14, width: 320, height: 240 }
+  const mapConfig = { lon, lat, zoom: 14, width: 480, height: 360 }
   const mapSrc = getMap(mapConfig)
   const scheduleStatus = getScheduleStatus(data.schedule)
 </script>
 
 <section
-  class="max-w-screen-sm border rounded elevation-low md:max-w-xs bg-surface-2-bg text-surface-2-fg border-surface-1-border overflow-clip min-w-min">
+  class="max-w-screen-sm border rounded elevation-low md:max-w-xs bg-surface-2-bg text-surface-2-fg border-surface-1-border overflow-hidden min-w-min">
   <a class="map-link" target="_blank" rel="noreferrer" href="https://goo.gl/maps/ReoWcHB4Ae6swoeHA">
     <img
       class="object-cover w-full h-full"

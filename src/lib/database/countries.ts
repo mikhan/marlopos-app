@@ -1,5 +1,6 @@
 import { unique } from '$core/utils/array'
 import { getBlurHashColor } from '$core/utils/image'
+import type { Api } from '$lib/api'
 import { api } from '$lib/services/api'
 
 export async function getCountriesPreview(): Promise<Api.CountryPreview[]> {

@@ -10,9 +10,6 @@ switch (PUBLIC_IMAGE_CDN_PROVIDER) {
   case 'imagekit':
     setResourceProvider(new ImagekitResourceProvider(PUBLIC_IMAGE_CDN_ENDPOINT))
     break
-
-  default:
-    throw new Error('No CDN resource provider configured')
 }
 
 addDocumentIndexProvider('packages', packagesIndexProvider)
@@ -20,7 +17,8 @@ addDocumentIndexProvider('packages', packagesIndexProvider)
 export const handle = handleLanguage
 
 export const handleError = (({ error }) => {
-  console.error(error)
+  const message = error instanceof Object && 'message' in error ? `Error: ${error.message}` : error
+  console.error(message)
 
   return { message: 'Ha ocurrido un error' }
 }) satisfies HandleServerError

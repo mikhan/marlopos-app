@@ -1,3 +1,4 @@
+import type { Api } from '$lib/api'
 import { api } from '../services/api'
 import type { Language } from '../utils/language'
 

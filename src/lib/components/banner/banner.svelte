@@ -213,7 +213,7 @@
       background-color: theme('colors.surface-2.fg');
       outline: 2px solid transparent;
       outline-offset: 8px;
-      transition-property: scale, opacity, outline-color, outline-offset;
+      transition-property: transform, opacity, outline-color, outline-offset;
       transition-duration: 150ms, 150ms, 150ms, 250ms;
       transition-timing-function: theme('transitionTimingFunction.in');
       opacity: 0.2;
@@ -221,14 +221,14 @@
       @media (pointer: fine) {
         width: theme('spacing.3');
         height: theme('spacing.3');
-        scale: 0.5;
+        transform: scale(0.5);
         opacity: 0.5;
       }
     }
 
     &[aria-selected='true'] {
       &::before {
-        scale: 1;
+        transform: scale(1);
         opacity: 1;
       }
     }

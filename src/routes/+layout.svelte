@@ -26,8 +26,6 @@
 
   $: if ($page.data.metadata) {
     metadataStore.set($page.data.metadata)
-  } else {
-    throw new Error(`No metadata defined for page ${$page.url.href}`)
   }
 
   onNavigate((navigation) => {
@@ -42,11 +40,9 @@
   })
 </script>
 
-<AppMetadata />
-
 <UiShell>
+  <AppMetadata />
   <AppTopbar />
   <slot />
+  <Chat propertyId={PUBLIC_TAWK_PROPERTY_ID} chatId={PUBLIC_TAWK_CHAT_ID} />
 </UiShell>
-
-<Chat propertyId={PUBLIC_TAWK_PROPERTY_ID} chatId={PUBLIC_TAWK_CHAT_ID} />

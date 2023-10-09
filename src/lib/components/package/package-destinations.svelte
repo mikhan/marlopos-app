@@ -36,7 +36,7 @@
   </ul>
   <div class="_map">
     <div
-      class="w-full h-full border rounded focusable-within focusable-ring bg-surface-1-bg border-surface-1-border overflow-clip elevation-low">
+      class="w-full h-full border rounded focusable-within focusable-ring bg-surface-1-bg border-surface-1-border overflow-hidden elevation-low">
       <PackageMap class="w-full h-full" {data} bind:this={packageMap} bind:isFullscreen />
     </div>
   </div>

@@ -1,3 +1,5 @@
+import type { Api } from '$lib/api'
+
 export const weekdays: Record<Api.Weekday, number> = {
   monday: 1,
   tuesday: 2,

@@ -154,6 +154,7 @@
 <style lang="postcss">
   :global([data-component='ui-carousel']) {
     position: relative;
+    outline: none;
   }
 
   .slides {
