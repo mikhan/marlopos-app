@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { Action } from 'svelte/action'
-  import { clamp } from '$core/utils/math'
-  import background from '$lib/assets/services-1.jpg'
+  import backgroundLgJpeg from './services-1-lg.jpg?format=jpg&as=url'
+  import backgroundLgWebp from './services-1-lg.jpg?format=webp&as=url'
+  import backgroundSmJpeg from './services-1-sm.jpg?format=jpg&as=url'
+  import backgroundSmWebp from './services-1-sm.jpg?format=webp&as=url'
 
   const parallax: Action<HTMLElement> = (element) => {
     const abortController = new AbortController()
@@ -10,8 +12,8 @@
     function onScroll() {
       const limit = element.clientHeight + window.innerHeight
       const offset = window.scrollY - (element.offsetTop - window.innerHeight)
-      const position = clamp(0, 1, offset / limit)
-      element.style.setProperty('--parallax-position', String(position))
+      const position = offset / limit
+      element.style.setProperty('--parallax-position', position.toFixed(2))
     }
 
     const observer = new IntersectionObserver(
@@ -21,7 +23,7 @@
         active = entry.isIntersecting
 
         if (active) {
-          window.addEventListener('scroll', onScroll, { signal: abortController.signal })
+          window.addEventListener('scroll', onScroll, { signal: abortController.signal, passive: true })
         } else {
           window.removeEventListener('scroll', onScroll)
         }
@@ -34,6 +36,8 @@
       observer.disconnect()
     }
 
+    onScroll()
+
     return {
       destroy: () => abortController.abort(),
     }
@@ -41,8 +45,13 @@
 </script>
 
 <article use:parallax>
-  <picture>
-    <img src={background} alt="" class="object-cover w-full h-full" width={1280} height={720} loading="lazy" />
+  <picture class="block sm:hidden">
+    <source srcset={backgroundSmWebp} type="image/webp" />
+    <img src={backgroundSmJpeg} alt="" class="object-cover w-full h-full" loading="lazy" />
+  </picture>
+  <picture class="hidden sm:block">
+    <source srcset={backgroundLgWebp} type="image/webp" />
+    <img src={backgroundLgJpeg} alt="" class="object-cover w-full h-full" loading="lazy" />
   </picture>
   <p class="leading-relaxed text-center text-white text-balance text-xl-fluid font-display">
     Contamos con más de <strong class="bg-[hsl(172_38%_46%)] px-3 py-1 rounded whitespace-nowrap"
@@ -52,7 +61,7 @@
 
 <style lang="postcss">
   article {
-    --parallax-offset: calc(864px - theme('screens.sm'));
+    --parallax-offset: calc(720px - theme('screens.sm'));
     --parallax-position: 0px;
     position: relative;
     display: grid;

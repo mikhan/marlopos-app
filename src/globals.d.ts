@@ -25,3 +25,31 @@ declare module '*.svg?dataurl' {
   const content: string
   export default content
 }
+
+declare module '*&imgs' {
+  const content: string[]
+  export default content
+}
+
+declare module '*&as=url' {
+  const content: string
+  export default content
+}
+
+declare module '*&as=picture' {
+  const content: {
+    img: { src: string; w: number; h: number }
+    sources: { [type: string]: { src: string; w: number }[] }
+  }
+  export default content
+}
+
+declare module '*&as=source' {
+  const content: { src: string; w: number }
+  export default content
+}
+
+declare module '*&as=srcset' {
+  const content: string
+  export default content
+}

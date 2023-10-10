@@ -1,11 +1,14 @@
 <script lang="ts">
   import { browser } from '$app/environment'
+  import Lazy from '$core/components/lazy.svelte'
+  import { matchMedia } from '$core/stores/match-media'
   import type { Api } from '$lib/api'
+  import { type CreateMapOptions, getStaticMapURL } from '$lib/services/map'
   import PackageDestination from './package-destination.svelte'
-  import PackageMap from './package-map.svelte'
+  import type PackageMap from './package-map.svelte'
 
   export let data: Api.Destination[]
-  let packageMap: PackageMap
+  let packageMap: PackageMap | undefined
   let container: HTMLElement
   let isFullscreen = false
 
@@ -24,6 +27,17 @@
   }
 
   $: syncFullscreen(isFullscreen)
+
+  const showInteractiveMap = matchMedia('(min-width: 480px)')
+
+  const mapConfig: CreateMapOptions = {
+    center: 'auto',
+    width: 480,
+    height: 480,
+    markers: data.map(({ coordinates: [lon, lat] }) => ({ lon, lat, label: 'circle', color: '8471b1' })),
+  }
+
+  const mapSrc = getStaticMapURL(mapConfig).href
 </script>
 
 <svelte:document on:fullscreenchange={onFullscreenChange} />
@@ -36,8 +50,17 @@
   </ul>
   <div class="_map">
     <div
-      class="w-full h-full border rounded focusable-within focusable-ring bg-surface-1-bg border-surface-1-border overflow-hidden elevation-low">
-      <PackageMap class="w-full h-full" {data} bind:this={packageMap} bind:isFullscreen />
+      class="relative w-full h-full overflow-hidden border rounded focusable-within focusable-ring bg-surface-1-bg border-surface-1-border elevation-low">
+      {#if $showInteractiveMap || isFullscreen}
+        <Lazy this={() => import('./package-map.svelte')} let:Component={PackageMap}>
+          <PackageMap class="w-full h-full" {data} bind:this={packageMap} bind:isFullscreen />
+        </Lazy>
+      {:else}
+        <button class="absolute inset-0 outline-none" on:click={() => (isFullscreen = true)}>
+          <img class="object-contain w-full h-full" src={mapSrc} alt="" loading="lazy" />
+          <span class="sr-only">Mostrar mapa interactivo</span>
+        </button>
+      {/if}
     </div>
   </div>
 </div>
@@ -61,8 +84,11 @@
 
     &._fullscreen {
       overflow-y: auto;
-      padding-inline: theme('spacing.4');
       background-color: theme('colors.canvas.bg');
+
+      @media (min-width: theme('screens.md')) {
+        padding-inline: theme('spacing.4');
+      }
 
       ._destinations {
         display: none;
@@ -101,7 +127,7 @@
 
   ._map {
     width: 100%;
-    height: theme('spacing.96');
+    aspect-ratio: 1;
 
     @media (min-width: theme('screens.md')) {
       height: 100%;

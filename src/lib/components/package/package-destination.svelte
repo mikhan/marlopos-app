@@ -8,17 +8,17 @@
   import type PackageMap from './package-map.svelte'
 
   export let data: Api.Destination
-  export let packageMap: PackageMap
+  export let packageMap: PackageMap | undefined
 </script>
 
 <li
   id={`destination-${slugify(data.name)}`}
   tabindex="0"
   role="tab"
-  on:mouseover={() => packageMap.highlightDestination(data.id)}
-  on:mouseout={(event) => !event.currentTarget.matches(':focus') && packageMap.highlightDestination()}
-  on:focus={() => packageMap.focusDestination(data.id)}
-  on:blur={() => packageMap.focusDestination()}>
+  on:mouseover={() => packageMap?.highlightDestination(data.id)}
+  on:mouseout={(event) => packageMap && !event.currentTarget.matches(':focus') && packageMap.highlightDestination()}
+  on:focus={() => packageMap?.focusDestination(data.id)}
+  on:blur={() => packageMap?.focusDestination()}>
   <picture>
     <Image
       class="w-full h-full"

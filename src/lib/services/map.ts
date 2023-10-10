@@ -1,6 +1,6 @@
 import { PUBLIC_MAPBOX_ACCESS_TOKEN, PUBLIC_MAPBOX_STYLE, PUBLIC_MAPBOX_USER } from '$env/static/public'
 
-type CreateMarkerOptions = {
+export type CreateMarkerOptions = {
   lon: number
   lat: number
   label?: string
@@ -8,21 +8,42 @@ type CreateMarkerOptions = {
   color?: string
 }
 
-type CreateMapOptions = {
+export type CreateMapOptions = {
   width: number
   height: number
-  lon: number
-  lat: number
-  zoom: number
-  marker?: Omit<CreateMarkerOptions, 'lat' | 'lon'>
+  markers?: CreateMarkerOptions[]
+  center:
+    | {
+        lon: number
+        lat: number
+        zoom: number
+      }
+    | [number, number, number, number]
+    | 'auto'
 }
 
-export function getStaticMapURL({ lon, lat, zoom, width, height, marker }: CreateMapOptions) {
-  let href = `https://api.mapbox.com/styles/v1/${PUBLIC_MAPBOX_USER}/${PUBLIC_MAPBOX_STYLE}/static`
+export function getStaticMapURL({ center, width, height, markers }: CreateMapOptions) {
+  const url = new URL(`https://api.mapbox.com/styles/v1/${PUBLIC_MAPBOX_USER}/${PUBLIC_MAPBOX_STYLE}/static`)
 
-  if (marker) href += `/${createMarker({ lon, lat, ...marker })}`
+  if (markers?.length) {
+    url.pathname += '/' + markers.map(createMarker).join(',')
+  }
 
-  return new URL(`${href}/${lon},${lat},${zoom}/${width}x${height}?access_token=${PUBLIC_MAPBOX_ACCESS_TOKEN}`)
+  if (center === 'auto') {
+    url.pathname += `/auto`
+  } else if (Array.isArray(center)) {
+    url.pathname += `/[${center.join(',')}]`
+  } else {
+    url.pathname += `/${center.lon},${center.lat},${center.zoom}`
+  }
+
+  url.pathname += `/${width}x${height}`
+
+  url.searchParams.set('access_token', PUBLIC_MAPBOX_ACCESS_TOKEN)
+  url.searchParams.set('logo', 'false')
+  url.searchParams.set('attribution', 'false')
+
+  return url
 }
 
 function createMarker({ lon, lat, label, size = 'small', color }: CreateMarkerOptions) {

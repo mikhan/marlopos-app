@@ -7,7 +7,8 @@
   import { disableDocumentScrolling, enableDocumentScrolling } from '$core/services/popup'
   import { matchMedia } from '$core/stores/match-media'
   import { generateUID } from '$core/utils/element'
-  import logotipo from '$lib/assets/logotipo.png'
+  import logotipo from '$lib/assets/logotipo.png?w=32&h=32&as=url'
+  import logotipoWebp from '$lib/assets/logotipo.png?w=32&h=32&format=webp&as=url'
   import AppNavigationProgress from '$lib/components/app/app-navigation-progress.svelte'
   import Omnibox from '../search/omnibox.svelte'
   import AppTopbarLink from './app-topbar-link.svelte'
@@ -77,7 +78,10 @@
       </button>
     {/if}
     <a class="app-topbar-logo" href="/" data-sveltekit-preload-data>
-      <img class="w-auto h-8" src={logotipo} width="84" height="84" alt="Viajes Marlopos logo" />
+      <picture>
+        <source srcset={logotipoWebp} type="image/webp" />
+        <img class="w-8 h-8" src={logotipo} width="32" height="32" alt="Viajes Marlopos logo" />
+      </picture>
       <span class="font-bold tracking-wider uppercase">Viajes Marlopos</span>
     </a>
     <div class="ml-auto app-topbar-search">
@@ -194,7 +198,7 @@
       max-width: theme('screens.xl');
       top: 0;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateZ(0);
       pointer-events: none;
       background-image: linear-gradient(to right, #a87ffb, #25a6e9);
       filter: blur(128px);
