@@ -1,3 +1,3 @@
 export function writeToClipboard(value: string) {
-  navigator.clipboard.writeText(value)
+  return navigator.clipboard.writeText(value)
 }

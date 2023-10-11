@@ -26,7 +26,6 @@
     load: HTMLImageElement
   }>()
 
-  const loading = priority ? 'eager' : 'lazy'
   let loaded = false
 
   function onLoad(image: HTMLImageElement) {
@@ -80,16 +79,25 @@
   let showCover = $$slots.default
 
   onMount(() => {
+    const abortController = new AbortController()
+
     if (image.complete) {
       onLoad(image)
     } else {
       if (showCover) image.classList.add('_reveal')
-      image.addEventListener('load', () => onLoad(image), { once: true })
+      image.addEventListener('load', (event) => onLoad(event.target as HTMLImageElement), {
+        once: true,
+        signal: abortController.signal,
+      })
+    }
+
+    return function () {
+      abortController.abort()
     }
   })
 </script>
 
-<div class={'_wrapper ' + className} style:background-color={color}>
+<div class="_wrapper {className}" style:background-color={color}>
   {#if showCover}
     <div class="_overlay">
       <slot {loaded} />
@@ -98,7 +106,7 @@
   <img
     bind:this={image}
     style:object-fit={fit}
-    {loading}
+    loading={priority ? 'eager' : 'lazy'}
     src={_src}
     {width}
     {height}
