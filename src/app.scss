@@ -17,6 +17,8 @@
 
 body {
   font-family: theme('fontFamily.sans');
+  font-size: theme('fontSize.base[0]');
+  line-height: theme('fontSize.base[1]');
   background-color: theme('colors.neutral.900');
   color: theme('colors.canvas.fg');
 

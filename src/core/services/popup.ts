@@ -1,20 +1,27 @@
 import { browser } from '$app/environment'
-import { overrideProperties } from './element'
 
-let restoreProperties: (() => void) | undefined
+let locks = 0
 
 export function disableDocumentScrolling() {
   if (!browser) return
 
-  restoreProperties = overrideProperties(document.body, {
-    'padding-block-end': `${window.innerHeight - document.body.clientHeight}px`,
-    'padding-inline-end': `${window.innerWidth - document.body.clientWidth}px`,
-    'overflow': 'hidden',
-  })
+  locks++
+
+  if (locks === 1) {
+    document.body.style.setProperty('padding-block-end', `${window.innerHeight - document.body.clientHeight}px`)
+    document.body.style.setProperty('padding-inline-end', `${window.innerWidth - document.body.clientWidth}px`)
+    document.body.style.setProperty('overflow', 'hidden')
+  }
 }
 
 export function enableDocumentScrolling() {
-  if (!browser || !restoreProperties) return
+  if (!browser) return
 
-  restoreProperties()
+  locks = Math.max(0, locks - 1)
+
+  if (locks === 0) {
+    document.body.style.removeProperty('padding-block-end')
+    document.body.style.removeProperty('padding-inline-end')
+    document.body.style.removeProperty('overflow')
+  }
 }
