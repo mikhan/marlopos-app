@@ -6,121 +6,183 @@ import type { Language } from '../utils/language'
 
 export async function getPackage(options: { language: Language; id: string }): Promise<Api.Package> {
   const { data, error } = await api
-    .from('package_translations')
+    .from('package')
     .select(
       `
       id,
-      name,
-      description,
-      content,
-      package (
-        cover (
+      translations:package_translations!inner (
+        name,
+        price,
+        description,
+        content,
+        notes        
+      ),
+      cover (
+        id:filename_disk,
+        title,
+        width,
+        height,
+        blurhash
+      ),
+      schedule:package_schedule (
+        order,
+        start,
+        end
+      ),
+      destinations:package_destination (
+        days,
+        nights,
+        destination (
+          id,
+          coordinates->coordinates,
+          cover (
+            id:filename_disk,
+            title,
+            width,
+            height,
+            blurhash
+          ),
+          translations:destination_translations!inner (
+            name,
+            description
+          )
+        )
+      ),
+      gallery:package_gallery (
+        image:directus_files (
           id:filename_disk,
           title,
           width,
           height,
           blurhash
-        ),
-        package_schedule (
-          order,
-          start,
-          end
-        ),
-        package_destination!inner (
-          days,
-          nights,
-          destination!inner (
-            id,
-            coordinates->coordinates,
-            cover (
-              id:filename_disk,
-              title,
-              width,
-              height,
-              blurhash
-            ),
-            destination_translations!inner (
-              name,
-              description
-            )
-          )
+        )        
+      ),
+      attachments:package_files (
+        attachment:directus_files (
+          id:filename_disk,
+          title,
+          description,
+          type,
+          filesize
         )
       )`,
     )
     .eq('id', options.id)
-    .eq('package.package_destination.destination.destination_translations.languages_code', options.language.locale)
+    .eq('package_translations.languages_code', options.language.locale)
+    .eq('package_destination.destination.destination_translations.languages_code', options.language.locale)
     .throwOnError()
     .returns<
       {
         id: string
-        name: string
-        description: string
-        content: string
-        package: {
-          cover: {
+        destinations: {
+          days: number | null
+          nights: number | null
+          destination: {
+            id: string
+            coordinates: [number, number]
+            cover: {
+              id: string
+              title: string
+              width: number
+              height: number
+              blurhash: string
+            }
+            translations: [
+              {
+                name: string
+                description: string
+              },
+            ]
+          }
+        }[]
+        translations: [
+          {
+            name: string
+            price: string
+            description: string
+            content: string
+            notes: string
+          },
+        ]
+        cover: {
+          id: string
+          title: string
+          width: number
+          height: number
+          blurhash: string
+        }
+        schedule: {
+          order: number
+          start: string
+          end: string
+        }[]
+        gallery: {
+          image: {
             id: string
             title: string
             width: number
             height: number
             blurhash: string
           }
-          package_schedule: {
-            order: number
-            start: string
-            end: string
-          }[]
-          package_destination: {
-            days: number
-            nights: number
-            destination: {
-              id: string
-              coordinates: [number, number]
-              cover: {
-                id: string
-                title: string
-                width: number
-                height: number
-                blurhash: string
-              }
-              destination_translations: {
-                name: string
-                description: string
-              }[]
-            }
-          }[]
-        }
+        }[]
+        attachments: {
+          attachment: {
+            id: string
+            title: string
+            description: string
+            type: string
+            filesize: number
+          }
+        }[]
       }[]
     >()
 
   if (error) throw error
 
-  const [item] = data.map(({ package: { cover, package_schedule, package_destination }, ...rest }) => ({
-    ...rest,
-    cover: { ...cover, color: getBlurHashColor(cover.blurhash) },
-    schedule: package_schedule
-      .sort((a, b) => a.order - b.order)
-      .map(({ start, end }) => ({ start: new Date(start), end: new Date(end) })),
-    destinations: package_destination.map(
-      ({
-        destination: {
+  const [item] = data.map(
+    ({
+      id,
+      translations: [{ name, price, description, content, notes }],
+      cover,
+      destinations,
+      schedule,
+      gallery,
+      attachments,
+    }) => ({
+      id,
+      name,
+      price,
+      description,
+      content,
+      notes,
+      cover: { ...cover, color: getBlurHashColor(cover.blurhash) },
+      schedule: schedule
+        .sort((a, b) => a.order - b.order)
+        .map(({ start, end }) => ({ start: new Date(start), end: new Date(end) })),
+      destinations: destinations.map(
+        ({
+          destination: {
+            id,
+            coordinates,
+            cover,
+            translations: [{ name, description }],
+          },
+          days,
+          nights,
+        }) => ({
           id,
+          name,
+          description,
+          days,
+          nights,
           coordinates,
-          cover,
-          destination_translations: [translation],
-        },
-        days,
-        nights,
-      }) => ({
-        id,
-        name: translation?.name ?? '',
-        description: translation?.description ?? '',
-        days,
-        nights,
-        coordinates,
-        cover: { ...cover, color: getBlurHashColor(cover.blurhash) },
-      }),
-    ),
-  }))
+          cover: { ...cover, color: getBlurHashColor(cover.blurhash) },
+        }),
+      ),
+      gallery: gallery.map(({ image }) => ({ ...image, color: getBlurHashColor(image.blurhash) })),
+      attachments: attachments.map(({ attachment }) => attachment),
+    }),
+  )
 
   if (!item) throw notFound(`No se encontró el paquete`)
 

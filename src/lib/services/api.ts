@@ -1,7 +1,7 @@
 import { type PostgrestError, createClient } from '@supabase/supabase-js'
 import { SUPABASE_TOKEN, SUPABASE_URL } from '$env/static/private'
 import { DEFAULT_LANGUAGE, LANGUAGE_CODES, getLocalizedUrl } from '$lib/utils/language'
-import type { Database } from './database'
+import type { Database } from '../../supabase'
 
 export type ApiResponseBase = { status: number; statusText: string }
 export type ApiResponseError = { data: null; error: PostgrestError } & ApiResponseBase

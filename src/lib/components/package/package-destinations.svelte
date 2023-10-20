@@ -7,7 +7,7 @@
   import PackageDestination from './package-destination.svelte'
   import type PackageMap from './package-map.svelte'
 
-  export let data: Api.Destination[]
+  export let data: Api.PackageDestination[]
   let packageMap: PackageMap | undefined
   let container: HTMLElement
   let isFullscreen = false
@@ -131,7 +131,8 @@
 
     @media (min-width: theme('screens.md')) {
       height: 100%;
-      max-height: calc(100vh - 64px);
+      aspect-ratio: auto;
+      max-height: calc(100vh - var(--layout-topbar-height));
       padding-block: theme('spacing.4');
       position: sticky;
       top: theme('spacing.16');

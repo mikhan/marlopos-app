@@ -73,13 +73,23 @@
     indexStore.subscribe((index) => (indexLoop.index = index))
   }
 
-  let rotation: [number, number, number]
+  let rotation: [number | undefined, number, number | undefined]
   $: createIndexLoop(slides.length, loop)
-  $: rotation = [index === 0 ? indexLoop.size - 1 : index - 1, index, index === indexLoop.size - 1 ? 0 : index + 1]
+  $: rotation = getRotation(index, indexLoop.size)
   $: $documentVisibilityState === 'visible' ? resume() : pause()
 
   let displace = 0
   let width = 0
+
+  function getRotation(index: number, size: number): [number | undefined, number, number | undefined] {
+    if (size === 1) {
+      return [undefined, 0, undefined]
+    } else if (size === 2) {
+      return index === 0 ? [undefined, 0, 1] : [0, 1, undefined]
+    } else {
+      return [index === 0 ? size - 1 : index - 1, index, index === size - 1 ? 0 : index + 1]
+    }
+  }
 
   function onPanStart(event: PanEvent) {
     pause()

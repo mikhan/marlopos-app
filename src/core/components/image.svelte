@@ -10,13 +10,15 @@
 
   export let src: string
   export let alt: string
-  export let width: number
-  export let height: number
+  export let width: number | undefined
+  export let height: number | undefined
   export let srcset: Srcset[] = []
   export let sizes: string | null = null
   export let priority = false
-  export let fit: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' = 'fill'
+  export let fit: 'contain' | 'cover' | undefined = undefined
   export let color: string | null = null
+
+  $: if (fit) width = height = undefined
 
   let image: HTMLImageElement
   let className = ''
@@ -105,7 +107,7 @@
   {/if}
   <img
     bind:this={image}
-    style:object-fit={fit}
+    data-fit={fit}
     loading={priority ? 'eager' : 'lazy'}
     src={_src}
     {width}
@@ -124,16 +126,27 @@
   }
 
   img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
     opacity: 1;
     transition: opacity 500ms;
 
     &._reveal {
       transition-duration: 0ms;
       opacity: 0;
+    }
+
+    &[data-fit] {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    &[data-fit='cover'] {
+      object-fit: cover;
+    }
+
+    &[data-fit='contain'] {
+      object-fit: contain;
     }
   }
 

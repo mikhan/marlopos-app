@@ -1,13 +1,13 @@
 import { PUBLIC_IMAGE_CDN_ENDPOINT } from '$env/static/public'
-import { getBanners } from '$lib/database/banners'
 import { getCountriesPreview } from '$lib/database/countries'
+import { getFeatured } from '$lib/database/featured'
 import { getExternalOrigins, getPageLinks } from '$lib/services/api'
 import { LANGUAGE_CODES, getLanguage, isDefaultLanguage } from '$lib/utils/language'
 import type { EntryGenerator, PageServerLoad } from './$types'
 
 export const load = (async ({ url, params }) => {
   const language = getLanguage(params.lang)
-  const featured = getBanners({ language })
+  const featured = getFeatured({ language })
   const countriesPreview = getCountriesPreview()
 
   return {

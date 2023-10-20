@@ -1,0 +1,52 @@
+<div class="prose">
+  <slot />
+</div>
+
+<style lang="postcss" global>
+  .prose {
+    display: contents;
+    line-height: theme('lineHeight.relaxed');
+
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    h3 {
+      font-size: theme('fontSize.xl[0]');
+      line-height: theme('fontSize.xl[0]');
+    }
+
+    p {
+      margin-top: theme('spacing.5');
+    }
+
+    blockquote {
+      margin-top: theme('spacing.5');
+      border-inline-start: theme('spacing[1.5]') solid theme('colors.neutral.500');
+      padding-block: theme('spacing.2');
+      padding-inline: theme('spacing.6');
+      background-color: theme('colors.neutral.700');
+      color: theme('colors.neutral.700-fg');
+      border-radius: theme('borderRadius.DEFAULT');
+    }
+
+    ul {
+      list-style-type: disc;
+      margin-top: theme('spacing.5');
+      padding-left: theme('spacing.6');
+    }
+
+    li {
+      padding-left: theme('spacing[1.5]');
+      margin-block: theme('spacing.2');
+
+      &::marker {
+        opacity: 0.75;
+      }
+    }
+
+    a[href] {
+      @apply link;
+    }
+  }
+</style>

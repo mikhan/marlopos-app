@@ -42,7 +42,8 @@
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background-image: linear-gradient(0deg, theme('colors.canvas.bg'), transparent 30%),
+      background-image: linear-gradient(0deg, theme('colors.canvas.bg'), transparent 50%),
+        linear-gradient(0deg, theme('colors.canvas.bg'), transparent 25%),
         radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 30%, transparent 75%);
     }
   }

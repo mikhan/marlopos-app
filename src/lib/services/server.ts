@@ -1,3 +1,3 @@
 import { error } from '@sveltejs/kit'
 
-export const notFound = (mesage: string) => error(404, mesage)
+export const notFound = (message: string) => error(404, message)

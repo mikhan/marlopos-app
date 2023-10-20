@@ -1,6 +1,6 @@
 <script lang="ts">
   import { faFacebook, faTwitter, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-  import { faEnvelope, faLink, faShareNodes } from '@fortawesome/free-solid-svg-icons'
+  import { faEllipsis, faEnvelope, faLink, faShareNodes } from '@fortawesome/free-solid-svg-icons'
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import UiMenuDivider from '$core/components/menu/ui-menu-divider.svelte'
@@ -96,8 +96,8 @@
     <UiMenuDivider />
 
     <UiMenuItem on:click={share}>
-      <Fa class="mr-2" fw icon={faShareNodes} />
-      <span>Más opciones...</span>
+      <Fa class="mr-2" fw icon={faEllipsis} />
+      <span>Más opciones</span>
     </UiMenuItem>
   {/if}
 </UiMenu>

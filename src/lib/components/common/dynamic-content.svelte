@@ -1,23 +1,31 @@
 <script lang="ts">
-  import DOMPurify from 'isomorphic-dompurify'
+  import SvelteMarkdown from 'svelte-markdown'
 
-  export let html = ''
+  export let source: string
 </script>
 
 <div>
-  {@html DOMPurify.sanitize(html, { ALLOWED_TAGS: ['p', 'li', 'a'] })}
+  <SvelteMarkdown {source} />
+  <slot />
 </div>
 
 <style lang="postcss">
-  div :global(p) {
-    line-height: theme('lineHeight.relaxed');
-  }
+  div {
+    display: contents;
 
-  div :global(p:not(:first-child)) {
-    margin-top: 1lh;
-  }
+    :global() {
+    }
 
-  div :global(a[href]) {
-    @apply link;
+    :global(p) {
+      line-height: theme('lineHeight.relaxed');
+    }
+
+    :global(p:not(:first-child)) {
+      margin-top: 1rem;
+    }
+
+    :global(a[href]) {
+      @apply link;
+    }
   }
 </style>

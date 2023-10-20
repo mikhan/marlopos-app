@@ -14,7 +14,7 @@ export function linkPlugin() {
         'transition-property': 'outline-color, outline-offset',
         'transition-duration': '150ms, 250ms',
         'border-radius': theme('borderRadius.DEFAULT'),
-        '&:is(:hover, :active)': {
+        '&:hover': {
           'text-decoration': 'underline',
         },
         '&:focus-visible': {

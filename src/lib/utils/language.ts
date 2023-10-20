@@ -11,7 +11,7 @@ export type LanguagesSupported = Record<LanguageCode, Language>
 export const LANGUAGE_CODES: LanguageCode[] = ['es', 'en']
 
 export const LANGUAGES: LanguagesSupported = {
-  es: { code: 'es', locale: 'es-ES', name: 'Español' },
+  es: { code: 'es', locale: 'es-MX', name: 'Español' },
   en: { code: 'en', locale: 'en-US', name: 'English' },
 } satisfies { [K in LanguageCode]: Language & { code: K; locale: `${K}-${string}` } }
 

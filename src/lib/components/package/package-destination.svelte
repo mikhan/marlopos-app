@@ -1,13 +1,14 @@
 <script lang="ts">
+  import SvelteMarkdown from 'svelte-markdown'
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
   import { getResourceHref } from '$core/services/resource-provider'
   import { slugify } from '$core/utils/string'
   import type { Api } from '$lib/api'
-  import DynamicContent from '$lib/components/common/dynamic-content.svelte'
+  import Prose from '../common/prose.svelte'
   import type PackageMap from './package-map.svelte'
 
-  export let data: Api.Destination
+  export let data: Api.PackageDestination
   export let packageMap: PackageMap | undefined
 </script>
 
@@ -36,9 +37,19 @@
       <Blurhash class="object-cover w-full h-full" hash={data.cover.blurhash} width={320} height={180} />
     </Image>
   </picture>
-  <div class="_content">
-    <h1 class="text-2xl">{data.name}</h1>
-    <DynamicContent html={data.description} />
+  <div class="md:p-4">
+    <Prose>
+      <h3>{data.name}</h3>
+      <div>
+        {#if data.days}
+          <small>{data.days} días</small>
+        {/if}
+        {#if data.nights}
+          <small>{data.nights} noches</small>
+        {/if}
+      </div>
+      <SvelteMarkdown source={data.description} />
+    </Prose>
   </div>
 </li>
 
@@ -75,24 +86,17 @@
     aspect-ratio: 16/9;
     flex-shrink: 0;
     overflow: hidden;
+    border-radius: theme('borderRadius.DEFAULT');
 
-    @media (theme('screens.sm') <= width < theme('screens.md')) {
-      aspect-ratio: 1/1;
+    @media (min-width: theme('screens.sm')) {
       width: theme('spacing.32');
+      aspect-ratio: 1/1;
     }
 
-    @media (width < theme('screens.md')) {
-      border-radius: theme('borderRadius.DEFAULT');
-    }
-  }
-
-  ._content {
-    display: flex;
-    flex-direction: column;
-    gap: theme('spacing.4');
-
-    @media (theme('screens.md') <= width) {
-      padding: theme('spacing.4');
+    @media (min-width: theme('screens.md')) {
+      width: auto;
+      aspect-ratio: 16/9;
+      border-radius: 0;
     }
   }
 </style>

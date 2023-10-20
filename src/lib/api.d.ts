@@ -2,11 +2,15 @@ export namespace Api {
   export type Package = {
     id: string
     name: string
+    price: string
     description: string
     content: string
+    notes: string
     cover: Image
     schedule: PackageSchedule[]
-    destinations: Destination[]
+    destinations: PackageDestination[]
+    gallery: Image[]
+    attachments: PackageAttachment[]
   }
 
   export type PackageSchedule = {
@@ -14,12 +18,23 @@ export namespace Api {
     end: Date
   }
 
+  export type PackageDestination = {
+    days: number | null
+    nights: number | null
+  } & Destination
+
+  export type PackageAttachment = {
+    id: string
+    title: string
+    type: string
+    filesize: number
+  }
+
   export type Destination = {
     id: string
     name: string
     description: string
     cover: Image
-    //photos: Image[]
     coordinates: [lng: number, lat: number]
   }
 
@@ -33,6 +48,7 @@ export namespace Api {
   }
 
   export type Banner = {
+    type: string
     id: string
     name: string
     description: string
