@@ -2,7 +2,7 @@
   import { afterNavigate } from '$app/navigation'
   import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
   import { onMount } from 'svelte'
-  import Fa from 'svelte-fa'
+  import IconButton from '$core/components/icon-button.svelte'
   import { getUiShellContext } from '$core/components/shell/ui-shell.svelte'
   import { disableDocumentScrolling, enableDocumentScrolling } from '$core/services/popup'
   import { matchMedia } from '$core/stores/match-media'
@@ -67,22 +67,20 @@
   bind:this={container}>
   <div class="app-topbar-content layout-lg">
     {#if $collapsed}
-      <button
-        class="app-topbar-menu-button"
-        on:click={() => (menuExpanded = !menuExpanded)}
+      <IconButton
+        icon={menuExpanded ? faTimes : faBars}
         title={menuExpanded ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
+        on:click={() => (menuExpanded = !menuExpanded)}
         aria-haspopup="true"
         aria-expanded={menuExpanded}
-        aria-controls={navigationMenuId}>
-        <Fa icon={menuExpanded ? faTimes : faBars} />
-      </button>
+        aria-controls={navigationMenuId} />
     {/if}
     <a class="app-topbar-logo" href="/" data-sveltekit-preload-data>
       <picture>
         <source srcset={logotipoWebp} type="image/webp" />
-        <img class="w-8 h-8" src={logotipo} width="32" height="32" alt="Viajes Marlopos logo" />
+        <img src={logotipo} width="32" height="32" alt="Viajes Marlopos logo" />
       </picture>
-      <span class="font-bold tracking-wider uppercase">Viajes Marlopos</span>
+      <span>Viajes Marlopos</span>
     </a>
     <div class="ml-auto app-topbar-search">
       <Omnibox bind:expanded={searchActive} />
@@ -149,21 +147,6 @@
       z-index: -1;
     }
 
-    &.__search-active {
-      .app-topbar-logo,
-      .app-topbar-sections,
-      .app-topbar-menu-button {
-        @media (width < theme('screens.lg')) {
-          display: none;
-        }
-      }
-
-      .app-topbar-search {
-        width: 100%;
-        transition: width 250ms ease-in-out;
-      }
-    }
-
     &.__expanded {
       height: 100dvh;
 
@@ -171,14 +154,6 @@
         background-color: theme('colors.surface-1.bg');
       }
     }
-  }
-
-  .app-topbar-menu-button {
-    display: grid;
-    place-content: center;
-    flex: 0 0 auto;
-    width: theme('spacing.10');
-    height: theme('spacing.10');
   }
 
   .app-topbar-content {
@@ -209,23 +184,54 @@
   }
 
   .app-topbar-logo {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: theme('spacing.8') max-content;
     gap: 8px;
+    align-items: center;
     text-wrap: nowrap;
     flex-shrink: 0;
-    padding: theme('spacing.2');
+    width: 200px;
     outline: none;
     border-radius: theme('borderRadius.DEFAULT');
+    font-weight: theme('fontWeight.bold');
+    letter-spacing: theme('letterSpacing.wider');
+    text-transform: uppercase;
+    opacity: 1;
     @apply focusable-visible focusable-ring;
+    transition-property: outline-color, outline-offset, width, opacity;
+    transition-duration: 150ms, 250ms, 250ms, 250ms;
+
+    span {
+      opacity: 1;
+      transition: opacity 250ms;
+    }
+
+    .app-topbar.__search-active & {
+      @media (width < theme('screens.md')) {
+        width: 0;
+        opacity: 0;
+        margin-right: calc(theme('spacing.4') * -1);
+      }
+      @media (min-width: theme('screens.md')) {
+        width: theme('spacing.8');
+
+        span {
+          opacity: 0;
+        }
+      }
+    }
   }
 
   .app-topbar-search {
     width: theme('spacing.10');
-    transition: width 250ms 250ms ease-in-out;
+    transition: width 250ms ease-in-out;
 
     @media (min-width: theme('screens.md')) {
       width: theme('spacing.44');
+    }
+
+    .app-topbar.__search-active & {
+      width: 100%;
     }
   }
 

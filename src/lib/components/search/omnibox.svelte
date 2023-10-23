@@ -11,7 +11,7 @@
   import { getSearchEngine } from '$lib/services/search'
   import OmniboxSuggestions from './omnibox-suggestions.svelte'
 
-  export let expanded = true
+  export let expanded = false
   export let value = ''
   let query = ''
   let suggestions: string[] | null = null
@@ -106,9 +106,7 @@
           <IconButton icon={faTimes} title="Borrar búsqueda" size="sm" tabindex={-1} on:click={clear} />
         </div>
       {/if}
-      {#if !expanded}
-        <code aria-hidden="true">CTRL+K</code>
-      {/if}
+      <code aria-hidden="true">CTRL+K</code>
     </div>
     {#if expanded && suggestions?.length}
       <OmniboxSuggestions
@@ -123,10 +121,9 @@
   .omnibox-container {
     position: relative;
     width: theme('spacing.10');
-    max-width: theme('maxWidth.prose');
     height: theme('spacing.10');
     z-index: 100;
-    margin-inline: auto;
+    margin-inline-start: auto;
     transition-property: width, scale;
     transition-duration: 250ms;
     transition-timing-function: ease-in-out;
@@ -137,7 +134,6 @@
 
     &:has([aria-expanded='true']) {
       width: 100%;
-      transition-delay: 250ms;
     }
   }
 
@@ -189,6 +185,8 @@
     aspect-ratio: 1/1;
     flex: 0 0 auto;
     position: absolute;
+    left: 0;
+    pointer-events: none;
   }
 
   input {
@@ -197,8 +195,17 @@
     box-shadow: none;
     background: transparent;
     outline: none;
+    opacity: 0;
     padding-left: theme('spacing.10');
     transition: opacity 250ms;
+
+    &[aria-expanded='true'] {
+      opacity: 1;
+    }
+
+    @media (min-width: theme('screens.md')) {
+      opacity: 1;
+    }
   }
 
   code {
@@ -208,6 +215,19 @@
     margin-inline-end: theme('spacing.3');
     border: 1px solid theme('colors.current');
     border-radius: theme('borderRadius.DEFAULT');
-    opacity: 0.5;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    pointer-events: none;
+    transition: opacity 250ms;
+
+    @media (min-width: theme('screens.md')) {
+      transition-delay: 250ms;
+      opacity: 0.5;
+    }
+
+    form:has([aria-expanded='true']) & {
+      opacity: 0;
+    }
   }
 </style>
