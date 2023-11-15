@@ -1,11 +1,24 @@
-export function loadScript(src: string) {
-  if (typeof window === 'undefined') return
+type LoadScriptOptions = {
+  defer?: boolean
+  async?: boolean
+  crossorigin?: string
+}
 
-  const script = document.createElement('script')
-  script.async = true
-  script.crossOrigin = '*'
-  script.src = src
+export function loadScript(src: string, options: LoadScriptOptions = {}): Promise<Event> {
+  if (typeof window === 'undefined') return Promise.reject('Window is not defined')
 
-  const head = document.querySelector('head')
-  head?.append(script)
+  return new Promise((resolve, reject) => {
+    const { async = true, defer = true, crossorigin = '*' } = options
+
+    const script = document.createElement('script')
+    script.async = async
+    script.defer = defer
+    script.crossOrigin = crossorigin
+    script.src = src
+    script.onload = resolve
+    script.onerror = reject
+
+    const container = document.querySelector('head') || document.body
+    container.append(script)
+  })
 }

@@ -9,8 +9,14 @@ export namespace Api {
     cover: Image
     schedule: PackageSchedule[]
     destinations: PackageDestination[]
-    gallery: Image[]
+    gallery: PackageThumbnail[]
     attachments: PackageAttachment[]
+  }
+
+  export type PackageThumbnail = {
+    type: 'image' | 'video'
+    id: string
+    title: string
   }
 
   export type PackageSchedule = {
@@ -27,6 +33,7 @@ export namespace Api {
     id: string
     title: string
     type: string
+    filename: string
     filesize: number
   }
 

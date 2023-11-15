@@ -10,8 +10,8 @@
 
   export let src: string
   export let alt: string
-  export let width: number | undefined
-  export let height: number | undefined
+  export let width: number | undefined = undefined
+  export let height: number | undefined = undefined
   export let srcset: Srcset[] = []
   export let sizes: string | null = null
   export let priority = false
@@ -38,6 +38,10 @@
 
   function getImageSizeFromURL(url: URL) {
     return getImageSize(url.searchParams.get('w'), url.searchParams.get('h'), url.searchParams.get('ar'))
+  }
+
+  function getImageSrc(src: string) {
+    return isAbsoluteURL(src) ? src : transformURL(src)
   }
 
   function getImageSrcset(src: string, srcset: ReadonlyArray<Srcset>): string | null {
@@ -75,10 +79,10 @@
     )
   }
 
-  let _src = transformURL(src)
-  let _srcset = getImageSrcset(src, srcset)
-  let _sizes = _srcset && sizes
-  let showCover = $$slots.default
+  $: _src = getImageSrc(src)
+  $: _srcset = getImageSrcset(src, srcset)
+  $: _sizes = _srcset && sizes
+  const showCover = $$slots.default
 
   onMount(() => {
     const abortController = new AbortController()
@@ -99,30 +103,38 @@
   })
 </script>
 
-<div class="_wrapper {className}" style:background-color={color}>
+<figure class={className} style:--color={color}>
+  <picture>
+    <slot name="source" />
+    <img
+      bind:this={image}
+      data-fit={fit}
+      loading={priority ? undefined : 'lazy'}
+      src={_src}
+      {width}
+      {height}
+      {alt}
+      srcset={_srcset}
+      sizes={_sizes}
+      decoding="async"
+      {...$$restProps} />
+  </picture>
   {#if showCover}
     <div class="_overlay">
       <slot {loaded} />
     </div>
   {/if}
-  <img
-    bind:this={image}
-    data-fit={fit}
-    loading={priority ? 'eager' : 'lazy'}
-    src={_src}
-    {width}
-    {height}
-    {alt}
-    srcset={_srcset}
-    sizes={_sizes}
-    decoding="async"
-    {...$$restProps} />
-</div>
+</figure>
 
 <style lang="postcss">
-  ._wrapper {
-    contain: content;
+  figure {
     position: relative;
+    background-color: var(--color);
+
+    &:has([data-fit]) {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   img {

@@ -9,22 +9,20 @@
 :root {
   color-scheme: dark;
   scroll-behavior: smooth;
-
-  @media (prefers-reduced-motion) {
-    scroll-behavior: auto;
-  }
-}
-
-body {
   font-family: theme('fontFamily.sans');
   font-size: theme('fontSize.base[0]');
   line-height: theme('fontSize.base[1]');
   background-color: theme('colors.neutral.900');
   color: theme('colors.canvas.fg');
+  overflow-x: hidden;
 
   @media (pointer: fine) {
     overflow-y: scroll;
     @apply scrollbar scrollbar-track-canvas-bg scrollbar-canvas-fg/50 scrollbar-border-canvas-border;
+  }
+
+  @media (prefers-reduced-motion) {
+    scroll-behavior: auto;
   }
 }
 

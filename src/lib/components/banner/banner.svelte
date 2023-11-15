@@ -1,7 +1,7 @@
 <script lang="ts">
   import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
-  import Carousel from '$core/components/carousel.svelte'
+  import Carousel from '$core/components/carousel/carousel.svelte'
   import { followFocus } from '$lib/actions/follow-focus'
   import type { Api } from '$lib/api'
   import BannerSlide from './banner-slide.svelte'
@@ -13,7 +13,7 @@
 
   function previous() {
     carousel.stop()
-    carousel.next()
+    carousel.previous()
   }
 
   function next() {
@@ -27,7 +27,7 @@
   }
 </script>
 
-<article class="h-[54rem] max-h-[100svh]">
+<article>
   <Carousel bind:this={carousel} bind:index {slides} loop={true} autoplay={false} speed={5000}>
     <svelte:fragment slot="slide" let:slideIndex let:slide>
       <BannerSlide data={slide} index={slideIndex} />
@@ -93,6 +93,8 @@
     outline: var(--debug) solid #0ff9;
     outline-offset: calc(var(--debug) * -1);
     position: relative;
+    height: 864px;
+    max-height: 100svh;
 
     &:hover,
     &:focus-within {
@@ -148,22 +150,14 @@
     transition-property: opacity, background-color, color;
     transition-duration: theme('transitionDuration.150');
     transition-timing-function: theme('transitionTimingFunction.in-out');
-
-    & > :global(*) {
-      /* width: 100%;
-      height: 100%; */
-    }
   }
 
   .indicators {
     outline: var(--debug) solid #0f09;
     outline-offset: calc(var(--debug) * -1);
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: theme('spacing.6');
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
     height: theme('spacing.12');
     z-index: 2;
     position: absolute;
@@ -174,34 +168,45 @@
     padding-block: theme('spacing.2');
 
     @media (pointer: coarse) {
-      gap: theme('spacing.1');
-      grid-auto-columns: 1fr;
+      width: 100%;
       align-items: flex-end;
-      pointer-events: none;
+      justify-content: stretch;
       max-width: calc(theme('screens.lg') + calc(var(--layout-padding) * 2));
+      pointer-events: none;
     }
   }
 
   .indicator {
     display: grid;
-    place-items: center;
+    align-items: center;
+    justify-content: stretch;
     cursor: pointer;
     outline: none;
-    width: 100%;
-    height: theme('spacing.1');
+    opacity: 0.5;
+    flex-grow: 1;
+    min-width: theme('spacing.3');
+    min-height: theme('spacing.3');
+    padding: theme('spacing.1');
+    transition: min-width 250ms ease-in-out, opacity 250ms ease-in-out;
 
     @media (pointer: fine) {
-      width: theme('spacing.6');
-      height: theme('spacing.6');
-    }
+      padding: theme('spacing.2');
+      min-width: theme('spacing.6');
+      min-height: theme('spacing.6');
 
-    &:hover::before {
-      opacity: 1;
+      &[aria-selected='true'] {
+        min-width: theme('spacing.12');
+      }
     }
 
     &:focus-visible::before {
       outline-color: theme('colors.ring');
       outline-offset: 2px;
+    }
+
+    &:hover,
+    &[aria-selected='true'] {
+      opacity: 1;
     }
 
     &::before {
@@ -213,24 +218,9 @@
       background-color: theme('colors.surface-2.fg');
       outline: 2px solid transparent;
       outline-offset: 8px;
-      transition-property: transform, opacity, outline-color, outline-offset;
-      transition-duration: 150ms, 150ms, 150ms, 250ms;
-      transition-timing-function: theme('transitionTimingFunction.in');
-      opacity: 0.2;
-
-      @media (pointer: fine) {
-        width: theme('spacing.3');
-        height: theme('spacing.3');
-        transform: scale(0.5);
-        opacity: 0.5;
-      }
-    }
-
-    &[aria-selected='true'] {
-      &::before {
-        transform: scale(1);
-        opacity: 1;
-      }
+      transition-property: outline-color, outline-offset;
+      transition-duration: 150ms, 250ms;
+      transition-timing-function: ease-in;
     }
   }
 </style>

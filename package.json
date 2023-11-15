@@ -48,7 +48,6 @@
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-svelte": "^2.34.0",
     "fast-blurhash": "^1.1.2",
-    "isomorphic-dompurify": "^1.9.0",
     "luxon": "^3.4.3",
     "mapbox-gl": "^2.15.0",
     "minisearch": "^6.1.0",

@@ -8,52 +8,64 @@
 </script>
 
 <script lang="ts">
+  import { browser, dev } from '$app/environment'
+  import { onMount } from 'svelte'
   import { loadScript } from '$core/utils/scripts'
+  import { requestIdleCallback } from '$lib/services/idle'
 
   export let propertyId: string
   export let chatId: string
 
-  const showPlaceholder = Boolean(propertyId && chatId)
+  const chatEnabled = Boolean(propertyId && chatId)
+  const deferLoading = dev
+  let showPlaceholder = chatEnabled
   let widgetLoaded = false
   let openWidget = false
 
   function createWidget() {
+    if (!browser) return
     if ('Tawk_API' in window) return
 
     window.Tawk_LoadStart = new Date()
-    window.Tawk_API = {}
+    window.Tawk_API = {
+      onLoad() {
+        widgetLoaded = true
+        showPlaceholder = false
 
-    window.Tawk_API['onLoad'] = function () {
-      widgetLoaded = true
-
-      if (window.Tawk_API && openWidget) {
-        const maximize = window.Tawk_API['maximize'] as () => void
-        maximize()
-      }
-    }
-
-    window.Tawk_API['customStyle'] = {
-      visibility: {
-        desktop: {
-          position: 'br',
-          xOffset: '16px',
-          yOffset: '16px',
-        },
-        mobile: {
-          position: 'br',
-          xOffset: '12px',
-          yOffset: '16px',
-        },
-        bubble: {
-          rotate: '0deg',
-          xOffset: '20px',
-          yOffset: '20px',
+        if (window.Tawk_API && openWidget) {
+          const maximize = window.Tawk_API['maximize'] as () => void
+          maximize()
+        }
+      },
+      customStyle: {
+        visibility: {
+          desktop: {
+            position: 'br',
+            xOffset: '16px',
+            yOffset: '16px',
+          },
+          mobile: {
+            position: 'br',
+            xOffset: '12px',
+            yOffset: '16px',
+          },
+          bubble: {
+            rotate: '0deg',
+            xOffset: '20px',
+            yOffset: '20px',
+          },
         },
       },
     }
 
     loadScript(`https://embed.tawk.to/${propertyId}/${chatId}`)
   }
+
+  onMount(() => {
+    if (!deferLoading) {
+      requestIdleCallback(createWidget)
+    }
+  })
 </script>
 
 {#if showPlaceholder}

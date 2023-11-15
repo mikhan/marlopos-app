@@ -165,7 +165,7 @@
       background-color: theme('colors.surface-2.bg');
       outline-color: theme('colors.surface-2.border');
       border-radius: theme('borderRadius.DEFAULT');
-      box-shadow: theme('elevation.hight');
+      box-shadow: theme('elevation.low');
       transform: scale(1);
     }
 

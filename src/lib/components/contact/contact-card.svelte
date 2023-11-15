@@ -38,7 +38,7 @@
   class="max-w-screen-sm overflow-hidden border rounded elevation-low md:max-w-xs bg-surface-2-bg text-surface-2-fg border-surface-1-border min-w-min">
   <a class="map-link" target="_blank" rel="noreferrer" href="https://goo.gl/maps/ReoWcHB4Ae6swoeHA">
     <img
-      class="object-cover w-full h-full"
+      class="object-none w-full h-full"
       src={mapSrc}
       width={mapConfig.width}
       height={mapConfig.height}

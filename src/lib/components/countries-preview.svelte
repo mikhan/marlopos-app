@@ -39,7 +39,7 @@
         icon={faChevronLeft}
         title="Anterior" />
       <UiScroller bind:this={uiScroller} on:scroll={onScroll}>
-        {#each data as item}
+        {#each data as item (item.id)}
           <CountryPreview data={item} />
         {/each}
       </UiScroller>
@@ -107,14 +107,19 @@
     }
 
     & > :global([data-component='ui-icon-button']._button-previous) {
+      left: theme('spacing.6');
+    }
+
+    & > :global([data-component='ui-icon-button']._button-previous) {
       @media (min-width: theme('screens.md')) {
+        left: 0;
         margin: 0;
         transform: translateX(-50%);
       }
     }
 
     & > :global([data-component='ui-icon-button']._button-next) {
-      right: theme('spacing.4');
+      right: theme('spacing.6');
     }
   }
 

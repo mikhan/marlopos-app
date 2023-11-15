@@ -7,7 +7,7 @@
   export let data: PageData
 </script>
 
-<AppContent className="gap-y-8 max-w-screen-2xl mx-auto">
+<AppContent class="gap-8 mx-auto max-w-screen-2xl">
   <Package data={data.page} />
   <AppFooter data={data.information} />
 </AppContent>

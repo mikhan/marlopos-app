@@ -14,8 +14,10 @@ export function layoutPlugin() {
 
       for (const screen of screens) {
         if (prevScreen) {
-          vars.push([`--layout-${prevScreen.name}-min`, `calc(calc(var(--layout-size) - ${screen.size}) / 2)`])
-          vars.push([`--layout-${prevScreen.name}-max`, `calc(calc(${prevScreen.size} - ${screen.size}) / 2)`])
+          vars.push([
+            `--layout-col-${prevScreen.name}`,
+            `clamp(0px, calc(calc(var(--layout-size) - ${screen.size}) / 2), calc(calc(${prevScreen.size} - ${screen.size}) / 2))`,
+          ])
         } else {
           vars.push(['--layout-full', `1fr`])
         }
@@ -30,13 +32,13 @@ export function layoutPlugin() {
       gridTemplateColumns += '[_full-start] var(--layout-full)\n'
 
       for (const name of screenNames) {
-        gridTemplateColumns += `[_${name}-start] min(var(--layout-${name}-min), var(--layout-${name}-max))\n`
+        gridTemplateColumns += `[_${name}-start] var(--layout-col-${name})\n`
       }
 
       gridTemplateColumns += `[_${last}-start] min(var(--layout-size), 480px)\n[_${last}-end]`
 
       for (const name of screenNames.reverse()) {
-        gridTemplateColumns += ` min(var(--layout-${name}-min), var(--layout-${name}-max))\n[_${name}-end]`
+        gridTemplateColumns += ` var(--layout-col-${name})\n[_${name}-end]`
       }
 
       gridTemplateColumns += ' var(--layout-full)\n[_full-end]'
@@ -46,17 +48,17 @@ export function layoutPlugin() {
       vars.push(['align-content', 'start'])
 
       addUtilities({
-        '.layout-container': Object.fromEntries(vars),
+        ':where(.layout-container)': Object.fromEntries(vars),
       })
 
       addUtilities({
-        [`:where(.layout-container > *)`]: {
+        ':where(.layout-container > *)': {
           'grid-column': `_full-start / _full-end`,
         },
       })
 
       addUtilities({
-        [`.layout-contain`]: {
+        ':where(.layout-contain)': {
           'width': '100%',
           'margin-inline-start': 'auto',
           'margin-inline-end': 'auto',
@@ -72,7 +74,7 @@ export function layoutPlugin() {
         })
 
         addUtilities({
-          [`.layout-contain`]: {
+          [`:where(.layout-contain)`]: {
             [`@media (min-width: ${size})`]: {
               'max-width': `min(var(--layout-size), calc(${size} - calc(var(--layout-padding) * 2)))`,
             },

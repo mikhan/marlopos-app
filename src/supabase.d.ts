@@ -1591,6 +1591,7 @@ export interface Database {
           status: string
           user_created: string | null
           user_updated: string | null
+          videos: Json
         }
         Insert: {
           color?: string
@@ -1602,6 +1603,7 @@ export interface Database {
           status?: string
           user_created?: string | null
           user_updated?: string | null
+          videos?: Json
         }
         Update: {
           color?: string
@@ -1613,6 +1615,7 @@ export interface Database {
           status?: string
           user_created?: string | null
           user_updated?: string | null
+          videos?: Json
         }
         Relationships: [
           {

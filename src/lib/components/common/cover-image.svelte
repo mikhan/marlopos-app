@@ -1,27 +1,41 @@
 <script lang="ts">
   import Blurhash from '$core/components/blurhash.svelte'
   import Image from '$core/components/image.svelte'
-  import { getResourceHref } from '$core/services/resource-provider'
+  import { breakpoints } from '$core/constants/breakpoints'
+  import { getResourceHref, transformURL } from '$core/services/resource-provider'
   import type { Api } from '$lib/api'
 
   export let data: Api.Image
+  export let priority = false
+
+  const images = {
+    small: {
+      src: transformURL(getResourceHref(data.id, { w: breakpoints.sm, h: 864, q: 50, fo: 'auto' })),
+      breakpoint: breakpoints.sm,
+    },
+    medium: {
+      src: transformURL(getResourceHref(data.id, { w: breakpoints.lg, h: 864, q: 75, fo: 'auto' })),
+      breakpoint: breakpoints.lg,
+    },
+    large: {
+      src: transformURL(getResourceHref(data.id, { w: breakpoints['2xl'], h: 864, q: 50 })),
+    },
+  }
 </script>
 
-<picture>
+<div>
   <Image
-    class="w-full h-full"
     fit="cover"
-    src={getResourceHref(data.id)}
+    src={images.large.src}
     width={data.width}
     height={data.height}
     alt={data.title}
     color={data.color}
-    priority={true}
-    srcset={[
-      { w: 480, h: 864, q: 50 },
-      { w: 1024, h: 864, q: 75 },
-      { w: 1536, h: 864, q: 100 },
-    ]}>
+    {priority}>
+    <svelte:fragment slot="source">
+      <source srcset={images.small.src} media="(max-width: {images.small.breakpoint}px)" />
+      <source srcset={images.medium.src} media="(max-width: {images.medium.breakpoint}px)" />
+    </svelte:fragment>
     <Blurhash
       class="object-cover w-full h-full animate-pulse"
       hash={data.blurhash}
@@ -29,10 +43,10 @@
       width={data.width}
       height={data.height} />
   </Image>
-</picture>
+</div>
 
 <style lang="postcss">
-  picture {
+  div {
     display: block;
     position: absolute;
     inset: 0;

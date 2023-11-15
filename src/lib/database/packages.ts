@@ -4,7 +4,10 @@ import { notFound } from '$lib/services/server'
 import { api } from '../services/api'
 import type { Language } from '../utils/language'
 
+const uuidRegexp = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
 export async function getPackage(options: { language: Language; id: string }): Promise<Api.Package> {
+  if (!uuidRegexp.test(options.id)) throw notFound(`No se encontró el paquete`)
+
   const { data, error } = await api
     .from('package')
     .select(
@@ -15,7 +18,7 @@ export async function getPackage(options: { language: Language; id: string }): P
         price,
         description,
         content,
-        notes        
+        notes
       ),
       cover (
         id:filename_disk,
@@ -48,26 +51,26 @@ export async function getPackage(options: { language: Language; id: string }): P
           )
         )
       ),
-      gallery:package_gallery (
+      images:package_gallery (
         image:directus_files (
           id:filename_disk,
-          title,
-          width,
-          height,
-          blurhash
-        )        
+          title
+        )
       ),
+      videos,
       attachments:package_files (
         attachment:directus_files (
           id:filename_disk,
           title,
           description,
           type,
+          filename:filename_download,
           filesize
         )
       )`,
     )
     .eq('id', options.id)
+    .eq('status', 'published')
     .eq('package_translations.languages_code', options.language.locale)
     .eq('package_destination.destination.destination_translations.languages_code', options.language.locale)
     .throwOnError()
@@ -116,14 +119,15 @@ export async function getPackage(options: { language: Language; id: string }): P
           start: string
           end: string
         }[]
-        gallery: {
+        images: {
           image: {
             id: string
             title: string
-            width: number
-            height: number
-            blurhash: string
           }
+        }[]
+        videos: {
+          id: string
+          title: string
         }[]
         attachments: {
           attachment: {
@@ -131,6 +135,7 @@ export async function getPackage(options: { language: Language; id: string }): P
             title: string
             description: string
             type: string
+            filename: string
             filesize: number
           }
         }[]
@@ -146,7 +151,8 @@ export async function getPackage(options: { language: Language; id: string }): P
       cover,
       destinations,
       schedule,
-      gallery,
+      images,
+      videos,
       attachments,
     }) => ({
       id,
@@ -179,7 +185,11 @@ export async function getPackage(options: { language: Language; id: string }): P
           cover: { ...cover, color: getBlurHashColor(cover.blurhash) },
         }),
       ),
-      gallery: gallery.map(({ image }) => ({ ...image, color: getBlurHashColor(image.blurhash) })),
+      gallery: [
+        ...images.map(({ image }) => ({ type: 'image', ...image } as const)),
+        ...videos.map((video) => ({ type: 'video', ...video } as const)),
+      ],
+      videos,
       attachments: attachments.map(({ attachment }) => attachment),
     }),
   )

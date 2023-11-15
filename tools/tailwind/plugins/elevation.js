@@ -1,5 +1,4 @@
 import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette'
-import toColorValue from 'tailwindcss/lib/util/toColorValue'
 import plugin from 'tailwindcss/plugin'
 
 export function elevationPlugin() {
@@ -7,7 +6,7 @@ export function elevationPlugin() {
     function ({ addBase, addUtilities, matchUtilities, theme }) {
       addBase({
         ':root': {
-          '--elevation-color': 'black',
+          '--elevation-color': 'rgb(0 0 0 / 0.2)',
         },
       })
 
@@ -22,7 +21,8 @@ export function elevationPlugin() {
       matchUtilities(
         {
           elevation: (value) => {
-            return { '--elevation-color': toColorValue(value) }
+            const color = typeof value === 'function' ? value({ opacityValue: 0.2 }) : value
+            return { '--elevation-color': color }
           },
         },
         { values: flattenColorPalette(theme('colors')), type: 'color' },
@@ -31,13 +31,11 @@ export function elevationPlugin() {
     {
       theme: {
         elevation: {
-          low:
-            '0px 1px 3px color-mix(in srgb, var(--elevation-color) 20%, transparent), ' +
-            '0px 2px 6px color-mix(in srgb, var(--elevation-color) 10%, transparent)',
+          low: '0px 1px 3px var(--elevation-color), ' + '0px 2px 6px var(--elevation-color)',
           hight:
-            '0px 1px 3px color-mix(in srgb, var(--elevation-color) 20%, transparent), ' +
-            '0px 2px 6px color-mix(in srgb, var(--elevation-color) 20%, transparent), ' +
-            '0px 8px 24px color-mix(in srgb, var(--elevation-color) 20%, transparent)',
+            '0px 1px 3px var(--elevation-color), ' +
+            '0px 2px 6px var(--elevation-color), ' +
+            '0px 8px 24px var(--elevation-color)',
         },
       },
     },

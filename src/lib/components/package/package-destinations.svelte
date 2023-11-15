@@ -3,14 +3,17 @@
   import Lazy from '$core/components/lazy.svelte'
   import { matchMedia } from '$core/stores/match-media'
   import type { Api } from '$lib/api'
-  import { type CreateMapOptions, getStaticMapURL } from '$lib/services/map'
+  import SectionHeader from '../common/section-header.svelte'
   import PackageDestination from './package-destination.svelte'
+  import PackageMapStatic from './package-map-static.svelte'
   import type PackageMap from './package-map.svelte'
 
   export let data: Api.PackageDestination[]
   let packageMap: PackageMap | undefined
   let container: HTMLElement
+  let mapContainer: HTMLElement
   let isFullscreen = false
+  const showInteractiveMap = matchMedia('(min-width: 768px)')
 
   function onFullscreenChange() {
     isFullscreen = document.fullscreenElement === container
@@ -27,83 +30,58 @@
   }
 
   $: syncFullscreen(isFullscreen)
-
-  const showInteractiveMap = matchMedia('(min-width: 480px)')
-
-  const mapConfig: CreateMapOptions = {
-    center: 'auto',
-    width: 480,
-    height: 480,
-    markers: data.map(({ coordinates: [lon, lat] }) => ({ lon, lat, label: 'circle', color: '8471b1' })),
-  }
-
-  const mapSrc = getStaticMapURL(mapConfig).href
 </script>
 
 <svelte:document on:fullscreenchange={onFullscreenChange} />
 
-<div class="_wrapper" class:_fullscreen={isFullscreen} bind:this={container}>
-  <ul class="_destinations" role="tablist" aria-labelledby="destinations-list-header">
-    {#each data as destination}
-      <PackageDestination data={destination} {packageMap} />
-    {/each}
-  </ul>
-  <div class="_map">
-    <div
-      class="relative w-full h-full overflow-hidden border rounded focusable-within focusable-ring bg-surface-1-bg border-surface-1-border elevation-low">
-      {#if $showInteractiveMap || isFullscreen}
-        <Lazy this={() => import('./package-map.svelte')} let:Component={PackageMap}>
-          <PackageMap class="w-full h-full" {data} bind:this={packageMap} bind:isFullscreen />
-        </Lazy>
-      {:else}
-        <button class="absolute inset-0 outline-none" on:click={() => (isFullscreen = true)}>
-          <img class="object-contain w-full h-full" src={mapSrc} alt="" loading="lazy" />
-          <span class="sr-only">Mostrar mapa interactivo</span>
-        </button>
-      {/if}
+<section class="layout-container">
+  <SectionHeader class="px-4 mb-8 layout-lg" id="destinations-list-header">Destinos incluídos</SectionHeader>
+
+  <div class="_wrapper layout-2xl" class:_fullscreen={isFullscreen} bind:this={container}>
+    <ul class="_destinations" role="tablist" aria-labelledby="destinations-list-header">
+      {#each data as destination (destination.id)}
+        <PackageDestination data={destination} {packageMap} />
+      {/each}
+    </ul>
+    <button
+      class="sticky h-12 px-4 m-4 -mb-20 rounded w-max bottom-4 elevation-low bg-surface-2-bg md:hidden"
+      on:click={() => mapContainer.scrollIntoView({ behavior: 'smooth' })}>Mostrar Mapa</button>
+    <div class="_map-container" bind:this={mapContainer}>
+      <div class="_map">
+        {#if $showInteractiveMap || isFullscreen}
+          <Lazy this={() => import('./package-map.svelte')} let:Component={PackageMap}>
+            <PackageMap class="w-full h-full" {data} bind:this={packageMap} bind:isFullscreen />
+          </Lazy>
+        {:else}
+          <PackageMapStatic {data} on:click={() => (isFullscreen = true)} />
+        {/if}
+      </div>
     </div>
   </div>
-</div>
+</section>
 
 <style lang="postcss">
   ._wrapper {
     display: flex;
     flex-direction: column;
-    gap: theme('spacing.2');
-    margin-block: calc(theme('spacing.4') * -1);
+    gap: theme('spacing.4');
 
     @media (min-width: theme('screens.md')) {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: theme('spacing.4');
+      margin-block: calc(theme('spacing.4') * -1);
     }
 
     @media (min-width: theme('screens.md')) {
       grid-template-columns: theme('spacing.96') 1fr;
     }
 
-    &._fullscreen {
+    &:fullscreen {
       overflow-y: auto;
       background-color: theme('colors.canvas.bg');
 
       @media (min-width: theme('screens.md')) {
         padding-inline: theme('spacing.4');
-      }
-
-      ._destinations {
-        display: none;
-
-        @media (min-width: theme('screens.md')) {
-          display: flex;
-        }
-      }
-
-      ._map {
-        top: 0;
-        width: 100%;
-        height: 100%;
-        max-width: 100%;
-        max-height: 100vh;
       }
     }
   }
@@ -123,19 +101,49 @@
       margin-left: auto;
       max-width: theme('maxWidth.screen-sm');
     }
+
+    ._wrapper:fullscreen & {
+      display: none;
+
+      @media (min-width: theme('screens.md')) {
+        display: flex;
+      }
+    }
   }
 
-  ._map {
+  ._map-container {
     width: 100%;
     aspect-ratio: 1;
+    max-height: calc(100vh - var(--layout-topbar-height) - theme('spacing.2') - theme('spacing.2'));
+    scroll-margin-block-start: calc(var(--layout-topbar-height) + theme('spacing.2'));
 
     @media (min-width: theme('screens.md')) {
       height: 100%;
-      aspect-ratio: auto;
       max-height: calc(100vh - var(--layout-topbar-height));
+      aspect-ratio: auto;
       padding-block: theme('spacing.4');
       position: sticky;
       top: theme('spacing.16');
     }
+
+    ._wrapper:fullscreen & {
+      top: 0;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100vh;
+    }
+  }
+
+  ._map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: theme('borderRadius.DEFAULT');
+    background-color: theme('colors.surface-1.bg');
+    border: 1px solid theme('colors.surface-1.border');
+    box-shadow: theme('elevation.low');
+    @apply focusable-within focusable-ring;
   }
 </style>

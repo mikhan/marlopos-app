@@ -3,7 +3,7 @@
   import type { Api } from '$lib/api'
   import { languageStore } from '$lib/stores/language.store'
   import { getLocalizedUrl } from '$lib/utils/language'
-  import BannerImage from './banner-image.svelte'
+  import CoverImage from '../common/cover-image.svelte'
 
   export let data: Api.Banner
   export let index: number
@@ -13,14 +13,7 @@
 </script>
 
 <div class="banner-slide">
-  <BannerImage
-    id={data.cover.id}
-    title={data.cover.title}
-    width={data.cover.width}
-    height={data.cover.height}
-    blurhash={data.cover.blurhash}
-    color={data.cover.color}
-    priority={index === 0} />
+  <CoverImage data={data.cover} priority={index === 0} />
   <div class="_content">
     <div class="_title">{data.name}</div>
     <p class="_description">{data.description}</p>

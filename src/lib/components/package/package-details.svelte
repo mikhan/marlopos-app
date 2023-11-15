@@ -51,8 +51,9 @@
   function daysDiff(start: Date, end: Date, language: Language) {
     const diff = Math.floor((end.getTime() - start.getTime()) / 1000 / 60 / 60 / 24) + 1
     const plurale = new Intl.PluralRules(language.locale, { type: 'ordinal' })
+    const lang = language.code === 'es' ? 'es' : 'en'
 
-    return `${diff} ${intl[language.code][plurale.select(diff) === 'one' ? 'one' : 'many']}`
+    return `${diff} ${intl[lang][plurale.select(diff) === 'one' ? 'one' : 'many']}`
   }
 </script>
 

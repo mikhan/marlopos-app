@@ -1,22 +1,19 @@
-import type { Api } from '$lib/api'
+// import type { Api } from '$lib/api'
 import { getCalendarEvents } from '$lib/database/calendar'
 import { getPageLinks } from '$lib/services/api'
-import { PseudoRandom } from '$lib/services/pseudo-random'
-import { getLanguage } from '$lib/utils/language'
+// import { PseudoRandom } from '$lib/services/pseudo-random'
 import type { PageServerLoad } from './$types'
 
-export const load = (async ({ url, params }) => {
-  const language = getLanguage(params.lang)
-
+export const load = (async ({ url, locals }) => {
   return {
     metadata: {
       title: 'Viajes Marlopos',
       description: 'Agencia de viajes Marlopos',
-      lang: language.code,
-      links: getPageLinks(url, params.lang),
+      lang: locals.lang.code,
+      links: getPageLinks(url, locals.lang.code),
       preconnect: [],
     },
-    calendarEvents: getCalendarEvents({ language }),
+    calendarEvents: getCalendarEvents({ language: locals.lang }),
     // calendarEvents: [
     //   createEvents(
     //     'Nisi ullamco nulla ad non cupidatat exercitation.',
@@ -94,28 +91,28 @@ export const load = (async ({ url, params }) => {
   }
 }) satisfies PageServerLoad
 
-const startDate = new Date().getTime()
-const rnd = new PseudoRandom(5)
-const dayMs = 1000 * 60 * 60 * 24
-let id = 0
-function createEvents(name: string, description: string): Api.CalendarEntry {
-  const length = rnd.nextRange(1, 10)
-  const eventDuration = rnd.nextRange(3, 15)
-  const eventGap = rnd.nextRange(4, 15)
-  const startDateDelay = rnd.nextRange(0, 3)
-  let date = startDate + startDateDelay * dayMs
+// const startDate = new Date().getTime()
+// const rnd = new PseudoRandom(5)
+// const dayMs = 1000 * 60 * 60 * 24
+// let id = 0
+// function createEvents(name: string, description: string): Api.CalendarEntry {
+//   const length = rnd.nextRange(1, 10)
+//   const eventDuration = rnd.nextRange(3, 15)
+//   const eventGap = rnd.nextRange(4, 15)
+//   const startDateDelay = rnd.nextRange(0, 3)
+//   let date = startDate + startDateDelay * dayMs
 
-  return {
-    id: (++id).toString(),
-    name,
-    description,
-    events: Array.from({ length }, () => {
-      const start = new Date(date)
-      date += eventDuration * dayMs
-      const end = new Date(date)
-      date += eventGap * dayMs
+//   return {
+//     id: (++id).toString(),
+//     name,
+//     description,
+//     events: Array.from({ length }, () => {
+//       const start = new Date(date)
+//       date += eventDuration * dayMs
+//       const end = new Date(date)
+//       date += eventGap * dayMs
 
-      return { start, end }
-    }),
-  }
-}
+//       return { start, end }
+//     }),
+//   }
+// }

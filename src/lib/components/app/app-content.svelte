@@ -8,16 +8,14 @@
   export const [getAppContentContext, setAppContentContext] = createContext<AppContentContext>()
 </script>
 
-<script lang="ts">
-  export let className = ''
-</script>
-
-<main class="layout-container {className}" {...$$restProps}>
+<main {...$$restProps}>
   <slot />
 </main>
 
 <style lang="postcss">
   main {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     box-shadow: theme('elevation.hight');

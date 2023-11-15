@@ -1,10 +1,8 @@
 import { getInformation } from '$lib/database/information'
-import { getLanguage } from '$lib/utils/language'
 import type { LayoutServerLoad } from './$types'
 
-export const load = (async ({ params }) => {
-  const language = getLanguage(params.lang)
+export const load = (async () => {
   const information = getInformation()
 
-  return { language, information }
+  return { information }
 }) satisfies LayoutServerLoad

@@ -28,15 +28,19 @@
   $: resultsPromise = search(query, $languageStore)
 </script>
 
-<section class="flex flex-col gap-8 layout-lg">
-  <SectionHeader class="mt-32">Resultados</SectionHeader>
-
-  {#await resultsPromise}
-    <div class="flex items-center gap-2">
-      <Fa icon={faSpinner} spin />
-      Buscando...
+{#await resultsPromise}
+  <div class="grid mt-16 place-content-center grow">
+    <div class="flex items-center gap-4">
+      <Fa icon={faSpinner} spin size="2x" />
+      <span class="text-3xl">Buscando...</span>
     </div>
-  {:then results}
-    <SearchResults {results} />
-  {/await}
-</section>
+  </div>
+{:then results}
+  <section class="gap-y-8 layout-container grow">
+    <div class="px-4 layout-lg">
+      <SectionHeader class="mt-32 mb-16">Resultados</SectionHeader>
+
+      <SearchResults {results} />
+    </div>
+  </section>
+{/await}

@@ -3,6 +3,9 @@ import sveltePreprocess from 'svelte-preprocess'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
+  vitePlugin: {
+    inspector: true,
+  },
   preprocess: sveltePreprocess({
     postcss: true,
   }),

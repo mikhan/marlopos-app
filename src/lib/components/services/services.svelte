@@ -1,85 +1,40 @@
 <script lang="ts">
-  import type { Action } from 'svelte/action'
+  import { breakpoints } from '$core/constants/breakpoints'
   import backgroundLgJpeg from './services-1-lg.jpg?format=jpg&as=url'
   import backgroundLgWebp from './services-1-lg.jpg?format=webp&as=url'
   import backgroundSmJpeg from './services-1-sm.jpg?format=jpg&as=url'
   import backgroundSmWebp from './services-1-sm.jpg?format=webp&as=url'
-
-  const parallax: Action<HTMLElement> = (element) => {
-    const abortController = new AbortController()
-    let active = false
-
-    function onScroll() {
-      const limit = element.clientHeight + window.innerHeight
-      const offset = window.scrollY - (element.offsetTop - window.innerHeight)
-      const position = offset / limit
-      element.style.setProperty('--parallax-position', position.toFixed(2))
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry || active === entry.isIntersecting) return
-
-        active = entry.isIntersecting
-
-        if (active) {
-          window.addEventListener('scroll', onScroll, { signal: abortController.signal, passive: true })
-        } else {
-          window.removeEventListener('scroll', onScroll)
-        }
-      },
-      { threshold: [0, 1] },
-    )
-
-    observer.observe(element)
-    abortController.signal.onabort = () => {
-      observer.disconnect()
-    }
-
-    onScroll()
-
-    return {
-      destroy: () => abortController.abort(),
-    }
-  }
 </script>
 
-<article use:parallax>
-  <picture class="block sm:hidden">
-    <source srcset={backgroundSmWebp} type="image/webp" />
-    <img src={backgroundSmJpeg} alt="" class="object-cover w-full h-full" loading="lazy" />
-  </picture>
-  <picture class="hidden sm:block">
+<section>
+  <picture>
+    <source srcset={backgroundSmWebp} type="image/webp" media="(max-width: {breakpoints.sm}px)" />
+    <source srcset={backgroundSmJpeg} type="image/jpeg" media="(max-width: {breakpoints.sm}px)" />
     <source srcset={backgroundLgWebp} type="image/webp" />
-    <img src={backgroundLgJpeg} alt="" class="object-cover w-full h-full" loading="lazy" />
+    <img src={backgroundLgJpeg} alt="" loading="lazy" />
   </picture>
-  <p class="leading-relaxed text-center text-white text-balance text-xl-fluid font-display">
-    Contamos con más de <strong class="bg-[hsl(172_38%_46%)] px-3 py-1 rounded whitespace-nowrap"
-      >15 años de experiencia</strong> en la operación, programación y comercialización de todo tipo de servicios turísticos.
+  <p>
+    Contamos con más de <strong>15 años de experiencia</strong> en la operación, programación y comercialización de todo
+    tipo de servicios turísticos.
   </p>
-</article>
+</section>
 
 <style lang="postcss">
-  article {
-    --parallax-offset: calc(720px - theme('screens.sm'));
-    --parallax-position: 0px;
+  section {
+    --image-size: 720px;
+    --container-size: theme('screens.sm');
     position: relative;
     display: grid;
-    place-content: center;
+    grid-template: 'stack' 100% / 100%;
     width: 100%;
-    height: theme('screens.sm');
-    padding-inline: theme('spacing.4');
-    overflow: hidden;
+    height: var(--container-size);
+
+    & > * {
+      grid-area: stack;
+    }
   }
 
   picture {
-    --offset: calc(var(--parallax-offset) * var(--parallax-position));
-    position: absolute;
-    inset: 0;
-    top: calc(var(--parallax-offset) * -1);
-    transform: translateY(var(--offset));
-    transition: transform 50ms linear;
-
     &::after {
       content: '';
       position: absolute;
@@ -93,8 +48,48 @@
     }
   }
 
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: none;
+    object-position: center;
+    animation-timeline: view(y 10%);
+    animation-name: parallax;
+    animation-fill-mode: both;
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+  }
+
+  @keyframes parallax {
+    from {
+      /* transform: scaleX(0); */
+      object-position: center calc(calc(var(--image-size) - var(--container-size)) * -1);
+    }
+
+    to {
+      /* transform: scaleX(1); */
+      object-position: center 0px;
+    }
+  }
+
   p {
     max-width: theme('screens.md');
+    place-self: center;
     z-index: 1;
+    padding-inline: theme('spacing.4');
+    font-family: theme('fontFamily.display');
+    font-size: theme('fontSize.xl-fluid[0]');
+    line-height: theme('fontSize.xl-fluid[1]');
+    text-align: center;
+    text-wrap: balance;
+    color: hsl(172 20% 90%);
+
+    strong {
+      background-color: hsl(172 38% 45%);
+      padding-block: theme('spacing.1');
+      padding-inline: theme('spacing.3');
+      border-radius: theme('borderRadius.DEFAULT');
+      white-space: nowrap;
+    }
   }
 </style>

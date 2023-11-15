@@ -17,25 +17,30 @@ export function transformURL(path: URL | string): string {
 }
 
 export type ResourceURLOptions = {
-  width?: number
-  height?: number
-  aspectRatio?: string
-  quality?: number
+  [key: string]: string | number
+  w?: number
+  h?: number
+  ar?: string
+  q?: number
   name?: string
 }
 
-export function getResourceURL(origin: string, filename: string, options: ResourceURLOptions = {}): URL {
-  if (options.name) {
-    const name = encodeURIComponent(options.name.replace(/ /g, '-'))
-    filename = filename.replace(/([^/.]+)\.(.+)$/, (_, filename, ext) => `seo/${filename}/${name}.${ext}`)
-  }
+function getResourceURL(origin: string, filename: string, options: ResourceURLOptions = {}): URL {
+  // if (options.name) {
+  //   const name = encodeURIComponent(options.name.replace(/ /g, '-'))
+  //   filename = filename.replace(/([^/.]+)\.(.+)$/, (_, filename, ext) => `seo/${filename}/${name}.${ext}`)
+  // }
 
   const url = new URL(`/api/assets/${filename}`, origin)
 
-  if (options.width) url.searchParams.set('w', String(options.width))
-  if (options.height) url.searchParams.set('h', String(options.height))
-  if (options.aspectRatio) url.searchParams.set('ar', options.aspectRatio)
-  if (options.quality) url.searchParams.set('q', String(options.quality))
+  for (const [key, value] of Object.entries(options)) {
+    // if (key === 'name') continue
+    if (key === 'width') url.searchParams.set('w', String(value))
+    else if (key === 'height') url.searchParams.set('h', String(value))
+    else if (key === 'aspectRatio') url.searchParams.set('ar', String(value))
+    else if (key === 'quality') url.searchParams.set('q', String(value))
+    else url.searchParams.set(key, String(value))
+  }
 
   return url
 }

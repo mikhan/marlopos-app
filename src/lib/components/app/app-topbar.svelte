@@ -7,8 +7,8 @@
   import { disableDocumentScrolling, enableDocumentScrolling } from '$core/services/popup'
   import { matchMedia } from '$core/stores/match-media'
   import { generateUID } from '$core/utils/element'
-  import logotipo from '$lib/assets/logotipo.png?w=32&h=32&as=url'
-  import logotipoWebp from '$lib/assets/logotipo.png?w=32&h=32&format=webp&as=url'
+  import logotipo from '$lib/assets/logotipo.png?w=48&h=48&as=url'
+  import logotipoWebp from '$lib/assets/logotipo.png?w=48&h=48&format=webp&as=url'
   import AppNavigationProgress from '$lib/components/app/app-navigation-progress.svelte'
   import Omnibox from '../search/omnibox.svelte'
   import AppTopbarLink from './app-topbar-link.svelte'
@@ -18,7 +18,7 @@
   const collapsed = matchMedia('(width < 768px)')
   const navigationMenuId = generateUID()
   let container: HTMLElement
-  let opacityOffset = 0
+  let opacityOffset = 250
   let searchActive = false
   let menuExpanded = false
   let height: number
@@ -123,14 +123,14 @@
       content: '';
       position: absolute;
       width: 100%;
-      height: 6rem;
+      height: theme('spacing.32');
       z-index: -1;
       pointer-events: none;
       opacity: calc(1 - var(--opacity));
       transition: opacity 150ms;
-      background-image: linear-gradient(180deg, theme('colors.neutral.900 / 50%'), transparent 100%),
-        linear-gradient(180deg, theme('colors.neutral.900 / 50%'), transparent 66%),
-        linear-gradient(180deg, theme('colors.neutral.900 / 50%'), transparent 33%);
+      background-image: linear-gradient(180deg, theme('colors.neutral.900 / 25%'), transparent 100%),
+        linear-gradient(180deg, theme('colors.neutral.900 / 25%'), transparent 66%),
+        linear-gradient(180deg, theme('colors.neutral.900 / 25%'), transparent 33%);
     }
 
     &::after {
@@ -142,9 +142,10 @@
       background-clip: content-box;
       border-bottom: 1px solid theme('colors.surface-1.border');
       backdrop-filter: blur(8px);
-      opacity: var(--opacity, 0);
+      opacity: var(--opacity);
       transition: opacity 150ms, background-color 250ms;
       z-index: -1;
+      box-shadow: theme('elevation.hight');
     }
 
     &.__expanded {

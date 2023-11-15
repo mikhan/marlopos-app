@@ -44,6 +44,12 @@
     pointer-events: auto;
   }
 
+  :global(.mapboxgl-control-container) {
+    font: initial;
+    font-family: theme('fontFamily.sans');
+    font-size: theme('fontSize.base');
+  }
+
   :global(.mapboxgl-ctrl-top-left) div,
   :global(.mapboxgl-ctrl-top-right) div {
     margin-top: theme('spacing.4');

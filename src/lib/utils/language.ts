@@ -1,21 +1,19 @@
-export type LanguageCode = 'es' | 'en'
-
 export interface Language {
   readonly code: LanguageCode
   readonly name: string
   readonly locale: string
 }
 
-export type LanguagesSupported = Record<LanguageCode, Language>
+export const LANGUAGE_CODES = ['es', 'en'] as const
 
-export const LANGUAGE_CODES: LanguageCode[] = ['es', 'en']
+export type LanguageCode = (typeof LANGUAGE_CODES)[number]
 
-export const LANGUAGES: LanguagesSupported = {
+export const LANGUAGES = {
   es: { code: 'es', locale: 'es-MX', name: 'Español' },
   en: { code: 'en', locale: 'en-US', name: 'English' },
-} satisfies { [K in LanguageCode]: Language & { code: K; locale: `${K}-${string}` } }
+} satisfies Record<LanguageCode, Language>
 
-export const DEFAULT_LANGUAGE = LANGUAGES.es
+export const DEFAULT_LANGUAGE = LANGUAGES['es'] as Language
 
 export function isDefaultLanguage(code: string): boolean {
   return code === DEFAULT_LANGUAGE.code

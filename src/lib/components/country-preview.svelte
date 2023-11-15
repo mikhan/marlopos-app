@@ -6,22 +6,15 @@
 
   export let data: Api.CountryPreview
 
-  $: imageSrc = getResourceHref(data.cover.id, { width: 256, height: 384 })
+  $: imageSrc = getResourceHref(data.cover.id, { w: 256, h: 384, name: data.cover.title })
 </script>
 
 <li>
-  <picture>
-    <Image
-      class="w-full h-full"
-      src={imageSrc}
-      alt={data.cover.title}
-      width={256}
-      height={384}
-      color={data.cover.color}
-      fit="cover">
+  <div class="image">
+    <Image src={imageSrc} alt={data.cover.title} width={256} height={384} color={data.cover.color}>
       <Blurhash class="object-cover w-full h-full" hash={data.cover.blurhash} width={256} height={384} />
     </Image>
-  </picture>
+  </div>
   <div class="content">
     <a class="sm:text-xl" href="/">{data.name}</a>
     <div class="text-sm truncate opacity-75">
@@ -51,7 +44,7 @@
     box-shadow: theme('elevation.low');
 
     &:is(:hover) {
-      picture {
+      .image {
         transform: scale(1.1);
       }
     }
@@ -88,7 +81,7 @@
     content: '・';
   }
 
-  picture {
+  .image {
     position: absolute;
     inset: 0;
     z-index: -1;

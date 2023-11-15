@@ -1,6 +1,5 @@
 import { type Readable, derived } from 'svelte/store'
 import { languageStore } from '$lib/stores/language.store'
-import type { LanguageCode } from '$lib/utils/language'
 import en from './en'
 import es, { type Translations } from './es'
 
@@ -21,10 +20,12 @@ function translate(translations: Translations, key: TranslationKey, vars?: Recor
 
 type TranslateFnc = (key: TranslationKey, vars?: Record<string, string>) => string
 
-const translations: Record<LanguageCode, Translations> = { es, en }
+const translations: Record<string, Translations> = { es, en }
 
 export function createTranslateFnc(translations: Translations): TranslateFnc {
   return (key, vars) => translate(translations, key, vars)
 }
 
-export const t: Readable<TranslateFnc> = derived(languageStore, ({ code }) => createTranslateFnc(translations[code]))
+export const t: Readable<TranslateFnc> = derived(languageStore, ({ code }) =>
+  createTranslateFnc(translations[code] ?? es),
+)

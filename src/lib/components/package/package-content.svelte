@@ -1,14 +1,14 @@
 <script lang="ts">
-  import SvelteMarkdown from 'svelte-markdown'
   import type { Api } from '$lib/api'
+  import DynamicContent from '../common/dynamic-content.svelte'
   import Prose from '../common/prose.svelte'
 
   export let data: Api.Package
 </script>
 
-<div class="max-w-screen-md px-4 grow-1">
+<div class="px-4 grow-1">
   <Prose>
-    <SvelteMarkdown source={data.content} />
+    <DynamicContent source={data.content} />
   </Prose>
 </div>
 

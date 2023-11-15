@@ -1,4 +1,5 @@
 import type { Handle } from '@sveltejs/kit'
+import { DEFAULT_LANGUAGE } from '$lib/utils/language'
 
 // import * as LanguageParser from 'accept-language-parser'
 // import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit'
@@ -13,10 +14,10 @@ import type { Handle } from '@sveltejs/kit'
 
 export const handleLanguage = (({ event, resolve }) => {
   // const clientLanguageCode = getClientLanguage(event.request)
-  const lang = 'es' // getUrlLanguage(url, clientLanguageCode)
+  event.locals.lang = DEFAULT_LANGUAGE // getUrlLanguage(url, clientLanguageCode)
 
   return resolve(event, {
-    transformPageChunk: ({ html }) => html.replace('%lang%', lang),
+    transformPageChunk: ({ html }) => html.replace('%lang%', event.locals.lang.code),
   })
 }) satisfies Handle
 

@@ -10,7 +10,7 @@
   export let data: PageData
 </script>
 
-<AppContent className="max-w-screen-2xl mx-auto">
+<AppContent class="max-w-screen-2xl mx-auto">
   <Banner slides={data.featured} />
   <CountriesPreview data={data.countriesPreview} />
   <Services />

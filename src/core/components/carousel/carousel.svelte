@@ -3,10 +3,11 @@
   import { writable } from 'svelte/store'
   import { type PanEvent, panning } from '$core/actions/pan'
   import { getFocusableElements } from '$core/utils/focus'
-  import { type KeyboardNavigation, useKeyboardNavigation } from '../actions/keyboard-navigation'
-  import { documentVisibilityState } from '../stores/document-visibility-state'
-  import { IndexManagerStore } from '../stores/index-manager-store'
-  import { IntervalPlayer } from '../types/interval-player'
+  import { type KeyboardNavigation, useKeyboardNavigation } from '../../actions/keyboard-navigation'
+  import { documentVisibilityState } from '../../stores/document-visibility-state'
+  import { IndexManagerStore } from '../../stores/index-manager-store'
+  import { IntervalPlayer } from '../../types/interval-player'
+  import { zIndex } from './z-index'
 
   export let slides: T[] = []
   export let index = 0
@@ -153,7 +154,8 @@
         role="tabpanel"
         aria-roledescription="slide"
         aria-label={`${slideIndex + 1} de ${slides.length}`}
-        use:registerSlide={slideIndex}>
+        use:registerSlide={slideIndex}
+        use:zIndex={rotation.indexOf(slideIndex)}>
         <slot name="slide" {slides} {index} {slide} {slideIndex} />
       </div>
     {/each}
@@ -172,6 +174,7 @@
     position: relative;
     width: 100%;
     height: 100%;
+    isolation: isolate;
   }
 
   .slide {
@@ -185,7 +188,7 @@
 
     &:not(.panning) {
       transition-property: transform;
-      transition-duration: theme('transitionDuration.700');
+      transition-duration: 500ms;
       transition-timing-function: theme('transitionTimingFunction.in-out');
     }
 
@@ -195,7 +198,6 @@
 
     &-current {
       transform: translateX(calc(0% + var(--displace, 0px)));
-      z-index: 2;
     }
 
     &-next {

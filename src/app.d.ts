@@ -1,31 +1,39 @@
-declare namespace App {
-  interface PageData {
-    metadata: Metadata
-  }
+import type { Language } from '$lib/utils/language'
 
-  interface Error {
-    message: string
-  }
+declare global {
+  declare namespace App {
+    interface PageData {
+      metadata: Metadata
+    }
 
-  interface Metadata {
-    title: string
-    description: string
-    lang: string
-    links: Link[]
-    preconnect: string[]
-  }
+    interface Error {
+      message: string
+    }
 
-  type Link = LinkAlternate | LinkCanonical
+    interface Locals {
+      lang: Language
+    }
 
-  interface LinkAlternate {
-    rel: 'alternate'
-    href: string
-    hreflang: string
-  }
+    interface Metadata {
+      title: string
+      description: string
+      lang: string
+      links: Link[]
+      preconnect: string[]
+    }
 
-  interface LinkCanonical {
-    rel: 'canonical'
-    href: string
-    href: string
+    type Link = LinkAlternate | LinkCanonical
+
+    interface LinkAlternate {
+      rel: 'alternate'
+      href: string
+      hreflang: string
+    }
+
+    interface LinkCanonical {
+      rel: 'canonical'
+      href: string
+      href: string
+    }
   }
 }

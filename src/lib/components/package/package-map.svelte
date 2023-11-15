@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     faArrowsToCircle,
+    faCheckSquare,
     faCompress,
     faExpand,
     faLocationCrosshairs,
@@ -8,6 +9,7 @@
     faMinus,
     faPlus,
     faSpinner,
+    faSquare,
   } from '@fortawesome/free-solid-svg-icons'
   import type { MapboxOptions } from 'mapbox-gl'
   import { onMount } from 'svelte'
@@ -42,6 +44,12 @@
   let zoom: number
   let center: MapPoint
   let mapOptions: Omit<MapboxOptions, 'container'>
+  let style: keyof typeof styles = 'default'
+
+  const styles = {
+    default: `mapbox://styles/${PUBLIC_MAPBOX_USER}/${PUBLIC_MAPBOX_STYLE}`,
+    satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+  }
 
   $: multiple = data.length > 1
   $: coordinates = data.map(({ coordinates }) => coordinates)
@@ -50,7 +58,7 @@
   $: center = coordinates[0] as MapPoint
   $: mapOptions = {
     accessToken: PUBLIC_MAPBOX_ACCESS_TOKEN,
-    style: `mapbox://styles/${PUBLIC_MAPBOX_USER}/${PUBLIC_MAPBOX_STYLE}`,
+    style: styles[style],
     attributionControl: false,
     scrollZoom: false,
     ...(multiple ? { bounds } : { zoom, center }),
@@ -60,6 +68,11 @@
 
   export function zoomTo(delta: number) {
     map.getMap().zoomTo(map.getMap().getZoom() + delta)
+  }
+
+  export function changeStyle(type: keyof typeof styles) {
+    style = type
+    map.getMap().setStyle(styles[style])
   }
 
   export function toggleFullscreen() {
@@ -138,7 +151,8 @@
   }
 
   function onDismiss() {
-    ;(document.activeElement as HTMLElement)?.blur()
+    const activeElement = document.activeElement as HTMLElement | null
+    activeElement?.blur()
   }
 
   onMount(() => {
@@ -157,20 +171,31 @@
   on:focusleave={disableInteraction}
   on:dismiss={onDismiss}>
   <InteractiveMap options={mapOptions} bind:this={map}>
+    <MapControl position="top-left">
+      <button
+        class="_map-button"
+        title="Mostrar todos los destinos"
+        on:click={() => changeStyle(style === 'default' ? 'satellite' : 'default')}>
+        <span class="flex items-center gap-2">
+          <Fa icon={style === 'default' ? faSquare : faCheckSquare} />
+          <span>Vista satelital</span>
+        </span>
+      </button>
+    </MapControl>
     <MapControl>
       <button
         class="_map-button"
         title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
         on:click={() => toggleFullscreen()}>
-        <Fa icon={isFullscreen ? faCompress : faExpand} />
+        <Fa fw icon={isFullscreen ? faCompress : faExpand} />
       </button>
     </MapControl>
     <MapControl>
       <button class="_map-button" title="Acercar el mapa" on:click={() => zoomTo(+1)}>
-        <Fa icon={faPlus} />
+        <Fa fw icon={faPlus} />
       </button>
       <button class="_map-button" title="Alejar el mapa" on:click={() => zoomTo(-1)}>
-        <Fa icon={faMinus} />
+        <Fa fw icon={faMinus} />
       </button>
     </MapControl>
     {#if geolocationEnabled}
@@ -181,6 +206,7 @@
           disabled={gettingCurrentPosition}
           on:click={() => focusCurrentPosition()}>
           <Fa
+            fw
             icon={gettingCurrentPosition ? faSpinner : faLocationCrosshairs}
             spin={gettingCurrentPosition}
             pulse={gettingCurrentPosition} />
@@ -190,11 +216,11 @@
     {#if !pristine}
       <MapControl>
         <button class="_map-button" title="Mostrar todos los destinos" on:click={() => reset()}>
-          <Fa icon={faArrowsToCircle} />
+          <Fa fw icon={faArrowsToCircle} />
         </button>
       </MapControl>
     {/if}
-    {#each data as { id, name, coordinates }}
+    {#each data as { id, name, coordinates } (id)}
       <MapMarker {coordinates}>
         <a
           href={'#destination-' + slugify(name)}
@@ -278,11 +304,12 @@
   }
 
   ._map-button {
-    font: initial;
+    box-sizing: content-box;
     display: grid;
     place-content: center;
-    width: theme('spacing.8');
-    height: theme('spacing.8');
+    min-width: theme('spacing.5');
+    height: theme('spacing.5');
+    padding: theme('spacing.2');
     color: theme('colors.surface-2.fg');
     background-color: theme('colors.surface-2.bg');
     border-radius: theme('borderRadius.DEFAULT');
