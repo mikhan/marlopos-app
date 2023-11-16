@@ -1,9 +1,9 @@
 <script lang="ts">
   import { breakpoints } from '$core/constants/breakpoints'
-  import backgroundLgJpeg from './services-1-lg.jpg?format=jpg&as=url'
-  import backgroundLgWebp from './services-1-lg.jpg?format=webp&as=url'
-  import backgroundSmJpeg from './services-1-sm.jpg?format=jpg&as=url'
-  import backgroundSmWebp from './services-1-sm.jpg?format=webp&as=url'
+  import backgroundLgJpeg from './services-1-lg.png?format=jpg&as=url'
+  import backgroundLgWebp from './services-1-lg.png?format=webp&as=url'
+  import backgroundSmJpeg from './services-1-sm.png?format=jpg&as=url'
+  import backgroundSmWebp from './services-1-sm.png?format=webp&as=url'
 </script>
 
 <section>
