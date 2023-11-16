@@ -41,6 +41,9 @@ devDependencies:
   '@types/chroma-js':
     specifier: ^2.4.1
     version: 2.4.1
+  '@types/gtag.js':
+    specifier: ^0.0.18
+    version: 0.0.18
   '@types/luxon':
     specifier: ^3.3.2
     version: 3.3.2
@@ -853,6 +856,10 @@ packages:
 
   /@types/geojson@7946.0.11:
     resolution: {integrity: sha512-L7A0AINMXQpVwxHJ4jxD6/XjZ4NDufaRlUJHjNIFKYUFBH1SvOW+neaqb0VTRSLW5suSrSu19ObFEFnfNcr+qg==}
+    dev: true
+
+  /@types/gtag.js@0.0.18:
+    resolution: {integrity: sha512-GJxnIvuXuVhKaHfsOdzGipoOoXq72y3mdcncc9h6i6E7nlz89zBEj2wrLM7bqO5Xk9Lm2B94MwdQsSwRlaPSWw==}
     dev: true
 
   /@types/json-schema@7.0.13:

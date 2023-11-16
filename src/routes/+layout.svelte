@@ -19,6 +19,7 @@
   import { page } from '$app/stores'
   import { PUBLIC_TAWK_CHAT_ID, PUBLIC_TAWK_PROPERTY_ID } from '$env/static/public'
   import UiShell from '$core/components/shell/ui-shell.svelte'
+  import Analytics from '$lib/components/analytics.svelte'
   import AppMetadata from '$lib/components/app/app-metadata.svelte'
   import AppTopbar from '$lib/components/app/app-topbar.svelte'
   import Chat from '$lib/components/chat.svelte'
@@ -41,6 +42,8 @@
     })
   })
 </script>
+
+<Analytics measurementId="G-FTWT6S8Z02" />
 
 <UiShell>
   <AppMetadata />
