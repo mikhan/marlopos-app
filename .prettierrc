@@ -10,7 +10,6 @@
   "trailingComma": "all",
   "bracketSameLine": true,
   "plugins": ["prettier-plugin-svelte", "@trivago/prettier-plugin-sort-imports"],
-  "pluginSearchDirs": ["."],
   "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
   "importOrder": ["^[$]env/(.*)", "^[$]core/(.*)", "^[$]lib/(.*)", "^[./]"],
   "importOrderSortSpecifiers": true
