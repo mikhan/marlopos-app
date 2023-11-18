@@ -17,7 +17,11 @@
   import { dev } from '$app/environment'
   import { onNavigate } from '$app/navigation'
   import { page } from '$app/stores'
-  import { PUBLIC_TAWK_CHAT_ID, PUBLIC_TAWK_PROPERTY_ID } from '$env/static/public'
+  import {
+    PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID,
+    PUBLIC_TAWK_CHAT_ID,
+    PUBLIC_TAWK_PROPERTY_ID,
+  } from '$env/static/public'
   import UiShell from '$core/components/shell/ui-shell.svelte'
   import Analytics from '$lib/components/analytics.svelte'
   import AppMetadata from '$lib/components/app/app-metadata.svelte'
@@ -43,7 +47,7 @@
   })
 </script>
 
-<Analytics measurementId="G-FTWT6S8Z02" />
+<Analytics measurementId={PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID} />
 
 <UiShell>
   <AppMetadata />
