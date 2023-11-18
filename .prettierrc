@@ -9,7 +9,7 @@
   "arrowParens": "always",
   "trailingComma": "all",
   "bracketSameLine": true,
-  "plugins": ["prettier-plugin-svelte", "@trivago/prettier-plugin-sort-imports"],
+  "plugins": ["prettier-plugin-svelte", "@trivago/prettier-plugin-sort-imports", "prettier-plugin-css-order"],
   "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
   "importOrder": ["^[$]env/(.*)", "^[$]core/(.*)", "^[$]lib/(.*)", "^[./]"],
   "importOrderSortSpecifiers": true

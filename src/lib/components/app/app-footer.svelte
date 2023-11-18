@@ -34,8 +34,8 @@
 <style lang="postcss">
   ._support {
     display: inline-block;
+    margin: 16px;
     width: 60px;
     height: 60px;
-    margin: 16px;
   }
 </style>

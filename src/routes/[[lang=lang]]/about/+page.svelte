@@ -28,31 +28,31 @@
 <style lang="postcss">
   section {
     display: grid;
-    grid-template-columns: 0.75fr 0.25fr 0.3fr 1fr 0.2fr;
     grid-template-rows: 0.2fr 0.4fr 1fr;
+    grid-template-columns: 0.75fr 0.25fr 0.3fr 1fr 0.2fr;
     margin-inline: auto;
-    width: 100%;
     padding-block: 2rem;
+    width: 100%;
 
     & > :nth-child(1) {
-      grid-column: 2 / 6;
       grid-row: 1 / 4;
-      aspect-ratio: 6/4;
+      grid-column: 2 / 6;
       z-index: 1;
+      aspect-ratio: 6/4;
     }
 
     & > :nth-child(2) {
-      grid-column: 1 / 3;
       grid-row: 2 / 4;
-      aspect-ratio: 3/4;
+      grid-column: 1 / 3;
       z-index: 2;
+      aspect-ratio: 3/4;
     }
 
     & > :nth-child(3) {
-      min-width: theme('screens.sm');
-      grid-column: 4 / 5;
       grid-row: 3 / 5;
+      grid-column: 4 / 5;
       z-index: 3;
+      min-width: theme('screens.sm');
     }
   }
 </style>

@@ -72,8 +72,8 @@
 
     @media (min-width: theme('screens.md')) {
       display: flex;
-      flex-wrap: wrap;
       flex-direction: row;
+      flex-wrap: wrap;
     }
   }
 
@@ -87,10 +87,10 @@
     display: grid;
     grid-template-columns: theme('spacing.16') 1fr;
     align-items: center;
-    background-color: theme('colors.surface-1.bg');
-    color: theme('colors.surface-1.fg');
-    border-radius: theme('borderRadius.DEFAULT');
     box-shadow: theme('elevation.low');
+    border-radius: theme('borderRadius.DEFAULT');
+    background-color: theme('colors.surface-1.bg');
     overflow: hidden;
+    color: theme('colors.surface-1.fg');
   }
 </style>

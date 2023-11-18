@@ -79,10 +79,10 @@
   [role='option'] {
     display: flex;
     align-items: center;
+    outline: none;
     width: 100%;
     height: theme('spacing.10');
     text-align: left;
-    outline: none;
 
     &:is(:hover, [aria-selected='true']) {
       background-color: theme('colors.surface-2.hover');

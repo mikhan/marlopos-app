@@ -42,14 +42,14 @@
 <style lang="postcss">
   ._animated-background {
     position: absolute;
-    inset: 0;
     z-index: -1;
+    inset: 0;
     overflow: hidden;
 
     svg {
+      transform: scale(1.01);
       width: 100%;
       height: 100%;
-      transform: scale(1.01);
     }
   }
 </style>

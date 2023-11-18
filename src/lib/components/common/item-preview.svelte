@@ -17,8 +17,8 @@
     --color: theme('colors.surface-1.fg');
     --dominant-color: transparent;
     display: grid;
-    place-content: flex-end stretch;
     position: relative;
+    place-content: flex-end stretch;
     overflow: hidden;
 
     &:is(:hover, :focus-within) {
@@ -28,30 +28,30 @@
   }
 
   .image {
-    isolation: isolate;
     position: absolute;
     inset: 0;
+    isolation: isolate;
 
     &::after {
-      content: '';
       position: absolute;
       inset: 0;
       background-image: linear-gradient(to top, var(--dominant-color) 1rem, 5rem, transparent 8rem);
+      content: '';
     }
   }
 
   .content {
-    color: var(--color);
     transition: color 250ms ease-in-out;
     isolation: isolate;
+    color: var(--color);
 
     &::before,
     &::after {
-      content: '';
       position: absolute;
-      inset: 0;
-      transition: opacity 250ms ease-in-out;
       z-index: -1;
+      transition: opacity 250ms ease-in-out;
+      inset: 0;
+      content: '';
     }
 
     &::before {

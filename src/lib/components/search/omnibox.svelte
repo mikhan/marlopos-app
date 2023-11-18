@@ -120,13 +120,13 @@
 <style lang="postcss">
   .omnibox-container {
     position: relative;
+    z-index: 100;
+    transition-duration: 250ms;
+    transition-property: width, scale;
+    transition-timing-function: ease-in-out;
+    margin-inline-start: auto;
     width: theme('spacing.10');
     height: theme('spacing.10');
-    z-index: 100;
-    margin-inline-start: auto;
-    transition-property: width, scale;
-    transition-duration: 250ms;
-    transition-timing-function: ease-in-out;
 
     @media (min-width: theme('screens.md')) {
       width: theme('spacing.44');
@@ -139,65 +139,65 @@
 
   form {
     display: flex;
-    flex-direction: column;
     position: absolute;
     top: 0;
     right: 0;
-    width: 100%;
+    flex-direction: column;
     transform: scale(0.9);
     transform-origin: right center;
-    max-height: calc(100dvh - 2rem);
-    color: theme('colors.surface-1.fg');
-    background-color: theme('colors.surface-1.bg');
+    transition-delay: 0ms;
+    transition-duration: 250ms;
+    transition-property: all;
+    transition-timing-function: ease-in-out;
     outline: 1px solid theme('colors.surface-1.border');
     outline-offset: -1px;
-    border-radius: theme('spacing.5');
-    transition-property: all;
-    transition-duration: 250ms;
-    transition-delay: 0ms;
-    transition-timing-function: ease-in-out;
     box-shadow: none;
+    border-radius: theme('spacing.5');
+    background-color: theme('colors.surface-1.bg');
+    width: 100%;
+    max-height: calc(100dvh - 2rem);
     overflow: hidden;
+    color: theme('colors.surface-1.fg');
 
     &:has([aria-expanded='true']) {
-      transition-delay: 250ms;
-      color: theme('colors.surface-2.fg');
-      background-color: theme('colors.surface-2.bg');
-      outline-color: theme('colors.surface-2.border');
-      border-radius: theme('borderRadius.DEFAULT');
-      box-shadow: theme('elevation.low');
       transform: scale(1);
+      transition-delay: 250ms;
+      outline-color: theme('colors.surface-2.border');
+      box-shadow: theme('elevation.low');
+      border-radius: theme('borderRadius.DEFAULT');
+      background-color: theme('colors.surface-2.bg');
+      color: theme('colors.surface-2.fg');
     }
 
     & > div {
       display: flex;
-      align-items: center;
-      flex: 0 0 auto;
-      height: theme('spacing.10');
       position: relative;
+      flex: 0 0 auto;
+      align-items: center;
+      height: theme('spacing.10');
     }
   }
 
   label {
     display: grid;
-    place-content: center;
-    height: 100%;
-    aspect-ratio: 1/1;
-    flex: 0 0 auto;
     position: absolute;
     left: 0;
+    flex: 0 0 auto;
+    place-content: center;
+    aspect-ratio: 1/1;
+    height: 100%;
     pointer-events: none;
   }
 
   input {
-    width: 100%;
-    height: 100%;
+    opacity: 0;
+    transition: opacity 250ms;
+    outline: none;
     box-shadow: none;
     background: transparent;
-    outline: none;
-    opacity: 0;
     padding-left: theme('spacing.10');
-    transition: opacity 250ms;
+    width: 100%;
+    height: 100%;
 
     &[aria-expanded='true'] {
       opacity: 1;
@@ -209,21 +209,21 @@
   }
 
   code {
-    font-size: theme('fontSize.xs[0]');
-    line-height: theme('fontSize.xs[1]');
-    padding-inline: theme('spacing.1');
+    position: absolute;
+    right: 0;
+    opacity: 0;
+    transition: opacity 250ms;
     margin-inline-end: theme('spacing.3');
     border: 1px solid theme('colors.current');
     border-radius: theme('borderRadius.DEFAULT');
-    opacity: 0;
-    position: absolute;
-    right: 0;
+    padding-inline: theme('spacing.1');
     pointer-events: none;
-    transition: opacity 250ms;
+    font-size: theme('fontSize.xs[0]');
+    line-height: theme('fontSize.xs[1]');
 
     @media (min-width: theme('screens.md')) {
-      transition-delay: 250ms;
       opacity: 0.5;
+      transition-delay: 250ms;
     }
 
     form:has([aria-expanded='true']) & {

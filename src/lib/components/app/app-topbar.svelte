@@ -120,32 +120,34 @@
     color: theme('colors.surface-2.fg');
 
     &::before {
-      content: '';
       position: absolute;
-      width: 100%;
-      height: theme('spacing.32');
-      z-index: -1;
-      pointer-events: none;
       opacity: calc(1 - var(--opacity));
+      z-index: -1;
       transition: opacity 150ms;
       background-image: linear-gradient(180deg, theme('colors.neutral.900 / 25%'), transparent 100%),
         linear-gradient(180deg, theme('colors.neutral.900 / 25%'), transparent 66%),
         linear-gradient(180deg, theme('colors.neutral.900 / 25%'), transparent 33%);
+      width: 100%;
+      height: theme('spacing.32');
+      pointer-events: none;
+      content: '';
     }
 
     &::after {
-      content: '';
       display: block;
       position: absolute;
-      inset: 0;
-      background-color: theme('colors.surface-1.bg / 75%');
-      background-clip: content-box;
-      border-bottom: 1px solid theme('colors.surface-1.border');
-      backdrop-filter: blur(8px);
       opacity: var(--opacity);
-      transition: opacity 150ms, background-color 250ms;
       z-index: -1;
+      backdrop-filter: blur(8px);
+      transition:
+        opacity 150ms,
+        background-color 250ms;
+      inset: 0;
       box-shadow: theme('elevation.hight');
+      border-bottom: 1px solid theme('colors.surface-1.border');
+      background-clip: content-box;
+      background-color: theme('colors.surface-1.bg / 75%');
+      content: '';
     }
 
     &.__expanded {
@@ -161,46 +163,46 @@
     display: flex;
     align-items: center;
     gap: theme('spacing.4');
+    isolation: isolate;
     width: 100%;
     height: theme('spacing.16');
-    isolation: isolate;
 
     &::before {
-      content: '';
       display: block;
       position: absolute;
-      width: 100%;
-      height: theme('spacing.32');
-      max-width: theme('screens.xl');
       top: 0;
       left: 50%;
       transform: translateX(-50%) translateZ(0);
-      pointer-events: none;
-      background-image: linear-gradient(to right, #a87ffb, #25a6e9);
-      filter: blur(128px);
       opacity: calc(var(--opacity) * 0.75);
-      transition: opacity 250ms;
       z-index: -1;
+      filter: blur(128px);
+      transition: opacity 250ms;
+      background-image: linear-gradient(to right, #a87ffb, #25a6e9);
+      width: 100%;
+      max-width: theme('screens.xl');
+      height: theme('spacing.32');
+      pointer-events: none;
+      content: '';
     }
   }
 
   .app-topbar-logo {
     display: grid;
     grid-template-columns: theme('spacing.8') max-content;
-    gap: 8px;
     align-items: center;
+    gap: 8px;
     text-wrap: nowrap;
     flex-shrink: 0;
-    width: 200px;
+    opacity: 1;
     outline: none;
     border-radius: theme('borderRadius.DEFAULT');
+    width: 200px;
     font-weight: theme('fontWeight.bold');
     letter-spacing: theme('letterSpacing.wider');
     text-transform: uppercase;
-    opacity: 1;
     @apply focusable-visible focusable-ring;
-    transition-property: outline-color, outline-offset, width, opacity;
     transition-duration: 150ms, 250ms, 250ms, 250ms;
+    transition-property: outline-color, outline-offset, width, opacity;
 
     span {
       opacity: 1;
@@ -209,9 +211,9 @@
 
     .app-topbar.__search-active & {
       @media (width < theme('screens.md')) {
-        width: 0;
         opacity: 0;
         margin-right: calc(theme('spacing.4') * -1);
+        width: 0;
       }
       @media (min-width: theme('screens.md')) {
         width: theme('spacing.8');
@@ -224,8 +226,8 @@
   }
 
   .app-topbar-search {
-    width: theme('spacing.10');
     transition: width 250ms ease-in-out;
+    width: theme('spacing.10');
 
     @media (min-width: theme('screens.md')) {
       width: theme('spacing.44');

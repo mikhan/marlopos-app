@@ -268,20 +268,20 @@
 <style lang="postcss">
   ._backdrop {
     position: fixed;
-    inset: 0;
     z-index: 1;
+    inset: 0;
   }
 
   ._menu {
     position: fixed;
-    padding: theme('spacing.1');
+    z-index: 1;
+    outline: none;
     box-shadow: theme('elevation.hight');
     border-radius: theme('borderRadius.md');
-    color: theme('colors.surface-2.fg');
     background-color: theme('colors.surface-2.bg');
+    padding: theme('spacing.1');
     overflow: auto;
-    z-index: 1;
+    color: theme('colors.surface-2.fg');
     user-select: none;
-    outline: none;
   }
 </style>

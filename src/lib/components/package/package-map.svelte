@@ -255,18 +255,18 @@
   }
 
   ._map_currentposition {
-    color: theme('colors.primary.200');
     filter: drop-shadow(2px 2px 2px #0006);
+    color: theme('colors.primary.200');
   }
 
   ._map-marker {
     display: block;
-    font-size: theme('fontSize.base');
-    color: theme('colors.primary.200');
-    filter: drop-shadow(2px 2px 2px #0006);
-    translate: 0 -50%;
     transform-origin: bottom center;
+    translate: 0 -50%;
+    filter: drop-shadow(2px 2px 2px #0006);
     outline: none;
+    color: theme('colors.primary.200');
+    font-size: theme('fontSize.base');
 
     &:hover,
     &:focus {
@@ -274,14 +274,14 @@
     }
 
     &:before {
-      content: '';
       position: absolute;
+      bottom: -5px;
+      left: 0;
+      z-index: -1;
+      background-image: radial-gradient(closest-side, rgb(0 0 0 / 40%) 10%, rgb(0 0 0 / 5%));
       width: 100%;
       height: 10px;
-      left: 0;
-      bottom: -5px;
-      background-image: radial-gradient(closest-side, rgb(0 0 0 / 40%) 10%, rgb(0 0 0 / 5%));
-      z-index: -1;
+      content: '';
     }
   }
 
@@ -304,21 +304,21 @@
   }
 
   ._map-button {
-    box-sizing: content-box;
     display: grid;
     place-content: center;
-    min-width: theme('spacing.5');
-    height: theme('spacing.5');
-    padding: theme('spacing.2');
-    color: theme('colors.surface-2.fg');
-    background-color: theme('colors.surface-2.bg');
-    border-radius: theme('borderRadius.DEFAULT');
-    box-shadow: theme('boxShadow.md');
-    border: 1px solid theme('colors.surface-1.fg / 25%');
+    transition-duration: 150ms, 150ms, 250ms;
+    transition-property: background-color, outline-color, outline-offset;
+    box-sizing: content-box;
     outline: 2px solid transparent;
     outline-offset: 8px;
-    transition-property: background-color, outline-color, outline-offset;
-    transition-duration: 150ms, 150ms, 250ms;
+    box-shadow: theme('boxShadow.md');
+    border: 1px solid theme('colors.surface-1.fg / 25%');
+    border-radius: theme('borderRadius.DEFAULT');
+    background-color: theme('colors.surface-2.bg');
+    padding: theme('spacing.2');
+    min-width: theme('spacing.5');
+    height: theme('spacing.5');
+    color: theme('colors.surface-2.fg');
 
     @media (pointer: coarse) {
       width: theme('spacing.10');
@@ -335,8 +335,8 @@
     }
 
     & + & {
-      border-top-left-radius: 0;
       border-top-right-radius: 0;
+      border-top-left-radius: 0;
     }
 
     & + &:not(:first-child) {
@@ -344,8 +344,8 @@
     }
 
     &:has(+ &) {
-      border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
 </style>

@@ -38,7 +38,7 @@
 
 <style lang="postcss">
   canvas {
-    transition: opacity 250ms;
     opacity: 0;
+    transition: opacity 250ms;
   }
 </style>

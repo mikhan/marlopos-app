@@ -46,8 +46,8 @@
 
   :global(.mapboxgl-control-container) {
     font: initial;
-    font-family: theme('fontFamily.sans');
     font-size: theme('fontSize.base');
+    font-family: theme('fontFamily.sans');
   }
 
   :global(.mapboxgl-ctrl-top-left) div,

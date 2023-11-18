@@ -41,28 +41,28 @@
 <style lang="postcss">
   .switch {
     --position: 0;
-    width: 72px;
-    height: 28px;
-    background-color: theme('colors.neutral.100 / 25%');
+    position: relative;
+    margin-left: auto;
     outline: 1px solid theme('colors.neutral.900 / 50%');
     outline-offset: -1px;
     border-radius: 8px;
-    position: relative;
-    margin-left: auto;
+    background-color: theme('colors.neutral.100 / 25%');
+    width: 72px;
+    height: 28px;
 
     &::before {
-      content: '';
       position: absolute;
-      height: 100%;
-      width: 40px;
       top: 0;
       left: 0;
-      background-color: theme('colors.neutral.900');
-      background-clip: content-box;
+      transform: translateX(calc(var(--position) * 32px));
+      transition: transform 150ms ease-in-out;
       border: 4px solid transparent;
       border-radius: 8px;
-      transition: transform 150ms ease-in-out;
-      transform: translateX(calc(var(--position) * 32px));
+      background-clip: content-box;
+      background-color: theme('colors.neutral.900');
+      width: 40px;
+      height: 100%;
+      content: '';
     }
 
     &:focus-visible,
@@ -72,24 +72,24 @@
     }
 
     &.disabled {
-      pointer-events: none;
       opacity: 0.5;
+      pointer-events: none;
     }
   }
 
   .switch-option {
     display: grid;
-    place-content: center;
-    height: 100%;
-    width: 40px;
-    top: 0px;
-    z-index: 1;
     position: absolute;
+    top: 0px;
+    right: 0;
+    place-content: center;
+    z-index: 1;
     transition: color 150ms ease-in-out;
+    width: 40px;
+    height: 100%;
+    font-weight: bold;
     font-size: theme('fontSize.xs[0]');
     line-height: theme('fontSize.xs[1]');
-    font-weight: bold;
-    right: 0;
 
     &:first-child {
       left: 0;

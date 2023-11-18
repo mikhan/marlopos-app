@@ -90,9 +90,9 @@
     }
 
     display: grid;
+    position: relative;
     outline: var(--debug) solid #0ff9;
     outline-offset: calc(var(--debug) * -1);
-    position: relative;
     height: 864px;
     max-height: 100svh;
 
@@ -104,15 +104,15 @@
 
   .control {
     display: none;
+    position: absolute;
     place-content: center;
+    z-index: 2;
     cursor: pointer;
     outline: none;
-    padding: 0;
-    width: var(--slide-control-size);
-    z-index: 2;
-    position: absolute;
     outline: var(--debug) dashed #00f9;
     outline-offset: calc(var(--debug) * -1);
+    padding: 0;
+    width: var(--slide-control-size);
 
     @media (min-width: theme('screens.md')) and (pointer: fine) {
       display: grid;
@@ -140,37 +140,37 @@
   .control-icon {
     display: grid;
     place-content: center;
-    width: var(--slide-control-icon-size);
-    aspect-ratio: 1;
-    border-radius: 100%;
-    color: var(--slide-control-icon-color);
-    background-color: var(--slide-control-icon-background);
-    outline: var(--slide-control-icon-outline);
     opacity: var(--slide-control-icon-opacity);
-    transition-property: opacity, background-color, color;
     transition-duration: theme('transitionDuration.150');
+    transition-property: opacity, background-color, color;
     transition-timing-function: theme('transitionTimingFunction.in-out');
+    outline: var(--slide-control-icon-outline);
+    border-radius: 100%;
+    background-color: var(--slide-control-icon-background);
+    aspect-ratio: 1;
+    width: var(--slide-control-icon-size);
+    color: var(--slide-control-icon-color);
   }
 
   .indicators {
-    outline: var(--debug) solid #0f09;
-    outline-offset: calc(var(--debug) * -1);
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: theme('spacing.12');
-    z-index: 2;
     position: absolute;
     bottom: 0;
     left: 50%;
+    justify-content: center;
+    align-items: center;
     transform: translateX(-50%);
+    z-index: 2;
+    outline: var(--debug) solid #0f09;
+    outline-offset: calc(var(--debug) * -1);
     padding-inline: var(--layout-padding);
     padding-block: theme('spacing.2');
+    height: theme('spacing.12');
 
     @media (pointer: coarse) {
-      width: 100%;
-      align-items: flex-end;
       justify-content: stretch;
+      align-items: flex-end;
+      width: 100%;
       max-width: calc(theme('screens.lg') + calc(var(--layout-padding) * 2));
       pointer-events: none;
     }
@@ -178,16 +178,18 @@
 
   .indicator {
     display: grid;
-    align-items: center;
+    flex-grow: 1;
     justify-content: stretch;
+    align-items: center;
+    opacity: 0.5;
+    transition:
+      min-width 250ms ease-in-out,
+      opacity 250ms ease-in-out;
     cursor: pointer;
     outline: none;
-    opacity: 0.5;
-    flex-grow: 1;
+    padding: theme('spacing.1');
     min-width: theme('spacing.3');
     min-height: theme('spacing.3');
-    padding: theme('spacing.1');
-    transition: min-width 250ms ease-in-out, opacity 250ms ease-in-out;
 
     @media (pointer: fine) {
       padding: theme('spacing.2');
@@ -211,16 +213,16 @@
 
     &::before {
       display: block;
-      content: '';
-      width: 100%;
-      height: 100%;
-      border-radius: theme('spacing[1.5]');
-      background-color: theme('colors.surface-2.fg');
+      transition-duration: 150ms, 250ms;
+      transition-property: outline-color, outline-offset;
+      transition-timing-function: ease-in;
       outline: 2px solid transparent;
       outline-offset: 8px;
-      transition-property: outline-color, outline-offset;
-      transition-duration: 150ms, 250ms;
-      transition-timing-function: ease-in;
+      border-radius: theme('spacing[1.5]');
+      background-color: theme('colors.surface-2.fg');
+      width: 100%;
+      height: 100%;
+      content: '';
     }
   }
 </style>

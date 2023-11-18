@@ -56,9 +56,9 @@
 
 <style lang="postcss">
   article {
-    padding-block: theme('spacing.24');
-    padding-inline-end: 0;
     background-color: theme('colors.primary.800');
+    padding-inline-end: 0;
+    padding-block: theme('spacing.24');
     color: theme('colors.primary.800-fg');
   }
 
@@ -74,16 +74,16 @@
 
   ._scroller {
     display: flex;
-    align-items: center;
     position: relative;
+    align-items: center;
     width: 100%;
     min-width: 0;
 
     & > :global([data-component='ui-scroller']) {
+      gap: theme('spacing.4');
+      margin-block: -1rem;
       padding-inline: var(--layout-padding) calc(100% + var(--layout-padding) - theme('spacing.64'));
       padding-block: 1rem;
-      margin-block: -1rem;
-      gap: theme('spacing.4');
 
       @media (min-width: theme('screens.md')) {
         padding-inline: 0 calc(100% - theme('spacing.64'));
@@ -91,11 +91,11 @@
     }
 
     & > :global([data-component='ui-icon-button']) {
-      background-color: theme('colors.surface-2.bg');
-      color: theme('colors.surface-2.fg');
-      box-shadow: theme('elevation.low');
       position: absolute;
       z-index: 1;
+      box-shadow: theme('elevation.low');
+      background-color: theme('colors.surface-2.bg');
+      color: theme('colors.surface-2.fg');
 
       &:not([disabled]):hover {
         background-color: theme('colors.surface-2.hover');
@@ -113,8 +113,8 @@
     & > :global([data-component='ui-icon-button']._button-previous) {
       @media (min-width: theme('screens.md')) {
         left: 0;
-        margin: 0;
         transform: translateX(-50%);
+        margin: 0;
       }
     }
 
@@ -130,8 +130,8 @@
 
     @media (min-width: theme('screens.md')) {
       padding-inline: 0;
-      text-align: left;
       width: theme('spacing.72');
+      text-align: left;
     }
   }
 </style>

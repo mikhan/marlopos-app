@@ -14,10 +14,10 @@
 
 <style lang="postcss">
   div {
-    padding: theme('spacing.4');
-    border-radius: theme('borderRadius.DEFAULT');
     box-shadow: theme('elevation.low');
+    border-radius: theme('borderRadius.DEFAULT');
     background-color: theme('colors.surface-1.bg');
+    padding: theme('spacing.4');
     color: theme('colors.surface-1.fg');
 
     @media (min-width: theme('screens.lg')) {

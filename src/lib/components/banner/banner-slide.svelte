@@ -24,18 +24,18 @@
 <style lang="postcss">
   .banner-slide {
     display: grid;
-    align-items: end;
     position: relative;
+    align-items: end;
     isolation: isolate;
     padding-inline: theme('spacing.4');
   }
 
   ._content {
-    color: theme('colors.surface-2.fg');
+    z-index: 1;
     padding-inline: var(--slide-control-size);
     padding-bottom: max(10vh, theme('spacing.12'));
+    color: theme('colors.surface-2.fg');
     user-select: none;
-    z-index: 1;
     text-align: center;
 
     @media (min-width: theme('screens.sm')) {
@@ -44,9 +44,9 @@
   }
 
   ._title {
-    font-family: theme('fontFamily.display');
     font-size: theme('fontSize.4xl-fluid[0]');
     line-height: theme('fontSize.4xl-fluid[1]');
+    font-family: theme('fontFamily.display');
     text-wrap: balance;
     max-width: theme('maxWidth.prose');
     text-shadow: 0 0 4px theme('colors.canvas.bg');
@@ -54,9 +54,9 @@
   }
 
   ._description {
+    margin-top: theme('spacing.2');
     font-size: theme('fontSize.xl[0]');
     line-height: theme('fontSize.xl[1]');
-    margin-top: theme('spacing.2');
     text-wrap: balance;
     max-width: theme('maxWidth.prose');
     text-shadow: 0 0 4px theme('colors.canvas.bg');

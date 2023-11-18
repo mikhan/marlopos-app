@@ -16,21 +16,21 @@
     --progress-color: theme('colors.ring');
     display: block;
     appearance: none;
+    background-color: var(--progress-background-color);
     width: 100%;
     height: 4px;
-    background-color: var(--progress-background-color);
 
     &::-webkit-progress-bar {
       background: none;
     }
 
     &:indeterminate {
-      background-color: var(--progress-background-color);
+      animation: progress-indeterminate 1s linear infinite;
       background-image: linear-gradient(to right, var(--progress-color) 30%, var(--progress-background-color) 30%);
-      background-repeat: no-repeat;
       background-position: 0% 0%;
       background-size: 150% 150%;
-      animation: progress-indeterminate 1s linear infinite;
+      background-repeat: no-repeat;
+      background-color: var(--progress-background-color);
     }
   }
 

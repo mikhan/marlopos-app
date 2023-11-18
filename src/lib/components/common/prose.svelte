@@ -37,23 +37,23 @@
 
       blockquote {
         margin-top: theme('spacing.5');
-        border-inline-start: theme('spacing[1.5]') solid theme('colors.neutral.500');
-        padding-block: theme('spacing.2');
-        padding-inline: theme('spacing.6');
-        background-color: theme('colors.neutral.700');
-        color: theme('colors.neutral.700-fg');
         border-radius: theme('borderRadius.DEFAULT');
+        border-inline-start: theme('spacing[1.5]') solid theme('colors.neutral.500');
+        background-color: theme('colors.neutral.700');
+        padding-inline: theme('spacing.6');
+        padding-block: theme('spacing.2');
+        color: theme('colors.neutral.700-fg');
       }
 
       ul {
-        list-style-type: disc;
         margin-top: theme('spacing.5');
         padding-left: theme('spacing.6');
+        list-style-type: disc;
       }
 
       li {
-        padding-left: theme('spacing[1.5]');
         margin-block: theme('spacing.2');
+        padding-left: theme('spacing[1.5]');
 
         &::marker {
           opacity: 0.75;

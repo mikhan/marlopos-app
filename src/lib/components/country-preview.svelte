@@ -29,19 +29,19 @@
     --color: theme('colors.surface-2.fg');
     display: grid;
     position: relative;
-    contain: content;
-    border-radius: theme('borderRadius.DEFAULT');
     transition: box-shadow 150ms ease-in;
+    transition-duration: 150ms, 250ms;
+    transition-property: outline-color, outline-offset;
+    contain: content;
     outline: 2px solid transparent;
     outline-offset: -8px;
-    transition-property: outline-color, outline-offset;
-    transition-duration: 150ms, 250ms;
+    box-shadow: theme('elevation.low');
+    border-radius: theme('borderRadius.DEFAULT');
+    aspect-ratio: 2/3;
     width: 50vw;
     max-width: theme('spacing.64');
-    aspect-ratio: 2/3;
     max-height: calc(100vh - var(--layout-topbar-height));
     user-select: none;
-    box-shadow: theme('elevation.low');
 
     &:is(:hover) {
       .image {
@@ -57,23 +57,23 @@
 
   .content {
     display: flex;
+    position: absolute;
     flex-direction: column;
     justify-content: flex-end;
-    position: absolute;
+    transition: color 150ms ease-in-out;
     inset: 0;
     padding: 1rem;
     color: var(--color);
-    transition: color 150ms ease-in-out;
   }
 
   a {
     outline: none;
 
     &::after {
-      content: '';
       position: absolute;
-      inset: 0;
       z-index: 1;
+      inset: 0;
+      content: '';
     }
   }
 
@@ -83,19 +83,19 @@
 
   .image {
     position: absolute;
-    inset: 0;
-    z-index: -1;
     transform: scale(1) translate3d(0, 0, 0);
+    z-index: -1;
     transition: transform 250ms ease-in-out;
+    inset: 0;
 
     &::after {
-      content: '';
       position: absolute;
       inset: 0;
-      pointer-events: none;
       background-image: radial-gradient(circle at left bottom, theme('colors.canvas.bg / 60%'), 30%, transparent 50%),
         linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 12rem),
         linear-gradient(0deg, theme('colors.canvas.bg / 60%'), transparent 6rem);
+      pointer-events: none;
+      content: '';
     }
   }
 </style>

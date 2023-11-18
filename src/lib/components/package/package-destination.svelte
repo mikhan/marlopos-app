@@ -57,21 +57,21 @@
 
 <style lang="postcss">
   li {
-    position: relative;
     display: grid;
+    position: relative;
     grid-template-columns: 1fr;
     gap: theme('spacing.4');
+    border: 1px solid theme('colors.surface-1.border');
+    border-radius: theme('borderRadius.DEFAULT');
+    background-color: theme('colors.surface-1.bg');
     padding: theme('spacing.4');
     color: theme('colors.surface-1.fg');
-    background-color: theme('colors.surface-1.bg');
-    border-radius: theme('borderRadius.DEFAULT');
-    border: 1px solid theme('colors.surface-1.border');
     @apply focusable focusable-ring;
-    transition-property: outline-color, outline-offset, background-color, color;
     transition-duration: 150ms, 250ms, 250ms, 250ms;
+    transition-property: outline-color, outline-offset, background-color, color;
     transition-timing-function: theme('transitionTimingFunction.in-out');
-    overflow: hidden;
     box-shadow: theme('boxShadow.xl');
+    overflow: hidden;
 
     @media (min-width: theme('screens.sm')) {
       grid-template-columns: theme('spacing.32') 1fr;
@@ -85,20 +85,20 @@
 
   ._image {
     display: block;
-    aspect-ratio: 16/9;
     flex-shrink: 0;
-    overflow: hidden;
     border-radius: theme('borderRadius.DEFAULT');
+    aspect-ratio: 16/9;
+    overflow: hidden;
 
     @media (min-width: theme('screens.sm')) {
-      width: theme('spacing.32');
       aspect-ratio: 1/1;
+      width: theme('spacing.32');
     }
 
     @media (min-width: theme('screens.md')) {
-      width: auto;
-      aspect-ratio: 16/9;
       border-radius: 0;
+      aspect-ratio: 16/9;
+      width: auto;
     }
   }
 

@@ -25,14 +25,14 @@
     outline: none;
 
     &::after {
-      content: '';
       display: block;
+      transform: rotate(45deg) scale(0.25);
+      transition: transform 150ms;
+      background-color: red;
       width: calc(var(--size) * 2);
       height: calc(var(--size) * 2);
-      background-color: red;
-      transform: rotate(45deg) scale(0.25);
       pointer-events: none;
-      transition: transform 150ms;
+      content: '';
     }
 
     &:hover::after,

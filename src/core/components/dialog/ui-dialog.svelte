@@ -38,20 +38,20 @@
 
 <style lang="postcss">
   dialog[open] {
+    animation: dialog-show 250ms ease-in;
+    box-shadow: theme('elevation.hight');
+    border-radius: theme('borderRadius.DEFAULT');
+    background-color: theme('colors.surface-2.bg');
     min-width: min(theme('screens.sm'), 90vw);
     max-width: calc(100% - calc(theme('spacing.4') * 2));
     max-height: min(30lh, calc(100vh - calc(theme('spacing.4') * 2)));
-    background-color: theme('colors.surface-2.bg');
     color: theme('colors.surface-2.fg');
-    border-radius: theme('borderRadius.DEFAULT');
-    box-shadow: theme('elevation.hight');
-    animation: dialog-show 250ms ease-in;
     @apply scrollbar-thin scrollbar-surface-2-fg scrollbar-track-surface-2-bg;
 
     &::backdrop {
+      animation: backdrop-show 250ms ease-in;
       background-color: theme('colors.neutral.900 / 75%');
       pointer-events: none;
-      animation: backdrop-show 250ms ease-in;
     }
 
     @keyframes dialog-show {
@@ -60,8 +60,8 @@
         opacity: 0;
       }
       to {
-        opacity: 1;
         transform: translateY(0);
+        opacity: 1;
       }
     }
 
@@ -76,27 +76,27 @@
   }
 
   header {
+    display: flex;
     position: sticky;
     top: 0;
     left: 0;
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding-inline: theme('spacing.4');
-    padding-block-start: theme('spacing.4');
+    align-items: center;
     margin-block-end: theme('spacing.4');
     background-color: inherit;
+    padding-inline: theme('spacing.4');
+    padding-block-start: theme('spacing.4');
 
     &::after {
-      content: '';
       position: absolute;
-      width: 100%;
-      height: theme('spacing.4');
-      left: 0;
       bottom: 0;
+      left: 0;
       translate: 0 100%;
       z-index: -1;
       background-image: linear-gradient(theme('colors.surface-2.bg'), transparent);
+      width: 100%;
+      height: theme('spacing.4');
+      content: '';
     }
 
     h1 {
@@ -111,26 +111,26 @@
 
   footer {
     display: flex;
-    gap: theme('spacing.4');
-    padding-inline: theme('spacing.4');
-    padding-block-end: theme('spacing.4');
-    margin-block-start: theme('spacing.4');
     position: sticky;
     bottom: 0;
     left: 0;
-    background-color: inherit;
     justify-content: flex-end;
+    gap: theme('spacing.4');
+    margin-block-start: theme('spacing.4');
+    background-color: inherit;
+    padding-inline: theme('spacing.4');
+    padding-block-end: theme('spacing.4');
 
     &::after {
-      content: '';
       position: absolute;
-      width: 100%;
-      height: theme('spacing.4');
-      left: 0;
       top: 0;
+      left: 0;
       translate: 0 -100%;
       z-index: -1;
       background-image: linear-gradient(to top, theme('colors.surface-2.bg'), 75%, transparent);
+      width: 100%;
+      height: theme('spacing.4');
+      content: '';
     }
   }
 </style>

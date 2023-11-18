@@ -100,9 +100,9 @@
   ul {
     --scrollbar-size: 0;
     display: grid;
+    grid-auto-flow: column;
     justify-content: start;
     align-items: stretch;
-    grid-auto-flow: column;
     overflow: hidden;
     scroll-behavior: smooth;
   }

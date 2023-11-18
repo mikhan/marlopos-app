@@ -39,14 +39,14 @@
     --background: theme('colors.surface-1.bg');
     --margin: theme('spacing.2');
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    color: var(--color);
-    background-color: var(--background);
-    border-radius: theme('borderRadius.lg');
-    margin: var(--margin);
+    align-items: center;
     align-self: center;
+    margin: var(--margin);
+    border-radius: theme('borderRadius.lg');
+    background-color: var(--background);
     isolation: isolate;
+    color: var(--color);
   }
 
   span {
@@ -61,12 +61,12 @@
       right: 0;
 
       &::before {
-        content: '';
         position: absolute;
-        inset: 0;
-        background-image: linear-gradient(to right, transparent, var(--background) theme('spacing.4'));
         z-index: -1;
+        inset: 0;
         border-radius: theme('borderRadius.lg');
+        background-image: linear-gradient(to right, transparent, var(--background) theme('spacing.4'));
+        content: '';
       }
     }
   }

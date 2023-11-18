@@ -94,15 +94,15 @@
 <style lang="postcss">
   button {
     display: grid;
-    place-content: center;
-    width: 60px;
-    height: 60px;
     position: fixed;
     right: 20px;
     bottom: 16px;
+    place-content: center;
+    z-index: 1000001 !important;
     border-radius: 100%;
     background-color: #8471b1;
+    width: 60px;
+    height: 60px;
     color: #ffffff;
-    z-index: 1000001 !important;
   }
 </style>

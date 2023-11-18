@@ -88,14 +88,14 @@
 <style lang="postcss">
   dl {
     display: grid;
-    gap: theme('spacing.6') theme('spacing.2');
     grid-template-columns: repeat(auto-fill, minmax(theme('spacing.64'), 1fr));
-    padding: theme('spacing.4');
-    border-radius: theme('borderRadius.DEFAULT');
+    gap: theme('spacing.6') theme('spacing.2');
     box-shadow: theme('elevation.low');
+    border-radius: theme('borderRadius.DEFAULT');
     background-color: theme('colors.surface-1.bg');
-    color: theme('colors.surface-1.fg');
+    padding: theme('spacing.4');
     min-width: theme('spacing.64');
+    color: theme('colors.surface-1.fg');
 
     @media (min-width: theme('screens.lg')) {
       grid-template-columns: theme('spacing.64');
@@ -104,8 +104,8 @@
   }
 
   dt {
-    font-size: theme('fontSize.xs[0]');
     font-weight: bold;
+    font-size: theme('fontSize.xs[0]');
     line-height: theme('fontSize.xs[1]');
   }
 

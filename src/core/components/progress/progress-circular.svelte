@@ -22,21 +22,21 @@
     --degrees: 360deg;
     --duration: 1000ms;
     --border: 6px solid #227ded;
-    container: ui-progress-circular / size;
     position: relative;
+    container: ui-progress-circular / size;
+    border-radius: 50%;
     width: 48px;
     height: 48px;
-    border-radius: 50%;
 
     .circle {
     }
 
     .mask,
     .fill {
-      width: 100%;
-      height: 100%;
       position: absolute;
       border-radius: 50%;
+      width: 100%;
+      height: 100%;
     }
     .fill {
       border: var(--border);
@@ -44,8 +44,8 @@
 
     .mask.full,
     .fill {
-      animation: ui-progress-circular-animation linear var(--duration) infinite;
       transform: rotate(var(--degrees));
+      animation: ui-progress-circular-animation linear var(--duration) infinite;
     }
 
     @container ui-progress-circular (min-width: 0px) {
@@ -59,10 +59,10 @@
     }
 
     .content {
-      position: absolute;
-      inset: 0;
       display: grid;
+      position: absolute;
       place-content: center;
+      inset: 0;
     }
 
     @keyframes ui-progress-circular-animation {

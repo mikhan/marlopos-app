@@ -7,14 +7,14 @@
 @import '$core/styles.scss';
 
 :root {
-  color-scheme: dark;
+  background-color: theme('colors.neutral.900');
+  overflow-x: hidden;
   scroll-behavior: smooth;
-  font-family: theme('fontFamily.sans');
+  color: theme('colors.canvas.fg');
+  color-scheme: dark;
   font-size: theme('fontSize.base[0]');
   line-height: theme('fontSize.base[1]');
-  background-color: theme('colors.neutral.900');
-  color: theme('colors.canvas.fg');
-  overflow-x: hidden;
+  font-family: theme('fontFamily.sans');
 
   @media (pointer: fine) {
     overflow-y: scroll;

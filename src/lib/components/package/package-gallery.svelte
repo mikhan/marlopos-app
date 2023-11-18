@@ -116,17 +116,17 @@
 <style lang="postcss">
   ._preview {
     position: relative;
-    width: 256px;
-    height: 144px;
     box-shadow: theme('elevation.low');
     border-radius: theme('borderRadius.DEFAULT');
+    width: 256px;
+    height: 144px;
     overflow: hidden;
   }
 
   ._scroller {
     display: flex;
-    align-items: center;
     position: relative;
+    align-items: center;
     width: 100%;
     min-width: 0;
 
@@ -140,11 +140,11 @@
     }
 
     & > :global([data-component='ui-icon-button']) {
-      background-color: theme('colors.surface-2.bg');
-      color: theme('colors.surface-2.fg');
-      box-shadow: theme('elevation.low');
       position: absolute;
       z-index: 1;
+      box-shadow: theme('elevation.low');
+      background-color: theme('colors.surface-2.bg');
+      color: theme('colors.surface-2.fg');
 
       &:not([disabled]):hover {
         background-color: theme('colors.surface-2.hover');

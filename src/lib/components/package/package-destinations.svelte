@@ -77,8 +77,8 @@
     }
 
     &:fullscreen {
-      overflow-y: auto;
       background-color: theme('colors.canvas.bg');
+      overflow-y: auto;
 
       @media (min-width: theme('screens.md')) {
         padding-inline: theme('spacing.4');
@@ -96,9 +96,9 @@
     }
 
     @media (min-width: theme('screens.md')) {
-      padding-block: theme('spacing.4');
       gap: theme('spacing.4');
       margin-left: auto;
+      padding-block: theme('spacing.4');
       max-width: theme('maxWidth.screen-sm');
     }
 
@@ -112,38 +112,38 @@
   }
 
   ._map-container {
-    width: 100%;
     aspect-ratio: 1;
+    width: 100%;
     max-height: calc(100vh - var(--layout-topbar-height) - theme('spacing.2') - theme('spacing.2'));
     scroll-margin-block-start: calc(var(--layout-topbar-height) + theme('spacing.2'));
 
     @media (min-width: theme('screens.md')) {
-      height: 100%;
-      max-height: calc(100vh - var(--layout-topbar-height));
-      aspect-ratio: auto;
-      padding-block: theme('spacing.4');
       position: sticky;
       top: theme('spacing.16');
+      padding-block: theme('spacing.4');
+      aspect-ratio: auto;
+      height: 100%;
+      max-height: calc(100vh - var(--layout-topbar-height));
     }
 
     ._wrapper:fullscreen & {
       top: 0;
       width: 100%;
-      height: 100%;
       max-width: 100%;
+      height: 100%;
       max-height: 100vh;
     }
   }
 
   ._map {
     position: relative;
+    box-shadow: theme('elevation.low');
+    border: 1px solid theme('colors.surface-1.border');
+    border-radius: theme('borderRadius.DEFAULT');
+    background-color: theme('colors.surface-1.bg');
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: theme('borderRadius.DEFAULT');
-    background-color: theme('colors.surface-1.bg');
-    border: 1px solid theme('colors.surface-1.border');
-    box-shadow: theme('elevation.low');
     @apply focusable-within focusable-ring;
   }
 </style>

@@ -92,10 +92,10 @@
 <style lang="postcss">
   .map-link {
     display: block;
+    transition-duration: 150ms, 250ms;
+    transition-property: outline-color, outline-offset;
     outline: 2px solid transparent;
     outline-offset: -8px;
-    transition-property: outline-color, outline-offset;
-    transition-duration: 150ms, 250ms;
     isolation: isolate;
 
     & > :global(*) {

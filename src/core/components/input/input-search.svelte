@@ -55,14 +55,14 @@
   :where(._container) {
     display: flex;
     position: relative;
-    width: 100%;
     background-color: Field;
+    width: 100%;
     color: FieldText;
 
     :global(:where(input)) {
+      border: none;
       background: transparent;
       padding-left: 0;
-      border: none;
     }
 
     :global(:where(input:not(:placeholder-shown))) {

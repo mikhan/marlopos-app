@@ -23,8 +23,8 @@
   section {
     --image-size: 720px;
     --container-size: theme('screens.sm');
-    position: relative;
     display: grid;
+    position: relative;
     grid-template: 'stack' 100% / 100%;
     width: 100%;
     height: var(--container-size);
@@ -36,15 +36,15 @@
 
   picture {
     &::after {
-      content: '';
       position: absolute;
-      inset: 0;
       opacity: 0.7;
-      background-color: theme('colors.canvas.bg/75%');
+      mix-blend-mode: multiply;
+      inset: 0;
       background-image: radial-gradient(rgb(0 0 0 / 75%) 1px, transparent 1px);
       background-size: 4px 4px;
-      mix-blend-mode: multiply;
+      background-color: theme('colors.canvas.bg/75%');
       pointer-events: none;
+      content: '';
     }
   }
 
@@ -54,10 +54,10 @@
     object-fit: none;
     object-position: center;
     animation-timeline: view(y 10%);
-    animation-name: parallax;
-    animation-fill-mode: both;
     animation-duration: 1ms;
     animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-name: parallax;
   }
 
   @keyframes parallax {
@@ -73,22 +73,22 @@
   }
 
   p {
-    max-width: theme('screens.md');
     place-self: center;
     z-index: 1;
     padding-inline: theme('spacing.4');
-    font-family: theme('fontFamily.display');
+    max-width: theme('screens.md');
     font-size: theme('fontSize.xl-fluid[0]');
     line-height: theme('fontSize.xl-fluid[1]');
+    font-family: theme('fontFamily.display');
     text-align: center;
     text-wrap: balance;
     color: hsl(172 20% 90%);
 
     strong {
-      background-color: hsl(172 38% 45%);
-      padding-block: theme('spacing.1');
-      padding-inline: theme('spacing.3');
       border-radius: theme('borderRadius.DEFAULT');
+      background-color: hsl(172 38% 45%);
+      padding-inline: theme('spacing.3');
+      padding-block: theme('spacing.1');
       white-space: nowrap;
     }
   }

@@ -17,11 +17,11 @@
 <style lang="postcss">
   button {
     display: grid;
-    place-content: center;
-    width: theme('spacing.10');
-    aspect-ratio: 1/1;
     flex: 0 0 auto;
+    place-content: center;
     border-radius: 100%;
+    aspect-ratio: 1/1;
+    width: theme('spacing.10');
     @apply focusable focusable-ring;
 
     &[data-size='sm'] {

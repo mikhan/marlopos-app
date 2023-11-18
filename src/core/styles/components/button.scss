@@ -4,26 +4,26 @@
     --fg: theme('colors.surface-1.fg');
     --hover: theme('colors.surface-1.hover');
     display: inline-flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     gap: theme('spacing.2');
-    min-width: theme('spacing.16');
-    height: theme('spacing.12');
-    padding: 0 theme('spacing.6');
-    color: var(--fg);
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: theme('borderRadius.DEFAULT');
-    border: 2px solid var(--bg);
-    letter-spacing: theme('letterSpacing.wider');
+    transition-duration: 150ms, 150ms, 150ms, 250ms;
+    transition-property: background-color, border-color, outline-color, outline-offset;
     outline: 2px solid transparent;
     outline-offset: 8px;
-    transition-property: background-color, border-color, outline-color, outline-offset;
-    transition-duration: 150ms, 150ms, 150ms, 250ms;
+    border: 2px solid var(--bg);
+    border-radius: theme('borderRadius.DEFAULT');
+    padding: 0 theme('spacing.6');
+    min-width: theme('spacing.16');
+    height: theme('spacing.12');
+    color: var(--fg);
+    font-weight: bold;
+    letter-spacing: theme('letterSpacing.wider');
+    text-transform: uppercase;
 
     &:is(:hover, :active) {
-      background-color: var(--hover);
       border: 2px solid var(--hover);
+      background-color: var(--hover);
     }
 
     &:focus-visible {
@@ -33,8 +33,8 @@
   }
 
   .button-filled {
-    background-color: var(--bg);
     box-shadow: theme('elevation.low');
+    background-color: var(--bg);
   }
 
   .button-primary {

@@ -94,59 +94,59 @@
     --background: theme('colors.canvas.bg');
     display: grid;
     grid-template-rows: var(--first-row-size) repeat(var(--rows), auto) 1fr;
+    flex: 1 1 0px;
+    cursor: grab;
+    background-color: var(--background);
+    isolation: isolate;
     width: 100%;
     height: 100%;
-    flex: 1 1 0px;
-    background-color: var(--background);
     overflow: auto;
     scroll-behavior: smooth;
     user-select: none;
-    isolation: isolate;
-    cursor: grab;
     @apply scrollbar-thin scrollbar-border-canvas-border scrollbar-canvas-fg/50;
   }
 
   [role='row'] {
     --index: auto;
-    grid-column-start: 1;
-    grid-row-start: var(--index);
     display: grid;
     grid-template-columns: var(--first-column-size) repeat(var(--columns), var(--column-size)) 1fr;
     grid-auto-flow: column;
+    grid-row-start: var(--index);
+    grid-column-start: 1;
 
     &:first-child {
       position: sticky;
       top: 0;
       z-index: 2;
-      background-color: theme('colors.canvas.bg');
       box-shadow: inset 0 -1px theme('colors.canvas.border');
+      background-color: theme('colors.canvas.bg');
     }
 
     & > * {
       --index: auto;
       --span: 1;
+      grid-row-start: 1;
       grid-column-start: var(--index);
       grid-column-end: span var(--span);
-      grid-row-start: 1;
       box-shadow: inset -1px 0 theme('colors.canvas.border');
 
       &:first-child {
-        background-color: theme('colors.surface-1.bg');
-        box-shadow: inset -1px -1px theme('colors.surface-1.border');
         position: sticky;
         left: 0;
         z-index: 1;
+        box-shadow: inset -1px -1px theme('colors.surface-1.border');
+        background-color: theme('colors.surface-1.bg');
 
         &::before {
-          content: '';
           position: absolute;
           top: 0;
           left: 100%;
+          z-index: -1;
+          background-image: linear-gradient(to right, var(--background), 25%, transparent);
           width: 1rem;
           height: 100%;
           pointer-events: none;
-          background-image: linear-gradient(to right, var(--background), 25%, transparent);
-          z-index: -1;
+          content: '';
         }
       }
 

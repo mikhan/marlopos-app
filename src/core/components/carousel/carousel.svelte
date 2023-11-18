@@ -170,11 +170,11 @@
   }
 
   .slides {
-    overflow: hidden;
     position: relative;
+    isolation: isolate;
     width: 100%;
     height: 100%;
-    isolation: isolate;
+    overflow: hidden;
   }
 
   .slide {
@@ -187,8 +187,8 @@
     }
 
     &:not(.panning) {
-      transition-property: transform;
       transition-duration: 500ms;
+      transition-property: transform;
       transition-timing-function: theme('transitionTimingFunction.in-out');
     }
 
