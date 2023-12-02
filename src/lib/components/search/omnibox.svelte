@@ -1,54 +1,90 @@
+<script lang="ts" context="module">
+  export const [getOmniboxContext, setOmniboxContext] = createContext<{
+    registerOptionElement: Action<HTMLAnchorElement>
+    selected: Readable<HTMLAnchorElement | null>
+  }>()
+</script>
+
 <script lang="ts">
   import { browser } from '$app/environment'
   import { beforeNavigate } from '$app/navigation'
   import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons'
+  import MiniSearch from 'minisearch'
+  import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
+  import type { Action } from 'svelte/action'
+  import { type Readable, get, writable } from 'svelte/store'
   import { dismiss } from '$core/actions/dismiss'
   import { type Shortcut, shortcut } from '$core/actions/shortcut'
   import IconButton from '$core/components/icon-button.svelte'
+  import { createContext } from '$core/services/context'
   import { debounce } from '$core/utils/async'
-  import { generateUID } from '$core/utils/element'
-  import { getSearchEngine } from '$lib/services/search'
-  import OmniboxSuggestions from './omnibox-suggestions.svelte'
+  import { documentPositionSorter, generateUID } from '$core/utils/element'
+  import { mod } from '$core/utils/math'
+  import { removeDiacritics } from '$core/utils/string'
+  import type { SearchIndex, SearchResult } from '$lib/services/search'
+  import { languageStore } from '$lib/stores/language.store'
+  import { DEFAULT_LANGUAGE } from '$lib/utils/language'
+  import OmniboxResults from './omnibox-results.svelte'
 
   export let expanded = false
   export let value = ''
+
   let query = ''
-  let suggestions: string[] | null = null
+  let results: SearchResult[] | null = null
   let inputElement: HTMLInputElement
   let formElement: HTMLFormElement
+  let elements: HTMLAnchorElement[] = []
+  let loading = false
+  const selected = writable<HTMLAnchorElement | null>(null)
   let selectedId: string | undefined = undefined
   const inputId = generateUID('input')
   const listboxId = generateUID('listbox')
+  const showResultsDebounced = debounce(showResults, 50)
+  let searchEnginePromise: Promise<MiniSearch<SearchIndex>> | undefined = undefined
 
-  const showSuggestionsDebounced = debounce(showSuggestions, 250)
-  $: showSuggestionsDebounced(query)
+  $: showResultsDebounced(query)
+  $: locale = $languageStore.locale
 
   const openShortcut: Shortcut = [open, { ctrlKey: true, key: 'k' }]
 
-  async function showSuggestions(query: string) {
-    if (!browser) return
-    suggestions = query ? await fetchSuggestions(query) : null
+  async function showResults(query: string) {
+    if (browser && expanded && query) {
+      results = (await getSearchEngine())
+        .search(removeDiacritics(query), {
+          boost: { title: 2 },
+          fuzzy: 0.2,
+          prefix: true,
+        })
+        .map((result) => result['data'])
+    } else {
+      results = null
+    }
   }
 
-  async function fetchSuggestions(query: string): Promise<string[] | null> {
-    if (!expanded) return null
+  function select(delta: number) {
+    selected.update((selected) => {
+      elements.sort(documentPositionSorter)
+      const currentIndex = selected ? elements.indexOf(selected) : -1
 
-    const searchEngine = await getSearchEngine()
-    const suggestions = searchEngine
-      .autoSuggest(query, {
-        combineWith: 'OR',
-        boost: { title: 2 },
-        prefix: true,
-        fuzzy: false,
-        filter: (result) => result['data']['locale'] === 'es-ES',
-      })
-      .map(({ suggestion }) => suggestion)
+      return elements.at(mod(currentIndex + delta, elements.length)) ?? null
+    })
+  }
 
-    return suggestions
+  async function getSearchEngine() {
+    if (!searchEnginePromise) {
+      loading = true
+      searchEnginePromise = fetch(`${locale === DEFAULT_LANGUAGE.locale ? '' : `/${locale}`}/search/index.json`)
+        .then((response) => response.json())
+        .then((searchIndex: SearchIndex) => MiniSearch.loadJS(searchIndex.data, searchIndex.options))
+        .finally(() => (loading = false))
+    }
+
+    return searchEnginePromise
   }
 
   function open() {
+    getSearchEngine()
     expanded = true
     inputElement.focus()
     inputElement.select()
@@ -56,7 +92,7 @@
 
   function close() {
     expanded = false
-    suggestions = null
+    results = null
     query = value = ''
     inputElement.blur()
   }
@@ -67,23 +103,54 @@
   }
 
   function onKeydown(event: KeyboardEvent) {
-    if (event.key === 'Tab') close()
+    if (event.key === 'Tab') {
+      close()
+    } else if (event.key === 'ArrowUp') {
+      select(-1)
+      event.preventDefault()
+    } else if (event.key === 'ArrowDown') {
+      select(+1)
+      event.preventDefault()
+    }
   }
 
-  function acceptSuggestion(suggestion?: string, id?: string) {
-    value = suggestion || query
-    selectedId = id
+  function navigateTo(event: Event) {
+    const element = get(selected)
+    if (element) element.click()
+    event.preventDefault()
   }
 
   beforeNavigate(() => {
     close()
+  })
+
+  function registerOptionElement(element: HTMLAnchorElement) {
+    elements = [...elements, element]
+
+    return {
+      destroy() {
+        elements = elements.filter((e) => e !== element)
+        selected.update((selected) => (selected && elements.includes(selected) ? selected : null))
+      },
+    }
+  }
+
+  setOmniboxContext({
+    registerOptionElement,
+    selected: { subscribe: selected.subscribe },
+  })
+
+  onMount(() => {
+    if (document.activeElement === inputElement) {
+      open()
+    }
   })
 </script>
 
 <svelte:window use:shortcut={openShortcut} />
 
 <div class="omnibox-container">
-  <form action="/search" method="GET" autocomplete="off" use:dismiss on:dismiss={close} bind:this={formElement}>
+  <form autocomplete="off" on:submit={navigateTo} use:dismiss on:dismiss={close} bind:this={formElement}>
     <div>
       <label for={inputId}><Fa icon={faSearch} /><span class="sr-only">Buscar</span></label>
       <input
@@ -108,11 +175,11 @@
       {/if}
       <code aria-hidden="true">CTRL+K</code>
     </div>
-    {#if expanded && suggestions?.length}
-      <OmniboxSuggestions
-        {suggestions}
-        on:select={({ detail }) => acceptSuggestion(detail.suggestion, detail.id)}
-        on:click={() => formElement.submit()} />
+    {#if query && loading}
+      <div class="loading-indicator" />
+    {/if}
+    {#if expanded && results}
+      <OmniboxResults {results} />
     {/if}
   </form>
 </div>
@@ -134,6 +201,24 @@
 
     &:has([aria-expanded='true']) {
       width: 100%;
+
+      &::before {
+        position: fixed;
+        animation: backdrop-show 250ms ease-in;
+        inset: 0;
+        background-color: theme('colors.neutral.900 / 50%');
+        pointer-events: none;
+        content: '';
+      }
+    }
+
+    @keyframes backdrop-show {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
   }
 
@@ -155,7 +240,7 @@
     border-radius: theme('spacing.5');
     background-color: theme('colors.surface-1.bg');
     width: 100%;
-    max-height: calc(100dvh - 2rem);
+    max-height: 60svh;
     overflow: hidden;
     color: theme('colors.surface-1.fg');
 
@@ -228,6 +313,26 @@
 
     form:has([aria-expanded='true']) & {
       opacity: 0;
+    }
+  }
+
+  .loading-indicator {
+    position: absolute;
+    bottom: 0;
+    animation: 500ms ease-in-out infinite alternate ping;
+    background-image: linear-gradient(to right, theme('colors.primary.500'), theme('colors.primary.500'));
+    background-size: 10% 100%;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 4px;
+  }
+
+  @keyframes ping {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 100% 0%;
     }
   }
 </style>

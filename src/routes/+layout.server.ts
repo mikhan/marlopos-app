@@ -6,3 +6,6 @@ export const load = (async () => {
 
   return { information }
 }) satisfies LayoutServerLoad
+
+export const trailingSlash = 'always'
+export const prerender = true

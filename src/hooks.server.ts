@@ -1,6 +1,7 @@
 import type { HandleServerError } from '@sveltejs/kit'
 import { PUBLIC_IMAGE_CDN_ENDPOINT, PUBLIC_IMAGE_CDN_PROVIDER } from '$env/static/public'
 import { setResourceProvider } from '$core/services/resource-provider'
+import { destinationsIndexProvider } from '$lib/database/document-index-providers/destinations'
 import { packagesIndexProvider } from '$lib/database/document-index-providers/packages'
 import { handleLanguage } from '$lib/hooks/language.server'
 import { ImagekitResourceProvider } from '$lib/services/imagekit-resource-provider'
@@ -12,7 +13,8 @@ switch (PUBLIC_IMAGE_CDN_PROVIDER) {
     break
 }
 
-addDocumentIndexProvider('packages', packagesIndexProvider)
+addDocumentIndexProvider('package', packagesIndexProvider)
+addDocumentIndexProvider('destination', destinationsIndexProvider)
 
 export const handle = handleLanguage
 
