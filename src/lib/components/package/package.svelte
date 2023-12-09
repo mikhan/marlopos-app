@@ -14,23 +14,23 @@
 </script>
 
 <section class="layout-container">
-  <div class="relative h-[54rem] max-h-[100svh] -mb-[min(54rem,100svh)]">
-    <CoverImage data={data.cover} />
-  </div>
+  <PackageHeader title={data.name} description={data.description}>
+    <svelte:fragment slot="background">
+      <CoverImage data={data.cover} priority={true} />
+    </svelte:fragment>
+    <svelte:fragment slot="toolbar">
+      <ShareMenu />
+    </svelte:fragment>
+  </PackageHeader>
 
-  <div class="layout-lg relative z-[1]">
-    <div class="px-4 h-[54rem] max-h-[100svh] grid content-end -mb-24">
-      <PackageHeader {data} />
-      <div class="pt-12 pb-[max(10vh,3rem)] mt-8" />
-    </div>
+  <div class="layout-lg relative -mt-4">
     <div class="flex flex-col gap-y-4 gap-x-8 lg:flex-row">
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4 grow">
         <PackageContent {data} />
         <PackageNotes {data} />
       </div>
       <div class="flex flex-col gap-4">
         <PackageDetails {data} />
-        <ShareMenu />
       </div>
     </div>
   </div>

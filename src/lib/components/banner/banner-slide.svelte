@@ -4,6 +4,7 @@
   import { languageStore } from '$lib/stores/language.store'
   import { getLocalizedUrl } from '$lib/utils/language'
   import CoverImage from '../common/cover-image.svelte'
+  import PackageHeader from '../package/package-header.svelte'
 
   export let data: Api.Banner
   export let index: number
@@ -12,55 +13,11 @@
   $: href = makeRelative(getLocalizedUrl(new URL(`/packages/${data.id}`, $page.url), $languageStore.code))
 </script>
 
-<div class="banner-slide">
-  <CoverImage data={data.cover} priority={index === 0} />
-  <div class="_content">
-    <div class="_title">{data.name}</div>
-    <p class="_description">{data.description}</p>
-    <a {href} class="mt-8 button button-primary button-filled" data-sveltekit-preload-data>Más información</a>
-  </div>
-</div>
-
-<style lang="postcss">
-  .banner-slide {
-    display: grid;
-    position: relative;
-    align-items: end;
-    isolation: isolate;
-    padding-inline: theme('spacing.4');
-  }
-
-  ._content {
-    z-index: 1;
-    padding-inline: var(--slide-control-size);
-    padding-bottom: max(10vh, theme('spacing.12'));
-    color: theme('colors.surface-2.fg');
-    user-select: none;
-    text-align: center;
-
-    @media (min-width: theme('screens.sm')) {
-      text-align: left;
-    }
-  }
-
-  ._title {
-    font-size: theme('fontSize.4xl-fluid[0]');
-    line-height: theme('fontSize.4xl-fluid[1]');
-    font-family: theme('fontFamily.display');
-    text-wrap: balance;
-    max-width: theme('maxWidth.prose');
-    text-shadow: 0 0 4px theme('colors.canvas.bg');
-    /* text-shadow: 0 0 12px theme('colors.canvas.bg/50%'), 0 0 64px theme('colors.canvas.bg/50%'); */
-  }
-
-  ._description {
-    margin-top: theme('spacing.2');
-    font-size: theme('fontSize.xl[0]');
-    line-height: theme('fontSize.xl[1]');
-    text-wrap: balance;
-    max-width: theme('maxWidth.prose');
-    text-shadow: 0 0 4px theme('colors.canvas.bg');
-    /* text-shadow: 0 0 3px theme('colors.canvas.bg'), 0 0 6px theme('colors.canvas.bg/75%'),
-      0 0 32px theme('colors.canvas.bg/75%'); */
-  }
-</style>
+<PackageHeader title={data.name} description={data.description}>
+  <svelte:fragment slot="background">
+    <CoverImage data={data.cover} priority={index === 0} />
+  </svelte:fragment>
+  <svelte:fragment slot="toolbar">
+    <a {href} class="button button-primary button-filled" data-sveltekit-preload-data>Más información</a>
+  </svelte:fragment>
+</PackageHeader>

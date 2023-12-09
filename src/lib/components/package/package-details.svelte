@@ -107,6 +107,8 @@
     font-weight: bold;
     font-size: theme('fontSize.xs[0]');
     line-height: theme('fontSize.xs[1]');
+    letter-spacing: theme('letterSpacing.widest');
+    text-transform: uppercase;
   }
 
   dd {

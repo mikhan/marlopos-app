@@ -8,7 +8,7 @@
   import type { Api } from '$lib/api'
   import DynamicContent from '../common/dynamic-content.svelte'
   import Prose from '../common/prose.svelte'
-  import type PackageMap from './package-map.svelte'
+  import type PackageMap from './package-map-dynamic.svelte'
 
   export let data: Api.PackageDestination
   export let packageMap: PackageMap | undefined

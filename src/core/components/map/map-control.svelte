@@ -43,30 +43,4 @@
   div {
     pointer-events: auto;
   }
-
-  :global(.mapboxgl-control-container) {
-    font: initial;
-    font-size: theme('fontSize.base');
-    font-family: theme('fontFamily.sans');
-  }
-
-  :global(.mapboxgl-ctrl-top-left) div,
-  :global(.mapboxgl-ctrl-top-right) div {
-    margin-top: theme('spacing.4');
-  }
-
-  :global(.mapboxgl-ctrl-top-right) div,
-  :global(.mapboxgl-ctrl-bottom-right) div {
-    margin-right: theme('spacing.4');
-  }
-
-  :global(.mapboxgl-ctrl-bottom-right) div,
-  :global(.mapboxgl-ctrl-bottom-left) div {
-    margin-bottom: theme('spacing.4');
-  }
-
-  :global(.mapboxgl-ctrl-top-left) div,
-  :global(.mapboxgl-ctrl-bottom-left) div {
-    margin-left: theme('spacing.4');
-  }
 </style>

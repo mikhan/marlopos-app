@@ -8,7 +8,7 @@
   export let data: Api.Image
   export let priority = false
 
-  const images = {
+  $: images = {
     small: {
       src: transformURL(getResourceHref(data.id, { w: breakpoints.sm, h: 864, q: 50, fo: 'auto' })),
       breakpoint: breakpoints.sm,
@@ -54,9 +54,9 @@
     &::after {
       position: absolute;
       inset: 0;
-      background-image: linear-gradient(0deg, theme('colors.canvas.bg'), transparent 50%),
-        linear-gradient(0deg, theme('colors.canvas.bg'), transparent 25%),
-        radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 30%, transparent 75%);
+      background-image: linear-gradient(0deg, theme('colors.canvas.bg'), transparent 20rem),
+        linear-gradient(0deg, theme('colors.canvas.bg'), transparent 10rem),
+        radial-gradient(circle farthest-side at left bottom, theme('colors.canvas.bg / 50%') 15rem, transparent 30rem);
       pointer-events: none;
       content: '';
     }

@@ -18,7 +18,7 @@ export const load = (async ({ url, params, locals }) => {
       description: page.description,
       lang: locals.lang.code,
       links: getPageLinks(url, params.lang),
-      preconnect: getExternalOrigins([PUBLIC_IMAGE_CDN_ENDPOINT, 'http://api.mapbox.com']),
+      preconnect: getExternalOrigins([PUBLIC_IMAGE_CDN_ENDPOINT, 'https://api.mapbox.com']),
     },
     page,
   }

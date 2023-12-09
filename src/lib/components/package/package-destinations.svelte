@@ -5,11 +5,11 @@
   import type { Api } from '$lib/api'
   import SectionHeader from '../common/section-header.svelte'
   import PackageDestination from './package-destination.svelte'
+  import type PackageMapDynamic from './package-map-dynamic.svelte'
   import PackageMapStatic from './package-map-static.svelte'
-  import type PackageMap from './package-map.svelte'
 
   export let data: Api.PackageDestination[]
-  let packageMap: PackageMap | undefined
+  let packageMap: PackageMapDynamic | undefined
   let container: HTMLElement
   let mapContainer: HTMLElement
   let isFullscreen = false
@@ -49,8 +49,8 @@
     <div class="_map-container" bind:this={mapContainer}>
       <div class="_map">
         {#if $showInteractiveMap || isFullscreen}
-          <Lazy this={() => import('./package-map.svelte')} let:Component={PackageMap}>
-            <PackageMap class="w-full h-full" {data} bind:this={packageMap} bind:isFullscreen />
+          <Lazy this={() => import('./package-map-dynamic.svelte')} let:Component={PackageMapDynamic}>
+            <PackageMapDynamic class="w-full h-full" {data} bind:this={packageMap} bind:isFullscreen />
           </Lazy>
         {:else}
           <PackageMapStatic {data} on:click={() => (isFullscreen = true)} />

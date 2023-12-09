@@ -165,6 +165,7 @@
 <section
   {...$$restProps}
   tabindex="-1"
+  style:--map-marker-color={style !== 'default' ? '#db4336' : undefined}
   use:focusWithin
   use:dismiss={{ clickOutside: false, scroll: false }}
   on:focusenter={enableInteraction}
@@ -245,6 +246,7 @@
 
 <style lang="postcss">
   section {
+    --map-marker-color: theme('colors.primary.200');
     position: relative;
     width: 100%;
     height: 100%;
@@ -265,13 +267,8 @@
     translate: 0 -50%;
     filter: drop-shadow(2px 2px 2px #0006);
     outline: none;
-    color: theme('colors.primary.200');
+    color: var(--map-marker-color);
     font-size: theme('fontSize.base');
-
-    &:hover,
-    &:focus {
-      animation: bounce 500ms infinite;
-    }
 
     &:before {
       position: absolute;
@@ -286,7 +283,7 @@
   }
 
   ._map-marker-bounce {
-    animation: bounce 500ms 5;
+    animation: bounce 500ms infinite;
   }
 
   @keyframes bounce {

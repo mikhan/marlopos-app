@@ -16,10 +16,11 @@
 
 <button class="absolute inset-0 outline-none" on:click>
   <picture>
-    <source srcset={getMapHref(480)} media="(max-width: 480px)" />
+    <source srcset={getMapHref(480)} media="(max-width: 480px) and (max-height: 480px)" />
+    <source srcset={getMapHref(768)} media="(max-width: 768px) and (max-height: 768px)" />
     <img
       class="object-none w-full h-full"
-      src={getMapHref(768)}
+      src={getMapHref(1280)}
       alt="Mapa que muestra los destinos incluídos en el paquete"
       loading="lazy" />
   </picture>
