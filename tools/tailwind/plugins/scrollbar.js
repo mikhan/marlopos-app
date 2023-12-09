@@ -12,6 +12,7 @@ export function scrollbarPlugin() {
               '--scrollbar-size': trackSize,
               '--scrollbar-track-color': 'transparent',
               '--scrollbar-thumb-color': 'currentColor',
+              '--scrollbar-thumb-size': thumbSize,
               '&::-webkit-scrollbar': {
                 'width': 'var(--scrollbar-size)',
                 'height': 'var(--scrollbar-size)',
@@ -21,8 +22,8 @@ export function scrollbarPlugin() {
                 'background-color': 'var(--scrollbar-track-color)',
               },
               '&::-webkit-scrollbar-thumb': {
-                'border': `calc(calc(${trackSize} - ${thumbSize}) / 2) solid transparent`,
-                'border-radius': `calc(${trackSize} / 2)`,
+                'border': 'calc(calc(var(--scrollbar-size) - var(--scrollbar-thumb-size)) / 2) solid transparent',
+                'border-radius': 'calc(var(--scrollbar-size) / 2)',
                 'background-color': 'var(--scrollbar-thumb-color)',
                 'background-clip': 'content-box',
               },
